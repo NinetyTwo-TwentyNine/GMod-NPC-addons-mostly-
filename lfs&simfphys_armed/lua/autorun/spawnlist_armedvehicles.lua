@@ -3011,13 +3011,13 @@ local V = {
 		RearRelativeDamping = 5500,
 		
 		MaxGrip = 1000,
-		Efficiency = 2.5,
+		Efficiency = 1.2,
 		GripOffset = -300,
 		BrakePower = 60,
 		BulletProofTires = true,
 		
 		IdleRPM = 600,
-		LimitRPM = 7000,
+		LimitRPM = 3000,
 		PeakTorque = 700,
 		PowerbandStart = 600,
 		PowerbandEnd = 3500,
