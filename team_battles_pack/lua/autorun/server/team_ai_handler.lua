@@ -1,7 +1,7 @@
 local function SetRelationshipProperly(npc, ent, rel)
 	if ent:IsFlagSet(FL_NOTARGET) then rel = D_NU end
 
-	//if npc:Disposition(ent) != rel then
+	//if npc:Disposition(ent) != rel then  -- would prioritize entities which this NPC previously had a different relationship with
 		if (npc:Disposition(ent) == D_HT || npc:Disposition(ent) == D_FR) && (rel != D_HT && rel != D_FR) then
 			npc:ClearEnemyMemory(ent)
 		end

@@ -8,7 +8,7 @@ include('HL2 Fixes/working_combine_apc.lua')
 CreateConVar("bns_npc_check_complete", 1, bit.bor(FCVAR_NOT_CONNECTED, FCVAR_UNREGISTERED), "", 0, 1)
 
 local UnnecessaryKeyValues = {"additionalequipment", "avelocity", "basevelocity", "body", "cycle", "dontusespeechsemaphore", "effects", "expressionoverride", "fademaxdist", "fademindist", "fadescale", "friction", "globalname", "gravity", "hitboxset", "lightingorigin", "lightingoriginhack", "ltime", "modelindex", "playbackrate", "sequence", "shadowcastdist", "skin", "spawnflags", "speed", "texframeindex", "velocity", "view_ofs", "waterlevel"}
-cvars.AddChangeCallback("nav_area_size_check_complete", function()
+cvars.AddChangeCallback("bns_npc_check_complete", function()
   if GetConVarNumber("bns_npc_check_complete") == 0 then
     list.Add("BNS_AllNPCTemplates")
     list.Add("BNS_NPCKeyValues")
