@@ -94,13 +94,6 @@ if SERVER then
 		
 		self.SpawnTime = CurTime()
 		self.Filter = {self.Owner}
-
-		if !IsValid(self:GetLockOn()) then
-			timer.Simple(15, function()
-				if !IsValid(self) then return end
-				self:Detonate()
-			end)
-		end
 	end
 
 	function ENT:Think()	
@@ -110,8 +103,13 @@ if SERVER then
 		local Target = self:GetLockOn()
 		if IsValid( Target ) then
 			self:FollowTarget( Target )
+			self.RemoveTimer = 0
 		else
 			self:BlindFire()
+			self.RemoveTimer = (self.RemoveTimer or 0) + FrameTime()
+			if self.RemoveTimer >= 15 then
+				self.MarkForRemove = true
+			end
 		end
 
 		if self.SpawnTime + 0.2 < curtime then
@@ -125,8 +123,8 @@ if SERVER then
 					if ent ~= self and not table.HasValue( self.Filter, ent ) then return true end
 				end
 			} )
-			if trace.Hit then
-				self:Detonate()
+			if trace.Hit || self.MarkForRemove then
+				self:Detonate(trace.HitPos)
 			end
 		end
 		
@@ -166,11 +164,11 @@ if SERVER then
 		if not self.Explode then
 			self.Explode = true
 
-			local Pos = self:GetPos() - self:GetForward() * 10
 			local Dir = self:GetForward()
 			if isvector(target_pos) then
-				Dir = (target_pos - Pos):Angle():Forward()
+				Dir = (target_pos - self:GetPos()):Angle():Forward()
 			end
+			local Pos = self:GetPos() - Dir * 10
 
 			local bullet = {}
 				bullet.Num 			= 1
