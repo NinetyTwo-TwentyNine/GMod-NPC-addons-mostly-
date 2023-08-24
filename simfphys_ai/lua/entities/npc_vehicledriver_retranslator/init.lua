@@ -360,7 +360,7 @@ function ENT:SetEyesDirection()
 			mask = MASK_BLOCKLOS_AND_NPCS,
 			filter = self.TraceFilter
 		})
-		if los.Entity == enemy then
+		if simfphys.IdentifyVehicleTarget(self.VehicleDriver, los.Entity) == enemy then
 			self.VehicleDriver:UpdateEnemyMemory(enemy, enemy:GetPos())
 		end
 
