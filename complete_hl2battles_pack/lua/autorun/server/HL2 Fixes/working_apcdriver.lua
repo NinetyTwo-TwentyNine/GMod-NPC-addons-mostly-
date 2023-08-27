@@ -34,7 +34,7 @@ hook.Add("OnEntityCreated", "Combine APC Driver AI", function(ent)
 					return (ent:IsMoving())
 				end
 				func_table["check_npc_bmovement"] = function()
-					return ((ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMins().y):Distance(ent:GetCurWaypointPos()) > (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMaxs().y):Distance(ent:GetCurWaypointPos()))
+					return ((ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMins().y):Distance(ent:GetCurWaypointPos()) < (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMaxs().y):Distance(ent:GetCurWaypointPos()))
 				end
 				func_table["get_vehicle_flength"] = function()
 					return (ent.Vehicle:OBBMaxs().y)
