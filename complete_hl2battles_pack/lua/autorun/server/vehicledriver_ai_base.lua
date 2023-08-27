@@ -1,4 +1,14 @@
-function BNS_AddVehicleDrivingAI(ent, func_table)
+BNS_DFT_CHECK_VEHICLE_INWATER = 0
+BNS_DFT_CHECK_VEHICLE_NOGROUND = 1
+BNS_DFT_CHECK_VEHICLE_STOPPED = 2
+BNS_DFT_CHECK_NPC_HASTARGET = 3
+BNS_DFT_CHECK_NPC_TARGETSIGHT = 4
+BNS_DFT_CHECK_NPC_MOVEMENT = 5
+BNS_DFT_CHECK_NPC_BMOVEMENT = 6
+BNS_DFT_GET_VEHICLE_FLENGTH = 7
+BNS_DFT_GET_VEHICLE_BLENGTH = 8
+
+function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 	if !(ent:GetClass() == "npc_apcdriver" || ent:GetClass() == "npc_vehicledriver") then return end
 	if !IsValid(ent.Vehicle) then return end
 	if !ent.Vehicle:IsVehicle() then return end
@@ -9,19 +19,19 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 		ent.AvoidAreas = {}
 		ent.StuckCount = {}
 	else
-		ent.VehiclePath = "Never driving anywhere again."
+		ent.VehiclePath = BNS_VP_STATUS_NEVER
 	end
 
 	timer.Create("DrivingVehicleAI"..ent:EntIndex(), 0.1, 0, function()
 	if IsValid(ent) && IsValid(ent.Vehicle) && GetConVarNumber("ai_disabled") == 0 then
 //==============================================================================================================================================================================
-		ent.IsInWater = func_table["check_vehicle_water"]()
-		ent.NoGroundConnection = func_table["check_vehicle_noground"]()
-		ent.HasTarget = func_table["check_npc_target"]()
-		ent.TargetInSight = func_table["check_npc_targetsight"]()
+		ent.IsInWater = driving_func_table[BNS_DFT_CHECK_VEHICLE_INWATER]()
+		ent.NoGroundConnection = driving_func_table[BNS_DFT_CHECK_VEHICLE_NOGROUND]()
+		ent.HasTarget = driving_func_table[BNS_DFT_CHECK_NPC_HASTARGET]()
+		ent.TargetInSight = driving_func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT]()
 //==============================================================================================================================================================================
 		if ent.Driving then
-			if !func_table["check_npc_movement"]() then
+			if !driving_func_table[BNS_DFT_CHECK_NPC_MOVEMENT]() then
 				if ent.IsStuck then
 					ent.IsStuck = false
 					ent.StuckTimer = nil
@@ -40,7 +50,7 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 					ent.CurrentArea = ent.CurrentArea + 1
 				end
 				ent.Driving = false
-			elseif func_table["check_vehicle_stopped"]() then
+			elseif driving_func_table[BNS_DFT_CHECK_VEHICLE_STOPPED]() then
 				if !ent.StuckTimer then
 					ent.StuckTimer = 0
 				else
@@ -57,10 +67,10 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 						ent.BackupPath = table.Copy(ent.VehiclePath)
 						table.Empty(ent.VehiclePath)
 
-						if func_table["check_npc_bmovement"]() then
-							ent.StuckDistance = func_table["get_vehicle_flength"]()
+						if driving_func_table[BNS_DFT_CHECK_NPC_BMOVEMENT]() then
+							ent.StuckDistance = driving_func_table[BNS_DFT_GET_VEHICLE_FLENGTH]()
 						else
-							ent.StuckDistance = func_table["get_vehicle_blength"]()
+							ent.StuckDistance = driving_func_table[BNS_DFT_GET_VEHICLE_BLENGTH]()
 						end
 						table.insert( ent.VehiclePath, navmesh.GetNearestNavArea(ent.Vehicle:GetPos() + ent:GetForward()*ent.StuckDistance) )
 
@@ -92,7 +102,7 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 
 						if ent.CurrentArea >= table.Count(ent.VehiclePath) then
 							ent.Driving = false
-							ent.VehiclePath = "Never driving anywhere again."
+							ent.VehiclePath = BNS_VP_STATUS_NEVER
 							ent.CurrentArea = nil
 							ent.BackupPath = nil
 							ent.BackupArea = nil
@@ -211,8 +221,8 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 									for k,v in pairs(ent.PathBuildup) do
 										table.insert(ent.VehiclePath, v)
 									end
-								elseif ent.PathBuildup == "Failed!" then
-									ent.VehiclePath = "Failed!"
+								elseif ent.PathBuildup == BNS_VP_STATUS_FAILED then
+									ent.VehiclePath = BNS_VP_STATUS_FAILED
 								end
 								ent.PathBuildup = nil
 							else
@@ -243,9 +253,9 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 					else
 						ent.VehiclePath = nil
 					end
-				elseif ent.VehiclePath == "Failed!" then
+				elseif ent.VehiclePath == BNS_VP_STATUS_FAILED then
 					ent.Driving = false
-					ent.VehiclePath = "Delay before rebuilding..."
+					ent.VehiclePath = BNS_VP_STATUS_DELAY
 					ent.PathOutOfRange = false
 					ent.BreakTimer = nil
 
@@ -254,7 +264,7 @@ function BNS_AddVehicleDrivingAI(ent, func_table)
 					table.Add(ent.Path_EnemyLastPosTable, ent.Path_EnemyLastPosTable[1]:GetAdjacentAreas())
 					ent.Path_VehicleLastPosTable = {navmesh.GetNearestNavArea(ent.Vehicle:GetPos())}
 					table.Add(ent.Path_VehicleLastPosTable, ent.Path_VehicleLastPosTable[1]:GetAdjacentAreas())
-				elseif ent.VehiclePath == "Delay before rebuilding..." then
+				elseif ent.VehiclePath == BNS_VP_STATUS_DELAY then
 					if !table.HasValue(ent.Path_VehicleLastPosTable, navmesh.GetNearestNavArea(ent.Vehicle:GetPos())) || !table.HasValue(ent.Path_EnemyLastPosTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())) then
 						ent.Path_EnemyLastPosTable = nil
 						ent.Path_VehicleLastPosTable = nil

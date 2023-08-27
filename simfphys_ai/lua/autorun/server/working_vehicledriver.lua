@@ -37,31 +37,31 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 			end
 
 			local func_table = {}
-			func_table["check_vehicle_water"] = function()
+			func_table[BNS_DFT_CHECK_VEHICLE_INWATER] = function()
 				return (ent.Vehicle:WaterLevel() > 2)
 			end
-			func_table["check_vehicle_noground"] = function()
+			func_table[BNS_DFT_CHECK_VEHICLE_NOGROUND] = function()
 				return (!ent.Vehicle:IsDriveWheelsOnGround())
 			end
-			func_table["check_vehicle_stopped"] = function()
+			func_table[BNS_DFT_CHECK_VEHICLE_STOPPED] = function()
 				return (math.abs(ent.Vehicle.ForwardSpeed) < 5)
 			end
-			func_table["check_npc_target"] = function()
+			func_table[BNS_DFT_CHECK_NPC_HASTARGET] = function()
 				return (IsValid(ent:GetEnemy()))
 			end
-			func_table["check_npc_targetsight"] = function()
+			func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT] = function()
 				return (ent.HasTarget && (ent:Visible(ent:GetEnemy()) && ent:GetPos():Distance(ent:GetEnemy():BodyTarget(ent:GetPos())) <= ent:GetMaxLookDistance()))
 			end
-			func_table["check_npc_movement"] = function()
+			func_table[BNS_DFT_CHECK_NPC_MOVEMENT] = function()
 				return (ent:GetKeyValues()["target"] != "")
 			end
-			func_table["check_npc_bmovement"] = function()
+			func_table[BNS_DFT_CHECK_NPC_BMOVEMENT] = function()
 				return (ent.Retranslator.GoingBackwards)
 			end
-			func_table["get_vehicle_flength"] = function()
+			func_table[BNS_DFT_GET_VEHICLE_FLENGTH] = function()
 				return (ent.Vehicle.FLength)
 			end
-			func_table["get_vehicle_blength"] = function()
+			func_table[BNS_DFT_GET_VEHICLE_BLENGTH] = function()
 				return (ent.Vehicle.BLength)
 			end
 

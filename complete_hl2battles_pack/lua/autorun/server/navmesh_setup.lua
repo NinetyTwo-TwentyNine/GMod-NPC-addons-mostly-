@@ -1,18 +1,18 @@
 CreateConVar("nav_area_size_check_complete", 1, bit.bor(FCVAR_UNREGISTERED), "", 0, 1)
 
-SERVER_NavAreaSizes = {}
-SERVER_NavAreaDisconnections = {}
+BNS_Server_NavAreaSizes = {}
+BNS_Server_NavAreaDisconnections = {}
 
 local function CreateAreaDisconnection(current, neighbor)
-	if SERVER_NavAreaDisconnections[neighbor:GetID()] then
-		if table.HasValue(SERVER_NavAreaDisconnections[neighbor:GetID()], current:GetID()) then return end
+	if BNS_Server_NavAreaDisconnections[neighbor:GetID()] then
+		if table.HasValue(BNS_Server_NavAreaDisconnections[neighbor:GetID()], current:GetID()) then return end
 	end
 
-	if !SERVER_NavAreaDisconnections[current:GetID()] then
-		SERVER_NavAreaDisconnections[current:GetID()] = {}
+	if !BNS_Server_NavAreaDisconnections[current:GetID()] then
+		BNS_Server_NavAreaDisconnections[current:GetID()] = {}
 	end
-	if !table.HasValue(SERVER_NavAreaDisconnections[current:GetID()], neighbor:GetID()) then
-		table.insert(SERVER_NavAreaDisconnections[current:GetID()], neighbor:GetID())
+	if !table.HasValue(BNS_Server_NavAreaDisconnections[current:GetID()], neighbor:GetID()) then
+		table.insert(BNS_Server_NavAreaDisconnections[current:GetID()], neighbor:GetID())
 	end
 end
 
@@ -82,17 +82,17 @@ end
 
 cvars.AddChangeCallback("nav_area_size_check_complete", function()
 	if GetConVarNumber("nav_area_size_check_complete") == 0 then
-		table.Empty(SERVER_NavAreaSizes)
+		table.Empty(BNS_Server_NavAreaSizes)
 		for k,current in pairs(navmesh.GetAllNavAreas()) do
-			SERVER_NavAreaSizes[current:GetID()] = {}
+			BNS_Server_NavAreaSizes[current:GetID()] = {}
 
-			SERVER_NavAreaSizes[current:GetID()]["X"] = {}
-			SERVER_NavAreaSizes[current:GetID()]["X"][1] = AreaSizeCheck(current, 1)
-			SERVER_NavAreaSizes[current:GetID()]["X"][2] = AreaSizeCheck(current, 3)
+			BNS_Server_NavAreaSizes[current:GetID()]["X"] = {}
+			BNS_Server_NavAreaSizes[current:GetID()]["X"][1] = AreaSizeCheck(current, 1)
+			BNS_Server_NavAreaSizes[current:GetID()]["X"][2] = AreaSizeCheck(current, 3)
 
-			SERVER_NavAreaSizes[current:GetID()]["Y"] = {}
-			SERVER_NavAreaSizes[current:GetID()]["Y"][1] = AreaSizeCheck(current, 0)
-			SERVER_NavAreaSizes[current:GetID()]["Y"][2] = AreaSizeCheck(current, 2)
+			BNS_Server_NavAreaSizes[current:GetID()]["Y"] = {}
+			BNS_Server_NavAreaSizes[current:GetID()]["Y"][1] = AreaSizeCheck(current, 0)
+			BNS_Server_NavAreaSizes[current:GetID()]["Y"][2] = AreaSizeCheck(current, 2)
 		end
 		GetConVar("nav_area_size_check_complete"):SetFloat(1)
 		print("Done figuring out the navmesh data! ("..navmesh.GetNavAreaCount().." navigation areas in total)")
@@ -105,6 +105,15 @@ hook.Add("InitPostEntity", "BNS_NavAreaSizeCheck", function()
 	end)
 end)
 
+
+--========================================================================================================
+--The (vehicle) path determining function
+--========================================================================================================
+
+
+BNS_VP_STATUS_FAILED = "Failed!"
+BNS_VP_STATUS_DELAY = "Delay before rebuilding..."
+BNS_VP_STATUS_NEVER = "Never driving anywhere again."
 
 function Astar( start, goal, sizequota, avoidthose )
 	if ( !IsValid( start ) || !IsValid( goal ) ) then return false end
@@ -144,13 +153,13 @@ function Astar( start, goal, sizequota, avoidthose )
 		for k, neighbor in pairs( current:GetAdjacentAreas() ) do
 			local newCostSoFar = current:GetCostSoFar() + current:GetCenter():Distance( neighbor:GetCenter() )
 
-			if SERVER_NavAreaDisconnections[current:GetID()] then
-				if table.HasValue(SERVER_NavAreaDisconnections[current:GetID()], neighbor:GetID()) then
+			if BNS_Server_NavAreaDisconnections[current:GetID()] then
+				if table.HasValue(BNS_Server_NavAreaDisconnections[current:GetID()], neighbor:GetID()) then
 					continue
 				end
 			end
-			if SERVER_NavAreaDisconnections[neighbor:GetID()] then
-				if table.HasValue(SERVER_NavAreaDisconnections[neighbor:GetID()], current:GetID()) then
+			if BNS_Server_NavAreaDisconnections[neighbor:GetID()] then
+				if table.HasValue(BNS_Server_NavAreaDisconnections[neighbor:GetID()], current:GetID()) then
 					continue
 				end
 			end
@@ -164,9 +173,9 @@ function Astar( start, goal, sizequota, avoidthose )
 				if deltaXY != 0 then
 					local area_size
 					if deltaXY < 0 then  // We need to choose perpendicular direction to ours
-						area_size = SERVER_NavAreaSizes[neighbor:GetID()]["X"]
+						area_size = BNS_Server_NavAreaSizes[neighbor:GetID()]["X"]
 					else
-						area_size = SERVER_NavAreaSizes[neighbor:GetID()]["Y"]
+						area_size = BNS_Server_NavAreaSizes[neighbor:GetID()]["Y"]
 					end
 
 					if area_size[1] < (sizequota / 2) || area_size[2] < (sizequota / 2) then
@@ -198,5 +207,5 @@ function Astar( start, goal, sizequota, avoidthose )
 		end
 	end
 
-	return "Failed!"
+	return BNS_VP_STATUS_FAILED
 end
