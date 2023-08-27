@@ -2,7 +2,7 @@ include('HL2 Fixes/ai_ignoreplayers_fix.lua')
 include('HL2 Fixes/gunship_cannon_fix.lua')
 include('HL2 Fixes/helicopter_damage_fix.lua')
 include('HL2 Fixes/metropolice_manhack_fix.lua')
-include('HL2 Fixes/working_combine_apc.lua')
+include('HL2 Fixes/working_apcdriver.lua')
 
 
 CreateConVar("bns_npc_check_complete", 1, bit.bor(FCVAR_NOT_CONNECTED, FCVAR_UNREGISTERED), "", 0, 1)
