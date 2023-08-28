@@ -240,7 +240,7 @@ function ENT:UpdateAngleDifference()
 		self.TurretHasStopped = false
 	end
 
-	if self.TurretHasStopped then
+	if self.TurretHasStopped && math.Round(CurTime() - self.VehicleDriver:GetEnemyLastTimeSeen(), 1) <= 0.1 then
 		if self.AngleDifference then
 			local next_angle_diff = (self.VehicleDriver:EyeAngles() - self:GetGunDir():Angle())
 			if math.Round((next_angle_diff - self.AngleDifference).x) != 0 && math.Round((next_angle_diff - self.AngleDifference).y) == 0 then
@@ -255,7 +255,7 @@ function ENT:UpdateAngleDifference()
 			end
 		end
 		
-		if self.YawEditCounter >= 6 || self.PitchEditCounter >= 6 || ( self.PrevEnemyString && IsValid(self.VehicleDriver:GetEnemy()) && tostring(self.VehicleDriver:GetEnemy() || self.VehicleDriver) != self.PrevEnemyString ) then
+		if self.YawEditCounter >= 6 || self.PitchEditCounter >= 6 || ( self.PrevEnemyString && tostring(self.VehicleDriver:GetEnemy() || self.VehicleDriver) != self.PrevEnemyString ) then
 			self.AngleDifference = nil
 			self.TurretHasStopped_Counter = 0
 			self.YawEditCounter = 0
@@ -352,7 +352,10 @@ function ENT:SetEyesDirection()
 
 	if IsValid(driver:GetEnemy()) then
 		local enemy = driver:GetEnemy()
-		local enemy_pos = ( enemy:HeadTarget(seat_camera_pos) or enemy:BodyTarget(seat_camera_pos) ) - enemy:GetPos() + driver:GetEnemyLastKnownPos()
+		local enemy_pos = driver:GetEnemyLastKnownPos()
+		if (CurTime() - self.VehicleDriver:GetEnemyLastTimeSeen()) < 3 then
+			enemy_pos = enemy_pos + ( enemy:HeadTarget(seat_camera_pos) or enemy:BodyTarget(seat_camera_pos) ) - enemy:GetPos()
+		end
 
 		local los = util.TraceLine({
 			start = seat_camera_pos,

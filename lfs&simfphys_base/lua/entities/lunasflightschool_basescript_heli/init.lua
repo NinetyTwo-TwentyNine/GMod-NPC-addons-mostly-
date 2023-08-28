@@ -340,18 +340,22 @@ function ENT:RunAI()
 		
 		if IsValid( Target ) && self:AICanSee( Target ) then
 			local HisRadius = Target:BoundingRadius() 
-			local HisPos = Target:GetPos() + Vector(0,0,600)
+			local HisPos = Target:GetPos() + Vector(0,0,1600)
 			
-			TargetPos = HisPos + (myPos - HisPos):GetNormalized() * (myRadius + HisRadius + 500) + cAvoid * 8
+			TargetPos = HisPos + (myPos - HisPos):GetNormalized() * (myRadius + HisRadius + 2000) + cAvoid * 8
 			
 			local startpos =  self:GetRotorPos()
 			local tr = util.TraceHull( {
 				start = startpos,
-				endpos = (startpos + self:GetForward() * 50000),
+				endpos = (startpos - Vector(self:GetForward().x, self:GetForward().y, 0) * 50000),
 				mins = Vector( -30, -30, -30 ),
 				maxs = Vector( 30, 30, 30 ),
 				filter = self
 			} )
+
+			if (tr.StartPos:Distance(tr.HitPos) > 2000) then
+				TargetPos = TargetPos - Vector(self:GetForward().x, self:GetForward().y, 0) * 1000
+			end
 		end
 	end
 	
