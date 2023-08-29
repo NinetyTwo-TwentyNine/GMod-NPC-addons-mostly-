@@ -74,7 +74,7 @@ function simfphys.weapon:ValidClasses()
 end
 
 function simfphys.weapon:Initialize( vehicle )
-	vehicle.MaxMag = 50
+	vehicle.MaxMag = 40
 	vehicle.MaxRockets = 1
 	vehicle:SetNWString( "WeaponMode", tostring( vehicle.MaxMag ) )
 

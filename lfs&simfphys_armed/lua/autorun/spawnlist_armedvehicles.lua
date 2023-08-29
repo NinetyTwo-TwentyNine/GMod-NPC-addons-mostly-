@@ -469,7 +469,7 @@ list.Set( "simfphys_vehicles", "sim_fphys_v8elite_armed", V )
 
 
 local V = {
-	Name = "Synergy Elite Jeep airboatgun",
+	Name = "Synergy Elite Jeep machinegun",
 	Model = "models/vehicles/buggy_elite.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",

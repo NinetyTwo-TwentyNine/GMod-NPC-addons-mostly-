@@ -29,6 +29,7 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 			ent.Retranslator:Activate()
 
 			timer.Simple(FrameTime(), function()
+			if !IsValid(ent) then return end
 			if !IsValid(ent.Retranslator) then return end
 			if !IsValid(ent.Vehicle) then return end
 

@@ -1,35 +1,28 @@
 
-local function AirboatFire(ply,vehicle,shootOrigin,Attachment,damage)
-	local bullet = {}
-		bullet.Num 			= 1
-		bullet.Src 			= shootOrigin
-		bullet.Dir 			= Attachment.Ang:Forward()
-		bullet.Spread 		= Vector(0.04,0.04,0)
-		bullet.Tracer		= 1
-		bullet.TracerName 	= (damage > 10 and "AirboatGunHeavyTracer" or "AirboatGunTracer")
-		bullet.Force		= damage
-		bullet.Damage		= damage
-		bullet.HullSize		= 1
-		bullet.DisableOverride = true
-		bullet.Callback = function(att, tr, dmginfo)
-			dmginfo:SetDamageType(DMG_AIRBOAT)
-			
-			local effectdata = EffectData()
-				effectdata:SetOrigin(  tr.HitPos + tr.HitNormal )
-				effectdata:SetNormal( tr.HitNormal )
-				effectdata:SetRadius( (damage > 1) and 8 or 3 )
-			util.Effect( "cball_bounce", effectdata, true, true )
-		end
-		bullet.Attacker 	= ply
-		
-	vehicle:FireBullets( bullet )
+local function MachineGunFire(ply,vehicle,shootOrigin,Attachment,damage)
+
+	vehicle:EmitSound("sherman_fire_mg", 120)
+
+	local projectile = {}
+		projectile.filter = vehicle.VehicleData["filter"]
+		projectile.shootOrigin = shootOrigin
+		projectile.shootDirection = Attachment.Ang:Forward()
+		projectile.attacker = ply
+		projectile.Tracer	= 1
+		projectile.HullSize = 5
+		projectile.attackingent = vehicle
+		projectile.Spread = Vector(0.008,0.008,0.008)
+		projectile.Damage = damage
+		projectile.ArmourPiercing = true
+		projectile.Force = 12
+	
+	simfphys.FireHitScan( projectile )
 end
 
 function simfphys.weapon:ValidClasses()
 	
 	local classes = {
-		"sim_fphys_jeep_armed2",
-		--"sim_fphys_v8elite_armed2"
+		"sim_fphys_v8elite_armed2"
 	}
 	
 	return classes
@@ -42,10 +35,10 @@ function simfphys.weapon:Initialize( vehicle )
 	local attachmentdata = vehicle:GetAttachment( ID )
 
 	local prop = ents.Create( "gmod_sent_vehicle_fphysics_attachment" )
-	prop:SetModel( "models/airboatgun.mdl" )			
-	prop:SetPos( attachmentdata.Pos )
-	prop:SetAngles( attachmentdata.Ang )
-	prop:SetModelScale( 0.5 ) 
+	prop:SetModel( "models/blu/tanks/leopard2a7_gib_4.mdl" )			
+	prop:SetPos( attachmentdata.Pos + vehicle:GetUp() * -88 + vehicle:GetRight() * -30 + vehicle:GetForward() * 25.5 )
+	prop:SetAngles( attachmentdata.Ang + Angle(0,-90,0) )
+	prop:SetModelScale( 0.8 ) 
 	prop:Spawn()
 	prop:Activate()
 	prop:SetNotSolid( true )
@@ -101,37 +94,20 @@ function simfphys.weapon:Think( vehicle )
 	local deltapos = vehicle:GetPos() - vehicle.wOldPos
 	vehicle.wOldPos = vehicle:GetPos()
 
-	local shootOrigin = Attachment.Pos + deltapos * engine.TickInterval()
+	local shootOrigin = Attachment.Pos + vehicle:GetUp()*5 + Attachment.Ang:Forward()*7 + deltapos * engine.TickInterval()
+
+	local fire = ply:KeyDown( IN_ATTACK )
 	
-	vehicle.charge = vehicle.charge or 100
-	
-	local fire = ply:KeyDown( IN_ATTACK ) and vehicle.charge > 0
+	local Rate = FrameTime() / 5
+	vehicle.smTmpMG = vehicle.smTmpMG and vehicle.smTmpMG + math.Clamp((fire and 1 or 0) - vehicle.smTmpMG,-Rate * 6,Rate) or 0
 	
 	if fire then
 		self:PrimaryAttack( vehicle, ply, shootOrigin, Attachment, ID )
-	else
-		vehicle.charge = math.min(vehicle.charge + 0.3,100)
 	end
 	
 	vehicle.OldFire = vehicle.OldFire or false
 	if vehicle.OldFire ~= fire then
 		vehicle.OldFire = fire
-		if fire then
-			vehicle.wpn = CreateSound( vehicle, "weapons/airboat/airboat_gun_loop2.wav" )
-			vehicle.wpn:Play()
-			vehicle:CallOnRemove( "stopmesounds", function( vehicle )
-				if vehicle.wpn then
-					vehicle.wpn:Stop()
-				end
-			end)
-		else
-			if vehicle.wpn then
-				vehicle.wpn:Stop()
-				vehicle.wpn = nil
-			end
-
-			vehicle:EmitSound("weapons/airboat/airboat_gun_lastshot"..math.random(1,2)..".wav")
-		end
 	end
 end
 
@@ -147,24 +123,15 @@ end
 function simfphys.weapon:PrimaryAttack( vehicle, ply, shootOrigin, Attachment, ID )
 	if not self:CanPrimaryAttack( vehicle ) then return end
 	
-	local effectdata = EffectData()
+	/*local effectdata = EffectData()
 		effectdata:SetOrigin( shootOrigin )
 		effectdata:SetAngles( Attachment.Ang )
 		effectdata:SetEntity( vehicle )
 		effectdata:SetAttachment( ID )
 		effectdata:SetScale( 1 )
-	util.Effect( "AirboatMuzzleFlash", effectdata, true, true )
+	util.Effect( "AirboatMuzzleFlash", effectdata, true, true )*/
 	
-	AirboatFire(ply,vehicle,shootOrigin,Attachment,(vehicle.charge / 5))
+	MachineGunFire(ply,vehicle,shootOrigin,Attachment,20)
 	
-	vehicle.charge = vehicle.charge - 0.5
-	
-	if vehicle.charge <= 0 then
-		if vehicle.charge > -1 then
-			vehicle:EmitSound("weapons/airboat/airboat_gun_energy"..math.Round(math.random(1,2),0)..".wav")
-		end
-		vehicle.charge = -50
-	end
-	
-	self:SetNextPrimaryFire( vehicle, CurTime() + 0.05 )
+	self:SetNextPrimaryFire( vehicle, CurTime() + 0.1 + (vehicle.smTmpMG ^ 5) * 0.05 )
 end
