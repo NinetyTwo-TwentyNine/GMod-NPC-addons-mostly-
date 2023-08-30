@@ -85,8 +85,9 @@ end
 
 function simfphys.weapon:Initialize( vehicle )
 	vehicle.MaxMag = 40
-	vehicle:SetNWString( "WeaponMode", tostring( vehicle.MaxMag ) )
 	vehicle.MaxRockets = 2
+	vehicle:SetNWString( "WeaponMode", tostring( vehicle.MaxMag ) )
+	vehicle:SetNWBool( "TurretSafeMode", false )
 
 	vehicle.CurMag = vehicle.MaxMag
 	vehicle.Rockets = vehicle.MaxRockets

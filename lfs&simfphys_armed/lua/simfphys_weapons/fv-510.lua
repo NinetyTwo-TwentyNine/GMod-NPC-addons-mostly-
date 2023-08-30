@@ -77,6 +77,7 @@ function simfphys.weapon:Initialize( vehicle )
 	vehicle.MaxMag = 40
 	vehicle.MaxRockets = 1
 	vehicle:SetNWString( "WeaponMode", tostring( vehicle.MaxMag ) )
+	vehicle:SetNWBool( "TurretSafeMode", false )
 
 	vehicle.CurMag = vehicle.MaxMag
 	vehicle.MissileTracking = {}

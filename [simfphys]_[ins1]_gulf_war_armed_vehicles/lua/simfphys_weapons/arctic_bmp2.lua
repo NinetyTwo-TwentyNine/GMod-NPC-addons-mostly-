@@ -70,6 +70,8 @@ function simfphys.weapon:Initialize( vehicle )
 	net.Broadcast()
 
 	self.BMP2Clip = self.BMP2Clipsize
+	vehicle:SetNWBool( "TurretSafeMode", false )
+
 	vehicle.MissileTracking = {}
 	vehicle:CallOnRemove("LaunchMissilesStraight"..vehicle:EntIndex(), function()
 		for _,missile in pairs(vehicle.MissileTracking) do

@@ -81,6 +81,8 @@ function simfphys.weapon:Initialize( vehicle )
 	net.Broadcast()
 
 	self.M2A3Clip = self.M2A3Clipsize
+	vehicle:SetNWBool( "TurretSafeMode", false )
+
 	vehicle.Rockets = self.MaxRockets
 	vehicle.MissileTracking = {}
 	vehicle:CallOnRemove("LaunchMissilesStraight"..vehicle:EntIndex(), function()

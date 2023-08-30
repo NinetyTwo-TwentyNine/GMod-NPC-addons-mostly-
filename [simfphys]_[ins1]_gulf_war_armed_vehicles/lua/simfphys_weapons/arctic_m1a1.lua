@@ -215,7 +215,7 @@ function simfphys.weapon:AimM240( ply, vehicle, pod )
 
 	vehicle.sm_pp_yaw = vehicle.sm_pp_yaw or 180
 
-	vehicle.sm_ppmg_yaw = vehicle.sm_ppmg_yaw and math.ApproachAngle( vehicle.sm_ppmg_yaw, Angles.y, 150 * FrameTime() ) or 180
+	vehicle.sm_ppmg_yaw = vehicle.sm_ppmg_yaw and math.ApproachAngle( vehicle.sm_ppmg_yaw, Angles.y, 150 * FrameTime() ) or 0
 	vehicle.sm_ppmg_pitch = vehicle.sm_ppmg_pitch and math.ApproachAngle( vehicle.sm_ppmg_pitch, -Angles.p, AimRate * FrameTime() ) or 0
 	vehicle.sm_ppmg_pivot = vehicle.sm_ppmg_pivot and math.Clamp(math.ApproachAngle( vehicle.sm_ppmg_pivot, Angles.y - 55 - vehicle.sm_pp_yaw + 180, 150 * FrameTime() ), -100, 100) or 0
 

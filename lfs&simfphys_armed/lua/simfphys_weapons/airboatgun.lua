@@ -29,7 +29,7 @@ function simfphys.weapon:ValidClasses()
 	
 	local classes = {
 		"sim_fphys_jeep_armed2",
-		--"sim_fphys_v8elite_armed2"
+		"sim_fphys_v8elite_armed2"
 	}
 	
 	return classes

@@ -469,7 +469,7 @@ list.Set( "simfphys_vehicles", "sim_fphys_v8elite_armed", V )
 
 
 local V = {
-	Name = "Synergy Elite Jeep machinegun",
+	Name = "Synergy Elite Jeep airboatgun",
 	Model = "models/vehicles/buggy_elite.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
@@ -563,6 +563,273 @@ local V = {
 	}
 }
 list.Set( "simfphys_vehicles", "sim_fphys_v8elite_armed2", V )
+
+
+local V = {
+	Name = "BRDM (APC)",
+	Model = "models/blu/conscript_apc.mdl",
+	Class = "gmod_sent_vehicle_fphysics_base",
+	Category = "Armed Vehicles",
+	SpawnOffset = Vector(0,0,50),
+
+	Members = {
+		Mass = 4200,
+		
+		MaxHealth = 4000,
+		
+		IsArmored = true,
+		
+		GibModels = {
+			"models/blu/conscript_apc.mdl",
+			"models/blu/tanks/leopard2a7_gib_4.mdl",
+			"models/props_vehicles/apc_tire001.mdl",
+			"models/props_vehicles/apc_tire001.mdl",
+			"models/props_vehicles/apc_tire001.mdl",
+			"models/props_vehicles/apc_tire001.mdl"
+		},
+		
+		EnginePos = Vector(-16.1,-81.68,47.25),
+		
+		LightsTable = "conapc",
+		
+		OnSpawn = 
+			function(ent) 
+				ent:SetNWBool( "simfphys_NoRacingHud", true )
+				ent:SetNWBool( "simfphys_NoHud", true ) 
+
+				ent:ManipulateBoneScale(ent:LookupBone("turret_pitch"), Vector(0,0,0))
+				ent:ManipulateBoneScale(ent:LookupBone("turret_yaw"), Vector(0,0,0))
+			end,
+
+		ApplyDamage = function( ent, damage, type ) 
+			simfphys.APCApplyDamage(ent, damage, type)
+		end,
+
+		OnDestroyed = function(ent)
+			local gib = ent.Gib
+			if !IsValid(gib) then return end
+			
+			local pos,ang,skin,pitch,yaw = gib:GetPos(),gib:GetAngles(),gib:GetSkin(),ent:GetPoseParameter("turret_pitch"),ent:GetPoseParameter("turret_yaw")
+			gib:ManipulateBoneScale(gib:LookupBone("turret_pitch"), Vector(0,0,0))
+			gib:ManipulateBoneScale(gib:LookupBone("turret_yaw"), Vector(0,0,0))
+		end,
+		
+		CustomWheels = true,
+		CustomSuspensionTravel = 10,
+		
+		CustomWheelModel = "models/props_vehicles/apc_tire001.mdl",
+		CustomWheelPosFL = Vector(-45,77,-22),
+		CustomWheelPosFR = Vector(45,77,-22),
+		CustomWheelPosRL = Vector(-45,-74,-22),
+		CustomWheelPosRR = Vector(45,-74,-22),
+		CustomWheelAngleOffset = Angle(0,180,0),
+		
+		CustomMassCenter = Vector(0,0,0),
+		
+		CustomSteerAngle = 35,
+		
+		SeatOffset = Vector(65,0,35),
+		SeatPitch = 0,
+		SeatYaw = 0,
+		
+		PassengerSeats = {
+			{
+				pos = Vector(13,75,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(0,0,-3.5),
+				ang = Angle(0,0,0)
+			},
+		},
+		
+		Attachments = {
+			{
+				model = "models/hunter/plates/plate075x105.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255),
+				pos = Vector(0.04,57.5,16.74),
+				ang = Angle(90,-90,0)
+			},
+			{
+				model = "models/hunter/plates/plate025x05.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255),
+				pos = Vector(-25.08,91.34,29.46),
+				ang = Angle(4.2,-109.19,68.43)
+			},
+			{
+				pos = Vector(-24.63,77.76,8.65),
+				ang = Angle(24.05,-12.81,-1.87),
+				model = "models/hunter/plates/plate05x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(24.63,77.76,8.65),
+				ang = Angle(24.05,-167.19,1.87),
+				model = "models/hunter/plates/plate05x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(-30.17,61.36,32.79),
+				ang = Angle(-1.21,-92.38,-130.2),
+				model = "models/hunter/plates/plate025x05.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(30.17,61.36,32.79),
+				ang = Angle(-1.21,-87.62,130.2),
+				model = "models/hunter/plates/plate025x05.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(0,72.92,40.54),
+				ang = Angle(0,-180,0.79),
+				model = "models/hunter/plates/plate1x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(25.08,91.34,29.46),
+				ang = Angle(4.2,-70.81,-68.43),
+				model = "models/hunter/plates/plate025x05.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(-29.63,79.02,19.28),
+				ang = Angle(90,-18,0),
+				model = "models/hunter/plates/plate05x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(29.63,79.02,19.28),
+				ang = Angle(90,-162,0),
+				model = "models/hunter/plates/plate05x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(0,75.33,5.91),
+				ang = Angle(0,0,0),
+				model = "models/hunter/plates/plate1x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(0,98.02,35.74),
+				ang = Angle(63,90,0),
+				model = "models/hunter/plates/plate025x025.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			},
+			{
+				pos = Vector(0,100.55,7.41),
+				ang = Angle(90,-90,0),
+				model = "models/hunter/plates/plate1x1.mdl",
+				material = "lights/white",
+				color = Color(0,0,0,255)
+			}
+		},
+		
+		FrontHeight = 20,
+		FrontConstant = 50000,
+		FrontDamping = 4000,
+		FrontRelativeDamping = 3000,
+		
+		RearHeight = 20,
+		RearConstant = 50000,
+		RearDamping = 4000,
+		RearRelativeDamping = 3000,
+		
+		FastSteeringAngle = 10,
+		SteeringFadeFastSpeed = 535,
+		
+		TurnSpeed = 8,
+		
+		MaxGrip = 140,
+		Efficiency = 1.25,
+		GripOffset = -14,
+		BrakePower = 120,
+		BulletProofTires = true,
+		
+		IdleRPM = 750,
+		LimitRPM = 5500,
+		PeakTorque = 180,
+		PowerbandStart = 1000,
+		PowerbandEnd = 4500,
+		Turbocharged = false,
+		Supercharged = false,
+		
+		FuelFillPos = Vector(-61.34,49.71,15.98),
+		FuelType = FUELTYPE_DIESEL,
+		FuelTankSize = 120,
+		
+		PowerBias = 0,
+		
+		EngineSoundPreset = 0,
+		
+		Sound_Idle = "simulated_vehicles/misc/Nanjing_loop.wav",
+		Sound_IdlePitch = 1,
+		
+		Sound_Mid = "simulated_vehicles/misc/m50.wav",
+		Sound_MidPitch = 1,
+		Sound_MidVolume = 1,
+		Sound_MidFadeOutRPMpercent = 58,
+		Sound_MidFadeOutRate = 0.476,
+		
+		Sound_High = "simulated_vehicles/misc/v8high2.wav",
+		Sound_HighPitch = 1,
+		Sound_HighVolume = 0.75,
+		Sound_HighFadeInRPMpercent = 58,
+		Sound_HighFadeInRate = 0.19,
+		
+		Sound_Throttle = "",
+		Sound_ThrottlePitch = 0,
+		Sound_ThrottleVolume = 0,
+		
+		snd_horn = "simulated_vehicles/horn_2.wav",
+		
+		ForceTransmission = 1,
+		
+		DifferentialGear = 0.27,
+		Gears = {-0.09,0,0.09,0.18,0.28,0.35}
+	}
+}
+list.Set( "simfphys_vehicles", "sim_fphys_conscriptapc_armed2", V )
 
 
 local V = {

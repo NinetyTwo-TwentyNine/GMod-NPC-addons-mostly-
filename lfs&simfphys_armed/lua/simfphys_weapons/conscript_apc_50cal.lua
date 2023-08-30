@@ -22,48 +22,60 @@ end
 function simfphys.weapon:ValidClasses()
 	
 	local classes = {
-		"sim_fphys_v8elite_armed2"
+		"sim_fphys_conscriptapc_armed2"
 	}
 	
 	return classes
 end
 
 function simfphys.weapon:Initialize( vehicle )
-	--vehicle:SetBodygroup(1,1)
+	local data = {}
+	data.Attachment = "muzzle_left"
+	data.Direction = Vector(1,0,0)
 
-	local ID = vehicle:LookupAttachment( "gun_ref" )
+	simfphys.RegisterCrosshair( vehicle:GetDriverSeat(), data )
+	simfphys.RegisterCamera( vehicle:GetDriverSeat(), Vector(13,45,50), Vector(13,45,50), true )
+	
+	if not istable( vehicle.PassengerSeats ) or not istable( vehicle.pSeat ) then return end
+	
+	for i = 2, table.Count( vehicle.pSeat ) do
+		simfphys.RegisterCamera( vehicle.pSeat[ i ], Vector(0,0,60), Vector(0,0,60) )
+	end
+
+
+	vehicle:ManipulateBoneScale(vehicle:LookupBone("turret_pitch"), Vector(0,0,0))
+	vehicle:ManipulateBoneScale(vehicle:LookupBone("turret_yaw"), Vector(0,0,0))
+
+	local ID = vehicle:LookupAttachment( "muzzle_left" )
 	local attachmentdata = vehicle:GetAttachment( ID )
 
 	local prop = ents.Create( "gmod_sent_vehicle_fphysics_attachment" )
 	prop:SetModel( "models/blu/tanks/leopard2a7_gib_4.mdl" )			
-	prop:SetPos( attachmentdata.Pos + vehicle:GetUp() * -88 + vehicle:GetRight() * -30 + vehicle:GetForward() * 25.5 )
-	prop:SetAngles( attachmentdata.Ang + Angle(0,-90,0) )
-	prop:SetModelScale( 0.8 ) 
+	prop:SetPos( attachmentdata.Pos + vehicle:GetUp() * -115 + vehicle:GetForward() * 25 + vehicle:GetRight() * 10 )
+	prop:SetAngles( attachmentdata.Ang + Angle(0,-90,-90) )
+	prop:SetModelScale( 1.0 ) 
 	prop:Spawn()
 	prop:Activate()
 	prop:SetNotSolid( true )
 	prop:SetParent( vehicle, ID )
 	prop.DoNotDuplicate = true
-
-	simfphys.RegisterCrosshair( vehicle:GetDriverSeat() )
-	
-	simfphys.SetOwner( vehicle.EntityOwner, prop )
 end
 
 function simfphys.weapon:AimWeapon( ply, vehicle, pod )	
-	local Aimang = ply:EyeAngles()
-	local AimRate = 250
+	local Aimang = pod:WorldToLocalAngles( ply:EyeAngles() )
+	local AimRate = 200
 	
 	local Angles = vehicle:WorldToLocalAngles( Aimang ) - Angle(0,90,0)
 	
 	vehicle.sm_pp_yaw = vehicle.sm_pp_yaw and math.ApproachAngle( vehicle.sm_pp_yaw, Angles.y, AimRate * FrameTime() ) or 0
 	vehicle.sm_pp_pitch = vehicle.sm_pp_pitch and math.ApproachAngle( vehicle.sm_pp_pitch, Angles.p, AimRate * FrameTime() ) or 0
+	vehicle.sm_pp_pitch = ( (vehicle.sm_pp_pitch > -20) and vehicle.sm_pp_pitch ) or -20
 	
 	local TargetAng = Angle(vehicle.sm_pp_pitch,vehicle.sm_pp_yaw,0)
 	TargetAng:Normalize() 
 	
-	vehicle:SetPoseParameter("vehicle_weapon_yaw", -TargetAng.y )
-	vehicle:SetPoseParameter("vehicle_weapon_pitch", -TargetAng.p )
+	vehicle:SetPoseParameter("turret_yaw", TargetAng.y )
+	vehicle:SetPoseParameter("turret_pitch", -TargetAng.p )
 	
 	return Aimang
 end
@@ -85,7 +97,7 @@ function simfphys.weapon:Think( vehicle )
 		return
 	end
 	
-	local ID = vehicle:LookupAttachment( "muzzle" )
+	local ID = vehicle:LookupAttachment( "muzzle_left" )
 	local Attachment = vehicle:GetAttachment( ID )
 	
 	self:AimWeapon( ply, vehicle, pod )
@@ -94,7 +106,7 @@ function simfphys.weapon:Think( vehicle )
 	local deltapos = vehicle:GetPos() - vehicle.wOldPos
 	vehicle.wOldPos = vehicle:GetPos()
 
-	local shootOrigin = Attachment.Pos + vehicle:GetUp()*5 + Attachment.Ang:Forward()*7 + deltapos * engine.TickInterval()
+	local shootOrigin = Attachment.Pos + deltapos * engine.TickInterval()
 
 	local fire = ply:KeyDown( IN_ATTACK )
 	
@@ -123,13 +135,13 @@ end
 function simfphys.weapon:PrimaryAttack( vehicle, ply, shootOrigin, Attachment, ID )
 	if not self:CanPrimaryAttack( vehicle ) then return end
 	
-	/*local effectdata = EffectData()
+	local effectdata = EffectData()
 		effectdata:SetOrigin( shootOrigin )
 		effectdata:SetAngles( Attachment.Ang )
 		effectdata:SetEntity( vehicle )
 		effectdata:SetAttachment( ID )
-		effectdata:SetScale( 1 )
-	util.Effect( "AirboatMuzzleFlash", effectdata, true, true )*/
+		effectdata:SetScale( 4 )
+	util.Effect( "CS_MuzzleFlash", effectdata, true, true )
 	
 	MachineGunFire(ply,vehicle,shootOrigin,Attachment,20)
 	
