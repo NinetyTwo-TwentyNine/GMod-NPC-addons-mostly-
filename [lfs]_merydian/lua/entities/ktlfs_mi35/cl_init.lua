@@ -24,7 +24,7 @@ function ENT:LFSHudPaintPassenger( X, Y, ply )
 	if Attachment then
 		-- for the crosshair to be accurate CLIENT aiming code has to be exactly the same as SERVER aiming code
 		
-		local TargetDir = Attachment.Ang:Forward()
+		local TargetDir = -Attachment.Ang:Forward()
 		/*local Dir = ply:EyeAngles():Forward()
 		local Forward = self:LocalToWorldAngles( Angle(20,0,0) ):Forward()
 		local AimDirToForwardDir = math.deg( math.acos( math.Clamp( Forward:Dot( Dir ) ,-1,1) ) )

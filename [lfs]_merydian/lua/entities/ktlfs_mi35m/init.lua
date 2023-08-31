@@ -46,7 +46,7 @@ function ENT:AltPrimaryAttack( Driver, Pod, Dir )
 
 	self:SetNextAltPrimary( 0.05 )
 	
-	local TargetDir = Attachment.Ang:Forward()
+	local TargetDir = -Attachment.Ang:Forward()
 	
 	-- ignore attachment angles and make aiming 100% accurate to player view direction
 	/*local Forward = self:LocalToWorldAngles( Angle(20,0,0) ):Forward()
