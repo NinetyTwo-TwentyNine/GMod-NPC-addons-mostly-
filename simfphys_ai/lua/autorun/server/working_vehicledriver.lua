@@ -65,6 +65,9 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 			func_table[BNS_DFT_GET_VEHICLE_BLENGTH] = function()
 				return (ent.Vehicle.BLength)
 			end
+			func_table[BNS_DFT_GET_VEHICLE_WIDTH] = function()
+				return (ent.Vehicle.Width)
+			end
 
 			BNS_AddVehicleDrivingAI(ent, func_table)
 			end)

@@ -42,6 +42,9 @@ hook.Add("OnEntityCreated", "Combine APC Driver AI", function(ent)
 				func_table[BNS_DFT_GET_VEHICLE_BLENGTH] = function()
 					return (ent.Vehicle:OBBMins().y)
 				end
+				func_table[BNS_DFT_GET_VEHICLE_WIDTH] = function()
+					return (math.abs(ent.Vehicle:OBBMaxs().x - ent.Vehicle:OBBMins().x))
+				end
 
 				BNS_AddVehicleDrivingAI(ent, func_table)
 			end

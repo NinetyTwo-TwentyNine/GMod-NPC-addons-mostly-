@@ -110,11 +110,11 @@ function simfphys.weapon:Initialize( vehicle )
 
 	if not istable( vehicle.PassengerSeats ) or not istable( vehicle.pSeat ) then return end
 
-	simfphys.RegisterCrosshair( vehicle.pSeat[1] , { Attachment = "muzzle_m240", Type = 5 } )
-	simfphys.RegisterCamera( vehicle.pSeat[1], Vector(0,-8,0), Vector(0,40,140), true, "m240_view" )
+	simfphys.RegisterCrosshair( vehicle.pSeat[1] , { Attachment = "muzzle_m2", Type = 5 } )
+	simfphys.RegisterCamera( vehicle.pSeat[1], Vector(0,-8,0), Vector(0,40,140), true, "m2_view" )
 
-	simfphys.RegisterCrosshair( vehicle.pSeat[2] , { Attachment = "muzzle_m2", Type = 5 } )
-	simfphys.RegisterCamera( vehicle.pSeat[2], Vector(0,-8,0), Vector(0,40,140), true, "m2_view" )
+	simfphys.RegisterCrosshair( vehicle.pSeat[2] , { Attachment = "muzzle_m240", Type = 5 } )
+	simfphys.RegisterCamera( vehicle.pSeat[2], Vector(0,-8,0), Vector(0,40,140), true, "m240_view" )
 
 	timer.Simple( 1, function()
 		if not IsValid( vehicle ) then return end
@@ -302,7 +302,7 @@ function simfphys.weapon:ControlM2( vehicle, deltapos )
 
 	if not istable( vehicle.PassengerSeats ) or not istable( vehicle.pSeat ) then return end
 
-	local pod = vehicle.pSeat[2]
+	local pod = vehicle.pSeat[1]
 
 	if not IsValid( pod ) then return end
 
@@ -362,7 +362,7 @@ function simfphys.weapon:ControlM240( vehicle, deltapos )
 
 	if not istable( vehicle.PassengerSeats ) or not istable( vehicle.pSeat ) then return end
 
-	local pod = vehicle.pSeat[1]
+	local pod = vehicle.pSeat[2]
 
 	if not IsValid( pod ) then return end
 
