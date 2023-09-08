@@ -7,7 +7,7 @@ BNS_DFT_CHECK_NPC_MOVEMENT = 6
 BNS_DFT_CHECK_NPC_BMOVEMENT = 7
 BNS_DFT_GET_VEHICLE_FLENGTH = 8
 BNS_DFT_GET_VEHICLE_BLENGTH = 9
-BNS_DFT_GET_VEHICLE_WIDTH = 10
+BNS_DFT_GET_VEHICLE_SIZEQUOTA = 10
 
 function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 	if !(ent:GetClass() == "npc_apcdriver" || ent:GetClass() == "npc_vehicledriver") then return end
@@ -195,7 +195,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 		if ent.HasTarget then
 			if !ent.Driving and !ent.TargetInSight then
 				if !ent.VehiclePath then
-					ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_WIDTH](), ent.AvoidAreas )
+					ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
 					ent.CurrentArea = 1
 				elseif istable(ent.VehiclePath) then
 					if table.GetLastValue(ent.VehiclePath) != navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) then
@@ -216,7 +216,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 							end
 
 							if table.HasValue( ent.CheckTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
-								ent.PathBuildup = Astar( ent.VehiclePath[table.Count(ent.VehiclePath)], navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_WIDTH](), ent.AvoidAreas )
+								ent.PathBuildup = Astar( ent.VehiclePath[table.Count(ent.VehiclePath)], navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
 								if istable(ent.PathBuildup) then
 									table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
 									for k,v in pairs(ent.PathBuildup) do
@@ -227,7 +227,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 								end
 								ent.PathBuildup = nil
 							else
-								ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_WIDTH](), ent.AvoidAreas )
+								ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
 								ent.CurrentArea = 1
 							end
 							ent.CheckTable = nil

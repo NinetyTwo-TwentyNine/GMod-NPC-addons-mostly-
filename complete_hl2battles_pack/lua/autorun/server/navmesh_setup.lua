@@ -171,14 +171,16 @@ function Astar( start, goal, sizequota, avoidthose )
 
 				local deltaXY = math.abs(neighbor:GetCenter().x - current:GetCenter().x) - math.abs(neighbor:GetCenter().y - current:GetCenter().y)
 				if deltaXY != 0 then
-					local area_size
+					local area_size_width, area_size_length
 					if deltaXY < 0 then  // We need to choose perpendicular direction to ours
-						area_size = BNS_Server_NavAreaSizes[neighbor:GetID()]["X"]
+						area_size_width = BNS_Server_NavAreaSizes[neighbor:GetID()]["X"]
+						area_size_length = BNS_Server_NavAreaSizes[neighbor:GetID()]["Y"]
 					else
-						area_size = BNS_Server_NavAreaSizes[neighbor:GetID()]["Y"]
+						area_size_width = BNS_Server_NavAreaSizes[neighbor:GetID()]["Y"]
+						area_size_length = BNS_Server_NavAreaSizes[neighbor:GetID()]["X"]
 					end
 
-					if area_size[1] < (sizequota / 2) || area_size[2] < (sizequota / 2) then
+					if area_size_width[1] < (sizequota.width / 2) || area_size_width[2] < (sizequota.width / 2) || area_size_length[1] < (sizequota.length / 2) || area_size_length[2] < (sizequota.length / 2) then
 						continue
 					end
 				end

@@ -463,7 +463,7 @@ function ENT:OnRemove()
 			end
 		end
 
-		if IsValid(vehicledriver) then
+		if IsValid(vehicledriver) && IsValid(seat) then
 			vehicledriver:Remove()
 		end
 	end)

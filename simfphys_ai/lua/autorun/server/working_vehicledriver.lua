@@ -39,34 +39,34 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 
 			local func_table = {}
 			func_table[BNS_DFT_CHECK_VEHICLE_INWATER] = function()
-				return (ent.Vehicle:WaterLevel() > 2)
+				return ( ent.Vehicle:WaterLevel() > 2 )
 			end
 			func_table[BNS_DFT_CHECK_VEHICLE_NOGROUND] = function()
-				return (!ent.Vehicle:IsDriveWheelsOnGround())
+				return ( !ent.Vehicle:IsDriveWheelsOnGround() )
 			end
 			func_table[BNS_DFT_CHECK_VEHICLE_STOPPED] = function()
-				return (math.abs(ent.Vehicle.ForwardSpeed) < 5)
+				return ( math.abs(ent.Vehicle.ForwardSpeed) < 5 )
 			end
 			func_table[BNS_DFT_CHECK_NPC_HASTARGET] = function()
-				return (IsValid(ent:GetEnemy()))
+				return ( IsValid(ent:GetEnemy()) )
 			end
 			func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT] = function()
-				return (ent.HasTarget && math.Round(CurTime() - ent:GetEnemyLastTimeSeen(), 1) <= 0.1)
+				return ( ent.HasTarget && math.Round(CurTime() - ent:GetEnemyLastTimeSeen(), 1) <= 0.1 )
 			end
 			func_table[BNS_DFT_CHECK_NPC_MOVEMENT] = function()
-				return (ent:GetKeyValues()["target"] != "")
+				return ( ent:GetKeyValues()["target"] != "" )
 			end
 			func_table[BNS_DFT_CHECK_NPC_BMOVEMENT] = function()
-				return (ent.Retranslator.GoingBackwards)
+				return ( ent.Retranslator.GoingBackwards )
 			end
 			func_table[BNS_DFT_GET_VEHICLE_FLENGTH] = function()
-				return (ent.Vehicle.FLength)
+				return ( ent.Vehicle.FLength )
 			end
 			func_table[BNS_DFT_GET_VEHICLE_BLENGTH] = function()
-				return (ent.Vehicle.BLength)
+				return ( ent.Vehicle.BLength )
 			end
-			func_table[BNS_DFT_GET_VEHICLE_WIDTH] = function()
-				return (ent.Vehicle.Width)
+			func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA] = function()
+				return ( {width = ent.Vehicle.Width, length = ent.Vehicle.FLength - ent.Vehicle.BLength} )
 			end
 
 			BNS_AddVehicleDrivingAI(ent, func_table)

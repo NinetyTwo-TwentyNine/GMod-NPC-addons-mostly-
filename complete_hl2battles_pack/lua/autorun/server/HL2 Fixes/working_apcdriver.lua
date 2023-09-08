@@ -16,34 +16,34 @@ hook.Add("OnEntityCreated", "Combine APC Driver AI", function(ent)
 
 				local func_table = {}
 				func_table[BNS_DFT_CHECK_VEHICLE_INWATER] = function()
-					return (ent.Vehicle:WaterLevel() > 2)
+					return ( ent.Vehicle:WaterLevel() > 2 )
 				end
 				func_table[BNS_DFT_CHECK_VEHICLE_NOGROUND] = function()
-					return (ent.Vehicle:GetOperatingParams().wheelsInContact <= 1)
+					return ( ent.Vehicle:GetOperatingParams().wheelsInContact <= 1 )
 				end
 				func_table[BNS_DFT_CHECK_VEHICLE_STOPPED] = function()
-					return (ent.Vehicle:GetSpeed() == 0)
+					return ( ent.Vehicle:GetSpeed() == 0 )
 				end
 				func_table[BNS_DFT_CHECK_NPC_HASTARGET] = function()
-					return (IsValid(ent:GetEnemy()))
+					return ( IsValid(ent:GetEnemy()) )
 				end
 				func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT] = function()
-					return (ent.HasTarget && ent:Visible(ent:GetEnemy()))
+					return ( ent.HasTarget && ent:Visible(ent:GetEnemy()) )
 				end
 				func_table[BNS_DFT_CHECK_NPC_MOVEMENT] = function()
-					return (ent:IsMoving())
+					return ( ent:IsMoving() )
 				end
 				func_table[BNS_DFT_CHECK_NPC_BMOVEMENT] = function()
-					return ((ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMins().y):Distance(ent:GetCurWaypointPos()) < (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMaxs().y):Distance(ent:GetCurWaypointPos()))
+					return ( (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMins().y):Distance(ent:GetCurWaypointPos()) < (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMaxs().y):Distance(ent:GetCurWaypointPos()) )
 				end
 				func_table[BNS_DFT_GET_VEHICLE_FLENGTH] = function()
-					return (ent.Vehicle:OBBMaxs().y)
+					return ( ent.Vehicle:OBBMaxs().y )
 				end
 				func_table[BNS_DFT_GET_VEHICLE_BLENGTH] = function()
-					return (ent.Vehicle:OBBMins().y)
+					return ( ent.Vehicle:OBBMins().y )
 				end
-				func_table[BNS_DFT_GET_VEHICLE_WIDTH] = function()
-					return (math.abs(ent.Vehicle:OBBMaxs().x - ent.Vehicle:OBBMins().x))
+				func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA] = function()
+					return ( {width = ent.Vehicle:OBBMaxs().x - ent.Vehicle:OBBMins().x, length = ent.Vehicle:OBBMaxs().y - ent.Vehicle:OBBMins().y} )
 				end
 
 				BNS_AddVehicleDrivingAI(ent, func_table)
