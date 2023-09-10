@@ -39,6 +39,8 @@ function ENT:Initialize()
 
 	self:EstablishVehicleConnection()
 	self:SetupDriverFunctions()
+
+	self:DeleteOnRemove(self.VehicleDriver)
 end
 
 function ENT:EstablishVehicleConnection()
@@ -62,9 +64,12 @@ function ENT:EstablishVehicleConnection()
 	end
 
 
-	self.TraceFilter = {self.Vehicle}
-	table.Add(self.TraceFilter, self.Vehicle:GetChildren())
-	table.Add(self.TraceFilter, self.Vehicle.Wheels)
+	if self.SeatPos == 0 then
+		if !(self:SetVehicleParameters()) then
+			self:RemoveByError("Failed to identify vehicle parameters.")
+			return
+		end
+	end
 	
 	self.Vehicle:GetPassengerSeats() -- Updating vehicle's pSeat table before changing seat parameters
 	if self.SeatPos == 0 then
@@ -74,12 +79,10 @@ function ENT:EstablishVehicleConnection()
 	end
 	self.Seat:Fire("Lock")
 
-	if self.SeatPos == 0 then
-		if !(self:SetVehicleParameters()) then
-			self:RemoveByError("Failed to identify vehicle parameters.")
-			return
-		end
-	end
+
+	self.TraceFilter = {self.Vehicle}
+	table.Add(self.TraceFilter, self.Vehicle:GetChildren())
+	table.Add(self.TraceFilter, self.Vehicle.Wheels)
 
 	if self.Seat:GetNWBool("HasCrosshair", false) then
 		self.GunnerSeat = true
@@ -442,7 +445,6 @@ function ENT:OnRemove()
 	local vehicle = self.Vehicle
 	local seat = self.Seat
 	local seatpos = self.SeatPos
-	local vehicledriver = self.VehicleDriver
 
 	timer.Simple(FrameTime(), function()
 		if IsValid(vehicle) && IsValid(seat) && isnumber(seatpos) then
@@ -461,10 +463,6 @@ function ENT:OnRemove()
 			else
 				vehicle.pSeat[seatpos] = seat
 			end
-		end
-
-		if IsValid(vehicledriver) && IsValid(seat) then
-			vehicledriver:Remove()
 		end
 	end)
 end

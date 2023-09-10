@@ -170,9 +170,10 @@ function Astar( start, goal, sizequota, avoidthose )
 				end
 
 				local deltaXY = math.abs(neighbor:GetCenter().x - current:GetCenter().x) - math.abs(neighbor:GetCenter().y - current:GetCenter().y)
-				if deltaXY != 0 then
-					local area_size_width, area_size_length
-					if deltaXY < 0 then  // We need to choose perpendicular direction to ours
+
+				local area_size_width, area_size_length
+				if math.Round(deltaXY) != 0 then
+					if deltaXY < 0 then  // We need to choose perpendicular direction to ours (for width)
 						area_size_width = BNS_Server_NavAreaSizes[neighbor:GetID()]["X"]
 						area_size_length = BNS_Server_NavAreaSizes[neighbor:GetID()]["Y"]
 					else
@@ -181,6 +182,13 @@ function Astar( start, goal, sizequota, avoidthose )
 					end
 
 					if area_size_width[1] < (sizequota.width / 2) || area_size_width[2] < (sizequota.width / 2) || area_size_length[1] < (sizequota.length / 2) || area_size_length[2] < (sizequota.length / 2) then
+						continue
+					end
+				else
+					area_size_width = BNS_Server_NavAreaSizes[neighbor:GetID()]["X"]
+					area_size_length = BNS_Server_NavAreaSizes[neighbor:GetID()]["Y"]
+
+					if area_size_width[1] < ((sizequota.width + sizequota.length) / 4) || area_size_width[2] < ((sizequota.width + sizequota.length) / 4) || area_size_length[1] < ((sizequota.width + sizequota.length) / 4) || area_size_length[2] < ((sizequota.width + sizequota.length) / 4) then
 						continue
 					end
 				end
