@@ -71,11 +71,11 @@ local function AreaSizeCheck(current, nav_direction, initial)
 
 
 		if nav_direction % 2 > 0 then
-			if ( initial:GetCenter().y - (neighbor:GetCenter().y + neighbor:GetSizeY()/2) ) > -12.5 || ( initial:GetCenter().y - (neighbor:GetCenter().y - neighbor:GetSizeY()/2) ) < 12.5 then
+			if math.abs( initial:GetCenter().y - neighbor:GetCenter().y ) < ( neighbor:GetSizeY() + initial:GetSizeY() ) / 4 then
 				newcurrent_table[neighbor:GetID()] = math.abs(current:GetCenter().x - neighbor:GetCenter().x)
 			end
 		else
-			if ( initial:GetCenter().x - (neighbor:GetCenter().x + neighbor:GetSizeX()/2) ) > -12.5 || ( initial:GetCenter().x - (neighbor:GetCenter().x - neighbor:GetSizeX()/2) ) < 12.5 then
+			if math.abs( initial:GetCenter().x - neighbor:GetCenter().x ) < ( neighbor:GetSizeX() + initial:GetSizeX() ) / 4 then
 				newcurrent_table[neighbor:GetID()] = math.abs(current:GetCenter().y - neighbor:GetCenter().y)
 			end
 		end

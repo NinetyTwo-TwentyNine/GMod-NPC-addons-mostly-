@@ -56,7 +56,7 @@ local function cannon_fire(ply,vehicle,shootOrigin,shootDirection)
 	vehicle:EmitSound("t90ms_fire")
 	vehicle:EmitSound("t90ms_reload")
 	
-	timer.Simple( 4, function() 
+	timer.Simple( 3, function() 
 		if IsValid( vehicle ) then 
 			vehicle:EmitSound("simulated_vehicles/weapons/leopard_ready.wav")
 		end

@@ -57,8 +57,8 @@ function simfphys.weapon:Initialize( vehicle )
 		simfphys.RegisterCamera( vehicle.pSeat[ i ], Vector(0,30,60), Vector(0,-20,60) )
 	end
 
-	vehicle.missles = {}
-	vehicle.max_missles = 5
+	vehicle.missiles = {}
+	vehicle.max_missiles = 5
 end
 
 function simfphys.weapon:AimWeapon( ply, vehicle, pod )	
@@ -103,7 +103,7 @@ function simfphys.weapon:Think( vehicle )
 	
 	local tr = util.TraceLine( {
 		start = Attachment.Pos,
-		endpos = Attachment.Pos + Aimang:Forward() * 10000,
+		endpos = Attachment.Pos + Attachment.Ang:Forward() * 50000,
 		filter = {vehicle}
 	} )
 	local Aimpos = tr.HitPos
@@ -128,45 +128,45 @@ function simfphys.weapon:Think( vehicle )
 		vehicle.afire_pressed = alt_fire
 		if alt_fire then
 			if vehicle.NextSecondaryShoot < curtime then
-				if table.Count(vehicle.missles) < vehicle.max_missles then
+				if table.Count(vehicle.missiles) < vehicle.max_missiles then
 					vehicle:EmitSound("PropAPC.FireCannon")
 					
 					local attch = vehicle:GetAttachment( vehicle:LookupAttachment( "cannon_muzzle" ) )
 					
-					local missle = ents.Create( "rpg_missile" ) -- need to make my own projectile entity at some point
-					missle:SetPos( attch.Pos )
-					missle:SetAngles( attch.Ang - Angle(15,0,0) )
-					missle:SetOwner( vehicle )
-					missle:SetSaveValue( "m_flDamage", 250 )
-					missle:Spawn()
-					missle:Activate()
+					local missile = ents.Create( "rpg_missile" ) -- need to make my own projectile entity at some point
+					missile:SetPos( attch.Pos )
+					missile:SetAngles( attch.Ang - Angle(15,0,0) )
+					missile:SetOwner( vehicle )
+					missile:SetSaveValue( "m_flDamage", 250 )
+					missile:Spawn()
+					missile:Activate()
 
-					vehicle.missles[missle:EntIndex()] = missle
-					missle:CallOnRemove("RemoveMissleFromTable", function()
+					vehicle.missiles[missile:EntIndex()] = missile
+					missile:CallOnRemove("RemovemissileFromTable", function()
 						if !IsValid(vehicle) then return end
-						vehicle.missles[missle:EntIndex()] = nil
+						vehicle.missiles[missile:EntIndex()] = nil
 					end)
 					
-					missle.DirVector = missle:GetAngles():Forward()
+					missile.DirVector = missile:GetAngles():Forward()
 					
 					vehicle.NextSecondaryShoot = curtime + 0.5
-					missle.UnlockTime = curtime + 0.5
+					missile.UnlockTime = curtime + 0.5
 				end
 			end
 		end
 	end
 	
-	for _,missle in pairs(vehicle.missles) do
-		if missle.UnlockTime < curtime then
-			local targetdir = Aimpos - missle:GetPos()
+	for _,missile in pairs(vehicle.missiles) do
+		if missile.UnlockTime < curtime then
+			local targetdir = Aimpos - missile:GetPos()
 			targetdir:Normalize()
 			
-			missle.DirVector = missle.DirVector + (targetdir - missle.DirVector) * 0.1
+			missile.DirVector = missile.DirVector + (targetdir - missile.DirVector) * 0.1
 			
-			local vel = -missle:GetVelocity() + missle.DirVector * 1500 // + vehicle:GetVelocity()
+			local vel = -missile:GetVelocity() + missile.DirVector * 1500 // + vehicle:GetVelocity()
 			
-			missle:SetVelocity( vel )
-			missle:SetAngles( missle.DirVector:Angle() )
+			missile:SetVelocity( vel )
+			missile:SetAngles( missile.DirVector:Angle() )
 		end
 	end
 	
