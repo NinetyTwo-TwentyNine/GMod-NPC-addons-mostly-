@@ -16,16 +16,24 @@ local function CreateAreaDisconnection(current, neighbor)
 	end
 end
 
-local function AreaSizeCheck(current, nav_direction)
-	local newcurrent = current
-	local deltaZ, deltaXY, elevationAngle
+local function AreaSizeCheck(current, nav_direction, initial)
+	initial = initial or current
+	local deltaZ, elevationAngle
 	local area_size = 0
 
+	local newcurrent_table = {}
 	for _,neighbor in pairs( current:GetAdjacentAreasAtSide(nav_direction) ) do
+		if BNS_Server_NavAreaDisconnections[neighbor:GetID()] then
+			if table.HasValue(BNS_Server_NavAreaDisconnections[neighbor:GetID()], current:GetID()) then continue end
+		end
+		if BNS_Server_NavAreaDisconnections[current:GetID()] then
+			if table.HasValue(BNS_Server_NavAreaDisconnections[current:GetID()], neighbor:GetID()) then continue end
+		end
+
 		deltaZ = current:ComputeAdjacentConnectionHeightChange(neighbor)
-		if math.abs(deltaZ) > 25 then
+		if math.abs(deltaZ) > 12.5 then
 			CreateAreaDisconnection(current, neighbor)
-			break
+			continue
 		end
 
 		deltaZ = current:GetClosestPointOnArea(neighbor:GetCenter()).z - current:GetCenter().z
@@ -36,7 +44,7 @@ local function AreaSizeCheck(current, nav_direction)
 		end
 		if math.abs(elevationAngle) > (math.pi / 6) then
 			CreateAreaDisconnection(current, neighbor)
-			break
+			continue
 		end
 
 		deltaZ = neighbor:GetClosestPointOnArea(current:GetCenter()).z - neighbor:GetCenter().z
@@ -47,7 +55,7 @@ local function AreaSizeCheck(current, nav_direction)
 		end
 		if math.abs(elevationAngle) > (math.pi / 6) then
 			CreateAreaDisconnection(current, neighbor)
-			break
+			continue
 		end
 
 		deltaZ = current:GetCenter().z - neighbor:GetCenter().z
@@ -58,25 +66,86 @@ local function AreaSizeCheck(current, nav_direction)
 		end
 		if math.abs(elevationAngle) > (math.pi / 6) then
 			CreateAreaDisconnection(current, neighbor)
-			break
+			continue
 		end
+
 
 		if nav_direction % 2 > 0 then
-			deltaXY = math.abs(current:GetCenter().x - neighbor:GetCenter().x)
+			if ( initial:GetCenter().y - (neighbor:GetCenter().y + neighbor:GetSizeY()/2) ) > -12.5 || ( initial:GetCenter().y - (neighbor:GetCenter().y - neighbor:GetSizeY()/2) ) < 12.5 then
+				newcurrent_table[neighbor:GetID()] = math.abs(current:GetCenter().x - neighbor:GetCenter().x)
+			end
 		else
-			deltaXY = math.abs(current:GetCenter().y - neighbor:GetCenter().y)
-		end
-		if deltaXY > area_size then
-			area_size = deltaXY
-			newcurrent = neighbor
+			if ( initial:GetCenter().x - (neighbor:GetCenter().x + neighbor:GetSizeX()/2) ) > -12.5 || ( initial:GetCenter().x - (neighbor:GetCenter().x - neighbor:GetSizeX()/2) ) < 12.5 then
+				newcurrent_table[neighbor:GetID()] = math.abs(current:GetCenter().y - neighbor:GetCenter().y)
+			end
 		end
 	end
 
-	if nav_direction % 2 > 0 then
-		return (area_size + newcurrent:GetSizeX()/2)
-	else
-		return (area_size + newcurrent:GetSizeY()/2)
+	for _,k in pairs(table.GetKeys(newcurrent_table)) do
+		local newcurrent_areasize
+		if BNS_Server_NavAreaSizes[k] then
+			if nav_direction % 2 == 1 && BNS_Server_NavAreaSizes[k]["X"] then
+				if nav_direction == 1 then 
+					newcurrent_areasize = BNS_Server_NavAreaSizes[k]["X"][1]
+				else
+					newcurrent_areasize = BNS_Server_NavAreaSizes[k]["X"][2]
+				end
+			end
+			if nav_direction % 2 == 0 && BNS_Server_NavAreaSizes[k]["Y"] then
+				if nav_direction == 0 then 
+					newcurrent_areasize = BNS_Server_NavAreaSizes[k]["Y"][1]
+				else
+					newcurrent_areasize = BNS_Server_NavAreaSizes[k]["Y"][2]
+				end
+			end
+		end
+
+		if !isnumber(newcurrent_areasize) then
+			newcurrent_areasize = AreaSizeCheck(navmesh.GetNavAreaByID(k), nav_direction, initial)
+		end
+		newcurrent_table[k] = newcurrent_table[k] + newcurrent_areasize
 	end
+
+	if !table.IsEmpty(newcurrent_table) then
+		for k,v in pairs(newcurrent_table) do
+			if area_size < v then
+				area_size = v
+			end
+		end
+	else
+		if nav_direction % 2 > 0 then
+			area_size = (current:GetSizeX()/2)
+		else
+			area_size = (current:GetSizeY()/2)
+		end
+	end
+
+	if !BNS_Server_NavAreaSizes[current:GetID()] then
+		BNS_Server_NavAreaSizes[current:GetID()] = {}
+	end
+	if nav_direction % 2 == 1 then
+		if !BNS_Server_NavAreaSizes[current:GetID()]["X"] then
+			BNS_Server_NavAreaSizes[current:GetID()]["X"] = {}
+		end
+
+		if nav_direction == 1 then 
+			BNS_Server_NavAreaSizes[current:GetID()]["X"][1] = area_size
+		else
+			BNS_Server_NavAreaSizes[current:GetID()]["X"][2] = area_size
+		end
+	end
+	if nav_direction % 2 == 0 then
+		if !BNS_Server_NavAreaSizes[current:GetID()]["Y"] then
+			BNS_Server_NavAreaSizes[current:GetID()]["Y"] = {}
+		end
+
+		if nav_direction == 0 then 
+			BNS_Server_NavAreaSizes[current:GetID()]["Y"][1] = area_size
+		else
+			BNS_Server_NavAreaSizes[current:GetID()]["Y"][2] = area_size
+		end
+	end
+	return area_size
 end
 
 
@@ -84,15 +153,29 @@ cvars.AddChangeCallback("nav_area_size_check_complete", function()
 	if GetConVarNumber("nav_area_size_check_complete") == 0 then
 		table.Empty(BNS_Server_NavAreaSizes)
 		for k,current in pairs(navmesh.GetAllNavAreas()) do
-			BNS_Server_NavAreaSizes[current:GetID()] = {}
+			if !BNS_Server_NavAreaSizes[current:GetID()] then
+				BNS_Server_NavAreaSizes[current:GetID()] = {}
+			end
 
-			BNS_Server_NavAreaSizes[current:GetID()]["X"] = {}
-			BNS_Server_NavAreaSizes[current:GetID()]["X"][1] = AreaSizeCheck(current, 1)
-			BNS_Server_NavAreaSizes[current:GetID()]["X"][2] = AreaSizeCheck(current, 3)
+			if !BNS_Server_NavAreaSizes[current:GetID()]["X"] then
+				BNS_Server_NavAreaSizes[current:GetID()]["X"] = {}
+			end
+			if !BNS_Server_NavAreaSizes[current:GetID()]["X"][1] then
+				BNS_Server_NavAreaSizes[current:GetID()]["X"][1] = AreaSizeCheck(current, 1)
+			end
+			if !BNS_Server_NavAreaSizes[current:GetID()]["X"][2] then
+				BNS_Server_NavAreaSizes[current:GetID()]["X"][2] = AreaSizeCheck(current, 3)
+			end
 
-			BNS_Server_NavAreaSizes[current:GetID()]["Y"] = {}
-			BNS_Server_NavAreaSizes[current:GetID()]["Y"][1] = AreaSizeCheck(current, 0)
-			BNS_Server_NavAreaSizes[current:GetID()]["Y"][2] = AreaSizeCheck(current, 2)
+			if !BNS_Server_NavAreaSizes[current:GetID()]["Y"] then
+				BNS_Server_NavAreaSizes[current:GetID()]["Y"] = {}
+			end
+			if !BNS_Server_NavAreaSizes[current:GetID()]["Y"][1] then
+				BNS_Server_NavAreaSizes[current:GetID()]["Y"][1] = AreaSizeCheck(current, 0)
+			end
+			if !BNS_Server_NavAreaSizes[current:GetID()]["Y"][2] then
+				BNS_Server_NavAreaSizes[current:GetID()]["Y"][2] = AreaSizeCheck(current, 2)
+			end
 		end
 		GetConVar("nav_area_size_check_complete"):SetFloat(1)
 		print("Done figuring out the navmesh data! ("..navmesh.GetNavAreaCount().." navigation areas in total)")
