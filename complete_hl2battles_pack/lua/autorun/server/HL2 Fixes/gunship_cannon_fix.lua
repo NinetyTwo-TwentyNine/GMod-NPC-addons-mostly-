@@ -1,7 +1,7 @@
 
 
 hook.Add("EntityEmitSound", "GunshipCannonFix", function(data)
-	if data.Entity then
+	if IsValid(data.Entity) then
 		local npc = data.Entity
 		if npc:GetClass() == "npc_combinegunship" then
 			if data.SoundName == "npc/strider/charging.wav" then
