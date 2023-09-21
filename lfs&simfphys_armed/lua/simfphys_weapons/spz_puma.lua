@@ -332,7 +332,7 @@ function simfphys.weapon:ControlTrackSounds( vehicle, wheelslocked )
 		vehicle.fastenuf = fastenuf
 
 		if fastenuf then
-			vehicle.track_snd = CreateSound( vehicle, "simulated_vehicles/sherman/sherman_tracks.wav" )
+			vehicle.track_snd = CreateSound( vehicle, "simulated_vehicles/sherman/tracks.wav" )
 			vehicle.track_snd:PlayEx(0,0)
 			vehicle:CallOnRemove( "stopmesounds", function( veh )
 				if veh.track_snd then
