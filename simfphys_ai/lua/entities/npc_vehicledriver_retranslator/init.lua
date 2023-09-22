@@ -452,7 +452,7 @@ function ENT:CheckIfMovementRequired()
 
 	if (math.Round(CurTime() - self.VehicleDriver:GetEnemyLastTimeSeen(), 1) <= 0.1) && (self.VehicleDriver:GetKeyValues()["target"] == "") then
 		self.AdditionalMovementCounter = self.AdditionalMovementCounter or 0
-		self.AdditionalMovementCounter = self.AdditionalMovementCounter + FrameTime() / ((self.TurretHasStopped and 2) or 1)
+		self.AdditionalMovementCounter = self.AdditionalMovementCounter + FrameTime() * ((self.TurretHasStopped and 1) or 0.5)
 		if self.AdditionalMovementCounter > 2.0 then
 			self.AdditionalMovementCounter = nil
 			self.AdditionalMovementRequired = true
