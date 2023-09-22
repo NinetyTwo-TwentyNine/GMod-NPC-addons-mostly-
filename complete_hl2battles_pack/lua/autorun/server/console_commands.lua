@@ -4,8 +4,13 @@ concommand.Add( "ent_getproperties", function (ply, cmd, args)
 		local ent = eyetrace.Entity
 		if table.IsEmpty(args) then
 			PrintTable(ent:GetKeyValues())
-		elseif ent:GetKeyValues()[args[1]] then
-			print(ent:GetKeyValues()[args[1]])
+		else
+			for k,v in pairs(ent:GetKeyValues()) do
+				if string.lower(k) == string.lower(args[1]) then
+					print(v)
+					break
+				end
+			end
 		end
 	end
 end)

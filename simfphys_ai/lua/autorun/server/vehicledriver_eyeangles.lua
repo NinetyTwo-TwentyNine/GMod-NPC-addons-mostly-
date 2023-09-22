@@ -6,10 +6,11 @@ hook.Add("InitPostEntity", "Simfphys_VehicleDriver_EyeAngles", function()	// I a
 		list.GetForEdit("SimfphysAI_DefaultFunctionsSave")[k] = v
 	end
 
+	local DefaultEyeAngles = table.Copy(FindMetaTable("Entity")).EyeAngles
 	FindMetaTable("Entity").EyeAngles = function(ent)
 		if table.HasValue(SIMFPHYS_AI_NpcIds, ent:EntIndex()) then
 			return ent:GetTable().EyeAngles()
 		end
-		return list.Get("SimfphysAI_DefaultFunctionsSave").EyeAngles(ent)
+		return DefaultEyeAngles(ent)
 	end
 end)

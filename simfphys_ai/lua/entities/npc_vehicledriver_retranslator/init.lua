@@ -334,6 +334,8 @@ function ENT:ControlTheGun()
 
 	if self.Attacking then
 		self:StartAttacking()
+	elseif self.SeatPos == 0 then
+		self:CheckIfMovementRequired()
 	end
 end
 
@@ -439,6 +441,23 @@ end
 function ENT:StartAttacking()
 	self.VehicleDriver:SetKeyDown(IN_ATTACK, true)
 	self.VehicleDriver:SetKeyDown(IN_ATTACK2, true)
+
+	if self.SeatPos != 0 then return end
+	self.AdditionalMovementCounter = 0
+	self.AdditionalMovementRequired = false
+end
+
+function ENT:CheckIfMovementRequired()
+	if self.AdditionalMovementRequired then return end
+
+	if (math.Round(CurTime() - self.VehicleDriver:GetEnemyLastTimeSeen(), 1) <= 0.1) && (self.VehicleDriver:GetKeyValues()["target"] == "") then
+		self.AdditionalMovementCounter = self.AdditionalMovementCounter or 0
+		self.AdditionalMovementCounter = self.AdditionalMovementCounter + FrameTime() / ((self.TurretHasStopped and 2) or 1)
+		if self.AdditionalMovementCounter > 2.0 then
+			self.AdditionalMovementCounter = nil
+			self.AdditionalMovementRequired = true
+		end
+	end
 end
 
 function ENT:OnRemove()

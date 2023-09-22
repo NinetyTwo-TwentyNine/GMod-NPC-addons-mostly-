@@ -51,7 +51,7 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 				return ( IsValid(ent:GetEnemy()) )
 			end
 			func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT] = function()
-				return ( ent.HasTarget && math.Round(CurTime() - ent:GetEnemyLastTimeSeen(), 1) <= 0.1 )
+				return ( ent.HasTarget && !ent.Retranslator.AdditionalMovementRequired && math.Round(CurTime() - ent:GetEnemyLastTimeSeen(), 1) <= 0.1 )
 			end
 			func_table[BNS_DFT_CHECK_NPC_MOVEMENT] = function()
 				return ( ent:GetKeyValues()["target"] != "" )

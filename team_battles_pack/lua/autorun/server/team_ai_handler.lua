@@ -63,6 +63,10 @@ end)
 hook.Add( "AcceptInput", "Team AI handling: If the team gets changed", function( ent, input, activator, caller, value )
 	if !ent:IsNPC() && !ent:IsPlayer() then return end
 		
+	if string.lower(input) == "setteam" then
+		ent:SetKeyValue("TeamNum", value)
+	end
+
 	if string.lower(input) == "addoutput" then
 		local prev_team = ent:GetInternalVariable("TeamNum")
 		timer.Simple(FrameTime(), function()
