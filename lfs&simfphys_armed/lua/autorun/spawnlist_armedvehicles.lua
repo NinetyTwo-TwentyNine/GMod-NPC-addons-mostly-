@@ -575,7 +575,7 @@ local V = {
 	Members = {
 		Mass = 4200,
 		
-		MaxHealth = 4000,
+		MaxHealth = 3500,
 		
 		IsArmored = true,
 		
@@ -842,7 +842,7 @@ local V = {
 	Members = {
 		Mass = 4800,
 		
-		MaxHealth = 4800,
+		MaxHealth = 4200,
 		
 		IsArmored = true,
 		
