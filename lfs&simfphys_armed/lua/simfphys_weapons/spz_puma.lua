@@ -80,7 +80,7 @@ local function atgm_fire(ply,vehicle,shootOrigin,shootDirection)
 end
 
 function simfphys.weapon:ValidClasses()
-	return { "sim_fphys_spzpuma_armed" }
+	return { "sim_fphys_spz_puma_armed" }
 end
 
 function simfphys.weapon:Initialize( vehicle )
@@ -447,8 +447,8 @@ function simfphys.weapon:UpdateSuspension( vehicle )
 end
 
 function simfphys.weapon:DoWheelSpin( vehicle )
-	local spin_r = (vehicle.VehicleData[ "spin_4" ] + vehicle.VehicleData[ "spin_6" ]) * -1.25
-	local spin_l = (vehicle.VehicleData[ "spin_3" ] + vehicle.VehicleData[ "spin_5" ]) * -1.25
+	local spin_r = (vehicle.VehicleData[ "spin_4" ] + vehicle.VehicleData[ "spin_6" ]) * 1.25
+	local spin_l = (vehicle.VehicleData[ "spin_3" ] + vehicle.VehicleData[ "spin_5" ]) * 1.25
 
 	net.Start( "simfphys_update_tracks", true )
 		net.WriteEntity( vehicle )

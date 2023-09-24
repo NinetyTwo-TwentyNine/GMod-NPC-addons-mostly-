@@ -28,7 +28,7 @@ local function cannon_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.attacker = ply
 		projectile.attackingent = vehicle
 		//projectile.ArmourPiercing = true
-		projectile.Damage = 80
+		projectile.Damage = 75
 		projectile.Force = 50
 		projectile.Size = 3
 		projectile.BlastRadius = 100

@@ -107,6 +107,75 @@ local light_table = {
 }
 list.Set("simfphys_lights", "lav25", light_table)
 
+local light_table = {
+	ModernLights = false,
+	L_HeadLampPos = Vector(138.77,-38.2983,40.4536),
+	L_HeadLampAng = Angle(10,0,0),
+
+	R_HeadLampPos = Vector(138.77,38.2983,40.4536),
+	R_HeadLampAng = Angle(10,0,0),
+
+	L_RearLampPos = Vector(-133.55 ,-40.0619,40.6141),
+	L_RearLampAng = Angle(10,180,0),
+
+	R_RearLampPos = Vector(-133.55 ,40.0619,40.6141),
+	R_RearLampAng = Angle(10,180,0),
+	
+	Headlight_sprites = { 
+		{
+			pos = Vector(138.77,-38.2983,40.4536),
+			material = "sprites/light_ignorez",
+			size = 45,
+		},
+		{
+			pos = Vector(138.77,38.2983,40.4536),
+			material = "sprites/light_ignorez",
+			size = 45,
+		},
+
+	},
+	Headlamp_sprites = { 
+		{
+			pos = Vector(138.77,-38.2983,40.4536),
+			material = "sprites/light_ignorez",
+			size = 45,
+		},
+		{
+			pos = Vector(138.77,38.2983,40.4536),
+			material = "sprites/light_ignorez",
+			size = 45,
+		},
+	},
+	FogLight_sprites = {
+		{
+			pos = Vector(135.838,36.3419,45.2833),
+			material = "sprites/light_ignorez",
+			size = 45,
+		},
+		{
+			pos = Vector(135.838,-36.3419,45.2833),
+			material = "sprites/light_ignorez",
+			size = 45,
+		},
+
+	},
+	Rearlight_sprites = {
+		Vector(-133.55 ,-40.0619,41.5),
+		Vector(-133.55 ,40.0619,41.5),
+	},
+	Brakelight_sprites = {
+		Vector(-133.55 ,-40.0619,41.5),
+		Vector(-133.55 ,40.0619,41.5),
+	},
+	Reverselight_sprites = {
+	
+		Vector(-133.55 ,-40.0619,40),
+		Vector(-133.55 ,40.0619,40),
+	},
+
+}
+list.Set("simfphys_lights", "lav-c2", light_table)
+
 
 local V = {
 	Name = "HL2 Combine APC",
@@ -1327,7 +1396,217 @@ local V = {
 		Gears = {-0.05,0,0.1,0.14,0.18,0.22,0.26,0.3}
 	}
 }
-list.Set("simfphys_vehicles", "sim_fphys_lav-25_armed", V)
+list.Set("simfphys_vehicles", "sim_fphys_lav25_armed", V)
+
+
+local V = {
+	Name = "LAV-C2", 
+	Model = Model("models/engineer/us/lav25/lavhq.mdl"),
+	Class = "gmod_sent_vehicle_fphysics_base",
+	Category = "Armed Vehicles",
+	SpawnOffset = Vector(0,0,10),
+	SpawnAngleOffset = 0,
+
+	Members = {
+		Mass = 4000,
+
+		MaxHealth = 4000,
+		
+		LightsTable = "lav-c2",
+
+		OnSpawn = 
+			function(ent) 
+				ent:SetNWBool( "simfphys_NoRacingHud", true )
+				ent:SetNWBool( "simfphys_NoHud", true ) 
+			end,
+
+		OnTick = function(ent)
+			local turn = ent:GetVehicleSteer() * 2 -- -1 or 1
+			ent:SetPoseParameter("steer_wheels", turn / 2)
+
+			if ent:EngineActive() then
+				ent:ResetSequence("raise")
+			else
+				ent:ResetSequence("lower")
+			end
+		end,
+
+		ApplyDamage = function( ent, damage, type ) 
+			simfphys.APCApplyDamage(ent, damage, type)
+		end,
+
+		OnDestroyed = function(ent)
+			local gib = ent.Gib
+			if !IsValid(gib) then return end
+			
+			local pos,ang,skin,pitch,yaw = gib:GetPos(),gib:GetAngles(),gib:GetSkin(),ent:GetPoseParameter("cannon_aim_pitch"),ent:GetPoseParameter("cannon_aim_yaw")
+			gib:SetPoseParameter("cannon_aim_pitch",pitch)
+			gib:SetPoseParameter("cannon_aim_yaw",yaw)
+
+			local wheel_tbl = {}
+			while(table.Count(wheel_tbl) < 5) do
+				local new_val = math.random(1,8)
+				if !table.HasValue(wheel_tbl, new_val) then
+					table.insert(wheel_tbl, new_val)
+				end
+			end
+			for k,v in pairs(wheel_tbl) do
+				local wheel_name
+				if v <= 4 then
+					wheel_name = "wheel_l_"..tostring(v)
+				else
+					wheel_name = "wheel_r_"..tostring(v-4)
+				end
+				gib:ManipulateBoneScale(gib:LookupBone(wheel_name), Vector(0,0,0))
+			end
+		end,
+
+		GibModels = {
+			"models/engineer/us/lav25/lavhq.mdl",
+			"models/salza/skoda_liaz/skoda_liaz_fwheel.mdl",
+			"models/salza/skoda_liaz/skoda_liaz_fwheel.mdl",
+			"models/salza/skoda_liaz/skoda_liaz_fwheel.mdl",
+			"models/salza/skoda_liaz/skoda_liaz_fwheel.mdl",
+			"models/salza/skoda_liaz/skoda_liaz_fwheel.mdl"
+		},
+		
+		IsArmored = true,
+		
+		NoWheelGibs = true,
+		
+		FrontWheelRadius = 20,
+		RearWheelRadius = 20,
+		
+		EnginePos = Vector(-68.1931,0,73.9256),
+		
+		CustomWheels = true,
+		
+		CustomWheelModel = "models/props_c17/canisterchunk01g.mdl",		
+		CustomWheelPosFL = Vector(91.5602,52.4676,-9),
+		CustomWheelPosFR = Vector(91.5602,-52.4676,-9),	
+		CustomWheelPosML = Vector(0,52.4676,-9),
+		CustomWheelPosMR = Vector(0,-52.4676,-9),
+		CustomWheelPosRL = Vector(-86.1969,52.4676,-9),
+		CustomWheelPosRR = Vector(-86.1969,-52.4676,-9),
+		CustomWheelAngleOffset = Angle(0,0,0),
+		
+		CustomMassCenter = Vector(0,0,0),
+		
+		CustomSteerAngle = 30,
+		FastSteeringAngle = 15,
+		SteeringFadeFastSpeed = 445,
+		
+		TurnSpeed = 4,
+		
+		SeatOffset = Vector(78.3507,-19.7656,40.6389),
+		SeatPitch = 0,
+		SeatYaw = 90,
+		
+		ModelInfo = {
+			WheelColor = Color(0,0,0,0),
+			-- WheelColor = Color(0,0,0,255),
+		},
+		
+		PassengerSeats = {
+			{
+				pos = Vector(0,24.6115,25),
+				ang = Angle(0,-90,0)
+			},
+			
+			{
+				pos = Vector(-50.6135,-18.6115,10),
+				ang = Angle(0,0,0)
+			},
+			{
+				pos = Vector(-78.6135,-18.6115,10),
+				ang = Angle(0,0,0)
+			},
+-------------
+			{
+				pos = Vector(-108.6135,-18.6115,10),
+				ang = Angle(0,0,0)
+			},
+
+		},
+		
+		
+		ExhaustPositions = {
+			{
+				pos = Vector(-43.2858,-55.0575,48.0862),
+				ang = Angle(180,30,0)
+			},
+			{
+				pos = Vector(-50.2858,-55.0575,48.0862),
+				ang = Angle(180,30,0)
+			},
+						{
+				pos = Vector(-36.2858,-55.0575,48.0862),
+				ang = Angle(180,30,0)
+			},
+		},
+		
+		CustomSuspensionTravel = 10,
+		
+		FrontHeight = 0,
+		FrontConstant = 45000,
+		FrontDamping = 4000,
+		FrontRelativeDamping = 4000,
+		
+		RearHeight = 0,
+		RearConstant = 45000,
+		RearDamping = 4000,
+		RearRelativeDamping = 4000,
+		
+		MaxGrip = 100,
+		Efficiency = 1,
+		GripOffset = 0,
+		BrakePower = 70,
+		BulletProofTires = true,
+		
+		IdleRPM = 700,
+		LimitRPM = 4500,
+		PeakTorque = 160,
+		PowerbandStart = 700,
+		PowerbandEnd = 4700,
+		Turbocharged = false,
+		Supercharged = false,
+		DoNotStall = true,
+		
+		FuelFillPos = Vector(-133,18,69),
+		FuelType = FUELTYPE_DIESEL,
+		FuelTankSize = 300,
+		
+		PowerBias = -0.5,
+		
+		EngineSoundPreset = 0,
+
+		Sound_Idle = "engineer/lav25/engine.wav",
+		Sound_IdlePitch = 1,
+		
+		Sound_Mid = "engineer/lav25/low.wav",
+		Sound_MidPitch = 1,
+		Sound_MidVolume = 1,
+		Sound_MidFadeOutRPMpercent = 60,
+		Sound_MidFadeOutRate = 0.4,
+		
+		Sound_High = "engineer/lav25/high.wav",
+		Sound_HighPitch = 1,
+		Sound_HighVolume = 1,
+		Sound_HighFadeInRPMpercent = 45,
+		Sound_HighFadeInRate = 0.2,
+		
+		Sound_Throttle = "",
+		Sound_ThrottlePitch = 0,
+		Sound_ThrottleVolume = 0,
+		
+		snd_horn = "common/null.wav",
+		ForceTransmission = 1,
+		
+		DifferentialGear = 0.4,
+		Gears = {-0.05,0,0.1,0.14,0.18,0.22,0.26,0.3}
+	}
+}
+list.Set("simfphys_vehicles", "sim_fphys_lav-c2_armed", V)
 
 
 local V = {
@@ -2125,7 +2404,7 @@ local V = {
 		Gears = {-0.2,0,0.04,0.08,0.1,0.15,0.2,0.25,0.35,0.4,0.45}
 	}
 }
-list.Set( "simfphys_vehicles", "sim_fphys_fv-510_armed", V )
+list.Set( "simfphys_vehicles", "sim_fphys_fv510_armed", V )
 
 
 local V = {
@@ -2326,7 +2605,7 @@ local V = {
 		Gears = {-0.14,0,0.1,0.15,0.2,0.245}
 	}
 }
-list.Set( "simfphys_vehicles", "sim_fphys_spzpuma_armed", V )
+list.Set( "simfphys_vehicles", "sim_fphys_spz_puma_armed", V )
 
 
 local V = {

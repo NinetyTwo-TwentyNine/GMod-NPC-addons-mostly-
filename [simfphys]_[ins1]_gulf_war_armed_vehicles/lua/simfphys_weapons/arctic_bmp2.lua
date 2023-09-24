@@ -28,11 +28,11 @@ local function cannon_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.attacker = ply
 		projectile.attackingent = vehicle
 		//projectile.ArmourPiercing = true
-		projectile.Damage = 40
+		projectile.Damage = 50
 		projectile.Force = 50
 		projectile.Size = 3
 		projectile.BlastRadius = 100
-		projectile.BlastDamage = 60
+		projectile.BlastDamage = 50
 		projectile.BlastEffect = "simfphys_tankweapon_explosion_micro"
 
 	simfphys.FirePhysProjectile( projectile )

@@ -50,7 +50,7 @@ end
 function simfphys.weapon:ValidClasses()
 	
 	local classes = {
-		"avx_lav-c2"
+		"sim_fphys_lav-c2_armed"
 	}
 	
 	return classes

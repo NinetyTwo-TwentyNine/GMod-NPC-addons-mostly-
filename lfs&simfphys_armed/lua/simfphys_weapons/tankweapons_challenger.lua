@@ -308,7 +308,7 @@ function simfphys.weapon:Attack( vehicle, ply, shootOrigin, Attachment, ID )
 	
 	hmg_fire( ply, vehicle, shootOrigin, shootDirection )
 	
-	self:SetNextFire( vehicle, CurTime() + 0.1 + (vehicle.smTmpMG ^ 5) * 0.05 )
+	self:SetNextFire( vehicle, CurTime() + 0.08 + (vehicle.smTmpMG ^ 5) * 0.05 )
 end
 
 function simfphys.weapon:CanAttack( vehicle )
@@ -406,74 +406,43 @@ function simfphys.weapon:ControlTrackSounds( vehicle, wheelslocked )
 	end
 end
 
+/*
 function simfphys.weapon:ControlPassengerSeats( vehicle )
 	if not vehicle.pSeat then return end
 	
 	vehicle.sm_pp_yaw = vehicle.sm_pp_yaw and vehicle.sm_pp_yaw or 0
 	vehicle.sm_pp_pitch = vehicle.sm_pp_pitch and vehicle.sm_pp_pitch or 0
 	
-	do
-		local Commander = vehicle.pSeat[2]
-		if IsValid( Commander ) then
-			local ply = Commander:GetDriver()
-			local Toggle = false
-			if IsValid( ply ) then
-				Toggle = ply:KeyDown( IN_JUMP )
-			end
+	local Commander = vehicle.pSeat[2]
+	if IsValid( Commander ) then
+		local ply = Commander:GetDriver()
+		local Toggle = false
+		if IsValid( ply ) then
+			Toggle = ply:KeyDown( IN_JUMP )
+		end
 			
-			if Toggle ~= vehicle.OldToggleC then
-				vehicle.OldToggleC = Toggle
-				if Toggle then
-					vehicle.tg_c_z = not vehicle.tg_c_z
+		if Toggle ~= vehicle.OldToggleC then
+			vehicle.OldToggleC = Toggle
+			if Toggle then
+				vehicle.tg_c_z = not vehicle.tg_c_z
 					
-					if vehicle.tg_c_z then
-						vehicle:EmitSound( "vehicles/atv_ammo_open.wav" )
-						simfphys.RegisterCamera( Commander, Vector(0,0,0), Vector(0,0,0), false )
-					else
-						vehicle:EmitSound( "vehicles/atv_ammo_close.wav" )
-						simfphys.RegisterCamera( Commander, Vector(0,0,25), Vector(0,0,25), false )
-					end
+				if vehicle.tg_c_z then
+					vehicle:EmitSound( "vehicles/atv_ammo_open.wav" )
+					simfphys.RegisterCamera( Commander, Vector(0,0,0), Vector(0,0,0), false )
+				else
+					vehicle:EmitSound( "vehicles/atv_ammo_close.wav" )
+					simfphys.RegisterCamera( Commander, Vector(0,0,25), Vector(0,0,25), false )
 				end
 			end
-
-			local X = math.sin( math.rad( -vehicle.sm_pp_yaw - 25 ) ) * 27
-			local Y = math.cos( math.rad( -vehicle.sm_pp_yaw - 25 ) ) * 27
-			Commander:SetLocalPos( Vector(X,Y,50 + (vehicle.tg_c_z and 25 or 0)) )
-			Commander:SetLocalAngles( Angle(0,vehicle.sm_pp_yaw - 90,0) ) 
 		end
-	end
-	
-	do
-		local Loader = vehicle.pSeat[3]
-		if IsValid( Loader ) then
-			local ply = Loader:GetDriver()
-			local Toggle = false
-			if IsValid( ply ) then
-				Toggle = ply:KeyDown( IN_JUMP )
-			end
-			
-			if Toggle ~= vehicle.OldToggleL then
-				vehicle.OldToggleL = Toggle
-				if Toggle then
-					vehicle.tg_l_z = not vehicle.tg_l_z
-					
-					if vehicle.tg_l_z then
-						vehicle:EmitSound( "vehicles/atv_ammo_open.wav" )
-						simfphys.RegisterCamera( Loader, Vector(0,0,0), Vector(0,0,0), false )
-					else
-						vehicle:EmitSound( "vehicles/atv_ammo_close.wav" )
-						simfphys.RegisterCamera( Loader, Vector(0,0,25), Vector(0,0,25), false )
-					end
-				end
-			end
 
-			local X = math.sin( math.rad( -vehicle.sm_pp_yaw - 160 ) ) * 27
-			local Y = math.cos( math.rad( -vehicle.sm_pp_yaw - 160 ) ) * 27
-			Loader:SetLocalPos( Vector(X,Y,50 + (vehicle.tg_l_z and 25 or 0)) )
-			Loader:SetLocalAngles( Angle(0,vehicle.sm_pp_yaw - 90,0) ) 
-		end
+		local X = math.sin( math.rad( -vehicle.sm_pp_yaw - 165 ) ) * 30
+		local Y = math.cos( math.rad( -vehicle.sm_pp_yaw - 165 ) ) * 30
+		Commander:SetLocalPos( Vector(X + 2.9121,Y,24 + (vehicle.tg_l_z and 25 or 0)) )
+		Commander:SetLocalAngles( Angle(0,vehicle.sm_pp_yaw - 90,0) ) 
 	end
 end
+*/
 
 function simfphys.weapon:Think( vehicle )
 	if not IsValid( vehicle ) or not vehicle:IsInitialized() then return end
@@ -484,7 +453,7 @@ function simfphys.weapon:Think( vehicle )
 	
 	local handbrake = vehicle:GetHandBrakeEnabled()
 	
-	self:ControlPassengerSeats( vehicle )
+	--self:ControlPassengerSeats( vehicle )
 	self:UpdateSuspension( vehicle )
 	self:DoWheelSpin( vehicle )
 	self:ControlTurret( vehicle, deltapos )

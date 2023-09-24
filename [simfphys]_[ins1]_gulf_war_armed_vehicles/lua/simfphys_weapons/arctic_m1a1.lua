@@ -293,6 +293,9 @@ function simfphys.weapon:ControlTurret( vehicle, deltapos )
 		self:PrimaryAttack( vehicle, ply, Attachment.Pos + DeltaP, Attachment )
 	end
 
+	local Rate = FrameTime() / 5
+	vehicle.smTmpHMG = vehicle.smTmpHMG and vehicle.smTmpHMG + math.Clamp((fire2 and 1 or 0) - vehicle.smTmpHMG,-Rate * 6,Rate) or 0
+
 	if fire2 then
 		self:SecondaryAttack( vehicle, ply, DeltaP, Attachment.Pos, Attachment.Ang )
 	end
@@ -485,7 +488,7 @@ function simfphys.weapon:SecondaryAttack( vehicle, ply, deltapos, cPos, cAng )
 
 	m240_fire( ply, vehicle, Attachment.Pos, (trace.HitPos - Attachment.Pos):GetNormalized() )
 
-	self:SetNextSecondaryFire( vehicle, CurTime() + (60 / 600) )
+	self:SetNextSecondaryFire( vehicle, CurTime() + 0.07 + (vehicle.smTmpHMG ^ 5) * 0.08 )
 end
 
 function simfphys.weapon:CanSecondaryAttack( vehicle )

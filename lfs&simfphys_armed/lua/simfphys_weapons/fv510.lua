@@ -38,7 +38,7 @@ local function cannon_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.attacker = ply
 		projectile.attackingent = vehicle
 		//projectile.ArmourPiercing = true
-		projectile.Damage = 100
+		projectile.Damage = 90
 		projectile.Force = 50
 		projectile.Size = 3
 		projectile.BlastRadius = 100
@@ -70,7 +70,7 @@ local function atgm_fire(ply,vehicle,shootOrigin,shootDirection)
 end
 
 function simfphys.weapon:ValidClasses()
-	return { "sim_fphys_fv-510_armed" }
+	return { "sim_fphys_fv510_armed" }
 end
 
 function simfphys.weapon:Initialize( vehicle )
