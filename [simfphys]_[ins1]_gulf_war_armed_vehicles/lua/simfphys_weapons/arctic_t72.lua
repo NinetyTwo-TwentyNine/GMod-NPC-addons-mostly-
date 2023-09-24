@@ -363,7 +363,7 @@ function simfphys.weapon:SecondaryAttack( vehicle, ply, deltapos, cPos, cAng )
 	local turret = vehicle:LookupBone("turret_yaw")
 	local attachment_pos, attachment_ang = vehicle:GetBonePosition(turret)
 
-	local attachment_deltapos,_ = LocalToWorld( Vector(20, 23, -30), Angle(), Vector(0,0,0), attachment_ang )
+	local attachment_deltapos,_ = LocalToWorld( Vector(10, 7, -45), Angle(), Vector(0,0,0), attachment_ang )
 	attachment_pos = attachment_pos + attachment_deltapos
 
 /*
