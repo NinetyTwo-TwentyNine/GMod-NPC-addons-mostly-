@@ -42,7 +42,7 @@ local function mg_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.Size = 3
 		projectile.BlastRadius = 75
 		projectile.BlastDamage = 45
-		projectile.DeflectAng = 40
+		projectile.DeflectAng = 30
 		projectile.BlastEffect = "simfphys_tankweapon_explosion_micro"
 	
 	simfphys.FirePhysProjectile( projectile )

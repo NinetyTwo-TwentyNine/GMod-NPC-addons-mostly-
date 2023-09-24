@@ -2541,7 +2541,7 @@ local V = {
 			"models/blu/tanks/sherman_gib_7.mdl",
 		},
 		
-		MaxHealth = 6000,
+		MaxHealth = 5400,
 		
 		IsArmored = true,
 		

@@ -77,8 +77,7 @@ local function cannon_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.ArmourPiercing = true
 		projectile.Damage = 420
 		projectile.Force = 8000
-		projectile.Size = 15
-		projectile.DeflectAng = 20
+		projectile.Size = 12
 		projectile.BlastRadius = 200
 		projectile.BlastDamage = 200
 		projectile.BlastEffect = "simfphys_tankweapon_explosion"

@@ -18,6 +18,6 @@ sound.Add({
 	name = "FV510WARRIOR_CANNON_FIRE",
 	channel = CHAN_AUTO,
 	volume = 1.0,
-	level = 160,
+	level = 130,
 	sound = "new_sound/fv510warrior_fire.wav"
 })

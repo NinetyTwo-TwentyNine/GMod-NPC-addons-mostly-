@@ -30,7 +30,7 @@ local function cannon_fire(ply,vehicle,shootOrigin,shootDirection)
 		//projectile.ArmourPiercing = true
 		projectile.Damage = 40
 		projectile.Force = 50
-		projectile.Size = 2
+		projectile.Size = 3
 		projectile.BlastRadius = 100
 		projectile.BlastDamage = 60
 		projectile.BlastEffect = "simfphys_tankweapon_explosion_micro"
@@ -78,7 +78,7 @@ function simfphys.weapon:Initialize( vehicle )
 			if !IsValid(missile) then continue end
 
 			local phys = missile:GetPhysicsObject()
-			local vel = missile:GetAngles():Forward() * missile.DefaultSpeed * 2
+			local vel = missile:GetAngles():Forward() * missile.DefaultSpeed
 			phys:SetVelocity( vel )
 		end
 		table.Empty(vehicle.MissileTracking)
@@ -329,7 +329,7 @@ function simfphys.weapon:Think( vehicle )
 	for i, missile in pairs(vehicle.MissileTracking or {}) do
 		if IsValid( missile ) then
 			if missile.UnlockTime < CurTime() then
-				missile:GetPhysicsObject():SetVelocity(missile.DirVector * missile.DefaultSpeed * 2)
+				missile:GetPhysicsObject():SetVelocity(missile.DirVector * missile.DefaultSpeed)
 				table.insert(remove, i)
 				continue
 			end

@@ -11,7 +11,7 @@ local function mg_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.ArmourPiercing = false
 		projectile.Damage = 30
 		projectile.Force = 50
-		projectile.Size = 3
+		projectile.Size = 2
 		projectile.BlastRadius = 50
 		projectile.BlastDamage = 30
 		projectile.DeflectAng = 40
