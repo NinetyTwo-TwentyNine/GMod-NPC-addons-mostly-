@@ -256,15 +256,20 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 					end
 				elseif ent.VehiclePath == BNS_VP_STATUS_FAILED then
 					ent.Driving = false
-					ent.VehiclePath = BNS_VP_STATUS_DELAY
 					ent.PathOutOfRange = false
 					ent.BreakTimer = nil
 
-					print(tostring(ent)..": The path isn't valid. Awaiting...")
 					ent.Path_EnemyLastPosTable = {navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())}
 					table.Add(ent.Path_EnemyLastPosTable, ent.Path_EnemyLastPosTable[1]:GetAdjacentAreas())
 					ent.Path_VehicleLastPosTable = {navmesh.GetNearestNavArea(ent.Vehicle:GetPos())}
 					table.Add(ent.Path_VehicleLastPosTable, ent.Path_VehicleLastPosTable[1]:GetAdjacentAreas())
+
+					ent.VehiclePath = BNS_VP_STATUS_NEVER
+					timer.Simple(3.0, function()
+						if !IsValid(ent) then return end
+						ent.VehiclePath = BNS_VP_STATUS_DELAY
+					end)
+					print(tostring(ent)..": The path isn't valid. Awaiting...")
 				elseif ent.VehiclePath == BNS_VP_STATUS_DELAY then
 					if !table.HasValue(ent.Path_VehicleLastPosTable, navmesh.GetNearestNavArea(ent.Vehicle:GetPos())) || !table.HasValue(ent.Path_EnemyLastPosTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())) then
 						ent.Path_EnemyLastPosTable = nil

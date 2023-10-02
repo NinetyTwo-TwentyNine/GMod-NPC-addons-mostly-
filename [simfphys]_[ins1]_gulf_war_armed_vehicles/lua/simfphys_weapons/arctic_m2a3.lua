@@ -278,7 +278,7 @@ function simfphys.weapon:SecondaryAttack( vehicle, ply, shootOrigin, Attachment 
 
 	local shootDirection = -Attachment.Ang:Right()
 
-	atgm_fire( ply, vehicle, shootOrigin + shootDirection * 80, shootDirection )
+	atgm_fire( ply, vehicle, shootOrigin + shootDirection * 100, shootDirection )
 
 	if vehicle.Rockets <= 0 then
 		self:SetNextSecondaryFire( vehicle, CurTime() + 5 )

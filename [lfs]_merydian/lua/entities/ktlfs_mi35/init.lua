@@ -273,9 +273,7 @@ function ENT:HandleWeapons(Fire1, Fire2, Fire3)
 					local GunnerAng = (Target:BodyTarget(Attachment.Pos) - Attachment.Pos):Angle()
 					GunnerDir = GunnerAng:Forward()
 		
-					if self:GetAmmoTertiary() > 0 then
-						Fire3 = math.cos( CurTime() * 0.8 + self:EntIndex() * 1337 ) > -0.5
-					end
+					Fire3 = math.cos( CurTime() * 0.8 + self:EntIndex() * 1337 ) > -0.5
 
 					local TurretAng = self:WorldToLocalAngles( GunnerAng )
 

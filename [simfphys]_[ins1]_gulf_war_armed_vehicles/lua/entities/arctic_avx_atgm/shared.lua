@@ -68,7 +68,7 @@ function ENT:Think()
 		end
 	    } )
 	    if trace.Hit then
-		self:Detonate()
+		self:Detonate(trace.HitPos)
 	    end
 	end
 
@@ -116,7 +116,7 @@ function ENT:Think()
     end
 end
 
-function ENT:Detonate()
+function ENT:Detonate(target_pos)
     if !self:IsValid() then return end
     local effectdata = EffectData()
         effectdata:SetOrigin( self:GetPos() )
@@ -127,6 +127,12 @@ function ENT:Detonate()
         util.Effect( "Explosion", effectdata)
     end
 
+    local Dir = self:GetForward()
+    if isvector(target_pos) then
+        Dir = (target_pos - self:GetPos()):Angle():Forward()
+    end
+    local Pos = self:GetPos() - Dir * 10
+
     local attacker = self
 
     if self.Owner:IsValid() then
@@ -135,8 +141,8 @@ function ENT:Detonate()
 
     local bullet = {}
         bullet.Num 			= 1
-        bullet.Src 			= self:GetPos() - self:GetForward() * 10
-        bullet.Dir 			= self:GetForward()
+        bullet.Src 			= Pos
+        bullet.Dir 			= Dir
         bullet.Spread 		= Vector(0,0,0)
         bullet.Tracer		= 0
         bullet.TracerName	= "simfphys_tracer"
@@ -160,7 +166,9 @@ function ENT:Detonate()
 end
 
 function ENT:PhysicsCollide(colData, collider)
-    //self:Detonate()
+    if CurTime() > self.SpawnTime + self.ArmTime then
+	self:Detonate(colData.HitPos)
+    end
 end
 
 function ENT:Draw()

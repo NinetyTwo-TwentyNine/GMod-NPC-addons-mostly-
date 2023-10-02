@@ -255,9 +255,7 @@ function ENT:HandleWeapons(Fire1, Fire2, Fire3)
 
 			Gunner:CrosshairDisable()
 
-			if self:GetAmmoTertiary() > 0 then
-				Fire3 = Gunner:KeyDown( IN_ATTACK )
-			end
+			Fire3 = Gunner:KeyDown( IN_ATTACK )
 
 			local TurretAng = self:WorldToLocalAngles( GunnerAng )
 

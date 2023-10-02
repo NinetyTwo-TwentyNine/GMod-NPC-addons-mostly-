@@ -238,7 +238,7 @@ function simfphys.weapon:SecondaryAttack( vehicle, ply, shootOrigin, Attachment 
 
 	local shootDirection = -Attachment.Ang:Right()
 
-	atgm_fire( ply, vehicle, shootOrigin + shootDirection * 80, shootDirection )
+	atgm_fire( ply, vehicle, shootOrigin + shootDirection * 100, shootDirection )
 
 	self:SetNextSecondaryFire( vehicle, CurTime() + 7.5 )
 end
