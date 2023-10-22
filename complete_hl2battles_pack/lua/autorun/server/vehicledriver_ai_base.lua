@@ -192,90 +192,88 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 			end
 		end
 //==============================================================================================================================================================================
-		if ent.HasTarget then
-			if !ent.Driving and !ent.TargetInSight then
-				if !ent.VehiclePath then
-					ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
-					ent.CurrentArea = 1
-				elseif istable(ent.VehiclePath) then
-					if table.GetLastValue(ent.VehiclePath) != navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) then
-						if table.HasValue( ent.VehiclePath, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
-							if table.KeyFromValue( ent.VehiclePath, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) < ent.CurrentArea then
-								ent.VehiclePath = table.Reverse(ent.VehiclePath)
-								ent.CurrentArea = table.Count(ent.VehiclePath) - ent.CurrentArea + 1
-							end
-							while( table.KeyFromValue( ent.VehiclePath, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) != table.Count(ent.VehiclePath) ) do
-								table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
-							end
-						else
-							ent.CheckTable = {}
-							table.insert( ent.CheckTable, table.GetLastValue(ent.VehiclePath) )
-							table.Add( ent.CheckTable, ent.CheckTable[1]:GetAdjacentAreas() )
-							for k,v in pairs( ent.CheckTable[1]:GetAdjacentAreas() ) do
-								table.Add( ent.CheckTable, v:GetAdjacentAreas() )
-							end
-
-							if table.HasValue( ent.CheckTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
-								ent.PathBuildup = Astar( ent.VehiclePath[table.Count(ent.VehiclePath)], navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
-								if istable(ent.PathBuildup) then
-									table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
-									for k,v in pairs(ent.PathBuildup) do
-										table.insert(ent.VehiclePath, v)
-									end
-								elseif ent.PathBuildup == BNS_VP_STATUS_FAILED then
-									ent.VehiclePath = BNS_VP_STATUS_FAILED
-								end
-								ent.PathBuildup = nil
-							else
-								ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
-								ent.CurrentArea = 1
-							end
-							ent.CheckTable = nil
+		if ent.HasTarget and !ent.Driving and !ent.TargetInSight then
+			if !ent.VehiclePath then
+				ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
+				ent.CurrentArea = 1
+			elseif istable(ent.VehiclePath) then
+				if table.GetLastValue(ent.VehiclePath) != navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) then
+					if table.HasValue( ent.VehiclePath, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
+						if table.KeyFromValue( ent.VehiclePath, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) < ent.CurrentArea then
+							ent.VehiclePath = table.Reverse(ent.VehiclePath)
+							ent.CurrentArea = table.Count(ent.VehiclePath) - ent.CurrentArea + 1
 						end
-					end
-				end
-
-				if istable(ent.VehiclePath) then
-					if ent.VehiclePath[ent.CurrentArea + 1] then
-						if IsValid(ent.DrivePoint) then
-							ent.DrivePoint:Remove()
-						end
-						ent.DrivePoint = ents.Create( "path_corner" )
-						ent.DrivePoint:SetName( "Driving_Point"..ent.DrivePoint:EntIndex() )
-						ent.DrivePoint:SetPos( ent.VehiclePath[ent.CurrentArea + 1]:GetCenter() + Vector(0, 0, 10) )
-
-						if ent.DrivePoint:IsInWorld() && (ent.DrivePoint:WaterLevel() <= 2 || ent.IsInWater) then
-							ent.DrivePoint:Spawn()
-							ent.DrivePoint:Activate()
-							ent.DrivePoint:DropToFloor()
-							ent:Fire("GotoPathCorner", ent.DrivePoint:GetName())
-							ent.Driving = true
+						while( table.KeyFromValue( ent.VehiclePath, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) != table.Count(ent.VehiclePath) ) do
+							table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
 						end
 					else
-						ent.VehiclePath = nil
-					end
-				elseif ent.VehiclePath == BNS_VP_STATUS_FAILED then
-					ent.Driving = false
-					ent.PathOutOfRange = false
-					ent.BreakTimer = nil
+						ent.CheckTable = {}
+						table.insert( ent.CheckTable, table.GetLastValue(ent.VehiclePath) )
+						table.Add( ent.CheckTable, ent.CheckTable[1]:GetAdjacentAreas() )
+						for k,v in pairs( ent.CheckTable[1]:GetAdjacentAreas() ) do
+							table.Add( ent.CheckTable, v:GetAdjacentAreas() )
+						end
 
-					ent.Path_EnemyLastPosTable = {navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())}
-					table.Add(ent.Path_EnemyLastPosTable, ent.Path_EnemyLastPosTable[1]:GetAdjacentAreas())
-					ent.Path_VehicleLastPosTable = {navmesh.GetNearestNavArea(ent.Vehicle:GetPos())}
-					table.Add(ent.Path_VehicleLastPosTable, ent.Path_VehicleLastPosTable[1]:GetAdjacentAreas())
-
-					ent.VehiclePath = BNS_VP_STATUS_NEVER
-					timer.Simple(3.0, function()
-						if !IsValid(ent) then return end
-						ent.VehiclePath = BNS_VP_STATUS_DELAY
-					end)
-					print(tostring(ent)..": The path isn't valid. Awaiting...")
-				elseif ent.VehiclePath == BNS_VP_STATUS_DELAY then
-					if !table.HasValue(ent.Path_VehicleLastPosTable, navmesh.GetNearestNavArea(ent.Vehicle:GetPos())) || !table.HasValue(ent.Path_EnemyLastPosTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())) then
-						ent.Path_EnemyLastPosTable = nil
-						ent.Path_VehicleLastPosTable = nil
-						ent.VehiclePath = nil
+						if table.HasValue( ent.CheckTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
+							ent.PathBuildup = Astar( ent.VehiclePath[table.Count(ent.VehiclePath)], navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
+							if istable(ent.PathBuildup) then
+								table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
+								for k,v in pairs(ent.PathBuildup) do
+									table.insert(ent.VehiclePath, v)
+								end
+							elseif ent.PathBuildup == BNS_VP_STATUS_FAILED then
+								ent.VehiclePath = BNS_VP_STATUS_FAILED
+							end
+							ent.PathBuildup = nil
+						else
+							ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
+							ent.CurrentArea = 1
+						end
+						ent.CheckTable = nil
 					end
+				end
+			end
+
+			if istable(ent.VehiclePath) then
+				if ent.VehiclePath[ent.CurrentArea + 1] then
+					if IsValid(ent.DrivePoint) then
+						ent.DrivePoint:Remove()
+					end
+					ent.DrivePoint = ents.Create( "path_corner" )
+					ent.DrivePoint:SetName( "Driving_Point"..ent.DrivePoint:EntIndex() )
+					ent.DrivePoint:SetPos( ent.VehiclePath[ent.CurrentArea + 1]:GetCenter() + Vector(0, 0, 10) )
+
+					if ent.DrivePoint:IsInWorld() && (ent.DrivePoint:WaterLevel() <= 2 || ent.IsInWater) then
+						ent.DrivePoint:Spawn()
+						ent.DrivePoint:Activate()
+						ent.DrivePoint:DropToFloor()
+						ent:Fire("GotoPathCorner", ent.DrivePoint:GetName())
+						ent.Driving = true
+					end
+				else
+					ent.VehiclePath = nil
+				end
+			elseif ent.VehiclePath == BNS_VP_STATUS_FAILED then
+				ent.Driving = false
+				ent.PathOutOfRange = false
+				ent.BreakTimer = nil
+
+				ent.Path_EnemyLastPosTable = {navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())}
+				table.Add(ent.Path_EnemyLastPosTable, ent.Path_EnemyLastPosTable[1]:GetAdjacentAreas())
+				ent.Path_VehicleLastPosTable = {navmesh.GetNearestNavArea(ent.Vehicle:GetPos())}
+				table.Add(ent.Path_VehicleLastPosTable, ent.Path_VehicleLastPosTable[1]:GetAdjacentAreas())
+
+				ent.VehiclePath = BNS_VP_STATUS_NEVER
+				timer.Simple(3.0, function()
+					if !IsValid(ent) then return end
+					ent.VehiclePath = BNS_VP_STATUS_DELAY
+				end)
+				print(tostring(ent)..": The path isn't valid. Awaiting...")
+			elseif ent.VehiclePath == BNS_VP_STATUS_DELAY then
+				if !table.HasValue(ent.Path_VehicleLastPosTable, navmesh.GetNearestNavArea(ent.Vehicle:GetPos())) || !table.HasValue(ent.Path_EnemyLastPosTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos())) then
+					ent.Path_EnemyLastPosTable = nil
+					ent.Path_VehicleLastPosTable = nil
+					ent.VehiclePath = nil
 				end
 			end
 		end

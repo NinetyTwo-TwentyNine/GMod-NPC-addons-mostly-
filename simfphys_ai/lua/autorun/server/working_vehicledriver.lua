@@ -4,9 +4,6 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 		if !IsValid(ent) then return end
 		if ent:MapCreationID() != -1 then return end
 
-		timer.Simple( (ent.NPCSpawnerTimer || FrameTime()), function()
-		if !IsValid(ent) then return end
-
 		if !table.IsEmpty(ents.FindByName(ent:GetKeyValues()["vehicle"])) then
 			for k,v in pairs(ents.FindByName(ent:GetKeyValues()["vehicle"])) do
 				if !v.fphysSeat || !v:IsVehicle() then
@@ -72,8 +69,6 @@ hook.Add("OnEntityCreated", "Simfphys Vehicle Driver Retranslator", function(ent
 			BNS_AddVehicleDrivingAI(ent, func_table)
 			end)
 		end
-		end)
-
 		end)
 	end
 end)

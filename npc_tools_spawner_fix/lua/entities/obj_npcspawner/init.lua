@@ -241,13 +241,33 @@ function ENT:SpawnNPC()
 	if(data.SpawnFlags) then spawnflags = bit.bor(spawnflags,data.SpawnFlags) end
 
 	local offset = data.Offset || 25
-	if(self.m_obbMaxNPC) then
+	if(self.m_obbMaxNPC) && !IsValid(self.CurrentSimfphysVehicle) then
 		for _,ent in ipairs(ents.FindInBox(self:LocalToWorld(self.m_obbMinNPC) + self:GetUp()*offset, self:LocalToWorld(self.m_obbMaxNPC) + self:GetUp()*offset)) do
 			if (ent:IsValid() && (ent:GetPhysicsObject():IsValid() || ent:IsNPC() || ent:IsPlayer()) && !ent:IsWeapon()) then return end
 		end
 	end
 
 	if(self.m_bShowEffects) then self:EmitSound("beams/beamstart5.wav",75,100) end
+	if list.Get( "simfphys_vehicles" ) then
+		if class == "npc_vehicledriver" && list.Get( "simfphys_vehicles" )[ keyvalues["vehicle"] ] && !IsValid(self.CurrentSimfphysVehicle) then
+			local vehicle_pos = self:GetPos() + self:GetUp()*offset
+			local vehicle_ang = Angle(0,self:GetAngles().y,0)
+			local simfphys_vehicle = simfphys.SpawnVehicleSimple( keyvalues["vehicle"], vehicle_pos, vehicle_ang )
+			
+			local vehicle_skin
+			if (data.Skin) then vehicle_skin = data.Skin end
+			for key,val in pairs(keyvalues) do
+				if (string.lower(key) == "skin") then vehicle_skin = val break end
+			end
+			if (vehicle_skin) then simfphys_vehicle:SetSkin(vehicle_skin) end
+
+			table.insert(self.m_tbVehicles,simfphys_vehicle)
+
+			self.CurrentSimfphysVehicle = simfphys_vehicle
+			self.SpecialTimerDelay = 0.5
+			return
+		end
+	end
 	local npc = ents.Create(class)
 
 	if(!npc:IsValid()) then ErrorNoHalt("Warning: Invalid npc class '" .. class .. "' for NPC Spawner! Removing..."); self:Remove(); return end
@@ -288,22 +308,8 @@ function ENT:SpawnNPC()
 		npc:SetKeyValue("vehicle",combine_apc:GetName())
 		npc.Vehicle = combine_apc
 	end
-	if class == "npc_vehicledriver" && list.Get( "simfphys_vehicles" )[ npc:GetInternalVariable("vehicle") ] then
-		local vehicle_pos = self:GetPos() + self:GetUp()*offset
-		local vehicle_ang = Angle(0,self:GetAngles().y,0)
-		local simfphys_vehicle = simfphys.SpawnVehicleSimple( npc:GetInternalVariable("vehicle"), vehicle_pos, vehicle_ang )
-			
-		local vehicle_skin
-		if (data.Skin) then vehicle_skin = data.Skin end
-		for key,val in pairs(keyvalues) do
-			if (string.lower(key) == "skin") then vehicle_skin = val break end
-		end
-		if (vehicle_skin) then simfphys_vehicle:SetSkin(vehicle_skin) end
-
-		table.insert(self.m_tbVehicles,simfphys_vehicle)
-
-		npc.NPCSpawnerTimer = 0.5
-		timer.Simple(npc.NPCSpawnerTimer, function()
+	if class == "npc_vehicledriver" && IsValid(self.CurrentSimfphysVehicle) then
+		local simfphys_vehicle = self.CurrentSimfphysVehicle
 		simfphys_vehicle.DriverSeat:SetName("simfphys["..simfphys_vehicle:EntIndex().."]driver_seat")
 		if simfphys_vehicle.PassengerSeats then
 			for i = 1,npc:GetInternalVariable("body") do
@@ -312,6 +318,8 @@ function ENT:SpawnNPC()
 					local npc_duplicate = ents.Create(class)
 					for key,val in pairs(npc:GetKeyValues()) do npc_duplicate:SetKeyValue(key, tostring(val)) end
 					npc_duplicate:SetKeyValue("vehicle",simfphys_vehicle.pSeat[i]:GetName())
+					npc_duplicate.Vehicle = simfphys_vehicle
+
 					npc_duplicate:Spawn()
 					npc_duplicate:Activate()
 				else
@@ -323,13 +331,10 @@ function ENT:SpawnNPC()
 		npc:SetKeyValue("vehicle",simfphys_vehicle.DriverSeat:GetName())
 		npc.Vehicle = simfphys_vehicle
 
-		finishNPCSpawn(self, npc)
-		end)
-
-		self.SpecialTimerDelay = npc.NPCSpawnerTimer + FrameTime()
-	else
-		finishNPCSpawn(self, npc)
+		self.CurrentSimfphysVehicle = nil
 	end
+
+	finishNPCSpawn(self, npc)
 end
 
 /*
