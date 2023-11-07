@@ -144,6 +144,7 @@ function ENT:Detonate(target_pos)
         bullet.Src 			= Pos
         bullet.Dir 			= Dir
         bullet.Spread 		= Vector(0,0,0)
+        bullet.Distance		= 100
         bullet.Tracer		= 0
         bullet.TracerName	= "simfphys_tracer"
         bullet.Force		= 30000

@@ -117,6 +117,7 @@ function ENT:Think()
 				bullet.Src 			= self:GetPos() - shootDirection * 10
 				bullet.Dir 			= shootDirection
 				bullet.Spread 		= Vector(0,0,0)
+				bullet.Distance		= 100
 				bullet.Tracer		= 0
 				bullet.TracerName	= "simfphys_tracer"
 				bullet.Force		= self.Force
