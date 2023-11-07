@@ -21,7 +21,7 @@ hook.Add("PlayerEnteredVehicle", "LFS AI handling", function(ply, seat)
 
 			local disposition = npc:Disposition(ply)
 			if disposition == D_HT then
-				npc:AddEntityRelationship(ply, D_FR, 99)
+				npc:AddEntityRelationship(ply, D_FR, GetTeamBasedRelationshipPriority(npc, ply))
 			end
 		end
 	end
@@ -39,7 +39,7 @@ hook.Add("PlayerLeaveVehicle", "LFS AI handling", function(ply, seat)
 
 			local disposition = npc:Disposition(ply)
 			if disposition == D_FR then
-				npc:AddEntityRelationship(ply, D_HT, 99)
+				npc:AddEntityRelationship(ply, D_HT, GetTeamBasedRelationshipPriority(npc, ply))
 			end
 		end
 	end
@@ -66,7 +66,7 @@ function LFS_AddVehicleBasedRelations(ent)
 
 			local disposition = npc:Disposition(ent)
 			if disposition == D_HT then
-				npc:AddEntityRelationship(ent, D_FR, 99)
+				npc:AddEntityRelationship(ent, D_FR, GetTeamBasedRelationshipPriority(npc, ent))
 			end
 		end
 	end
@@ -82,7 +82,7 @@ function LFS_AddVehicleBasedRelations(ent)
 			if !IsValid(driver) then driver = vehicle.NPC end
 			local disposition = ent:Disposition(driver)
 			if disposition == D_HT then
-				ent:AddEntityRelationship(driver, D_FR, 99)
+				ent:AddEntityRelationship(driver, D_FR, GetTeamBasedRelationshipPriority(ent, driver))
 			end
 		end
 	end

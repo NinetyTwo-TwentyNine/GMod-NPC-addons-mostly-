@@ -2638,7 +2638,7 @@ local V = {
 			"models/blu/tanks/tiger_gib_4.mdl",
 		},
 
-		MaxHealth = 7200,
+		MaxHealth = 6000,
 		
 		IsArmored = true,
 		
@@ -2820,7 +2820,7 @@ local V = {
 			"models/blu/tanks/sherman_gib_7.mdl",
 		},
 		
-		MaxHealth = 5400,
+		MaxHealth = 4500,
 		
 		IsArmored = true,
 		

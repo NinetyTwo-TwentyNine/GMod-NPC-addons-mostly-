@@ -5,8 +5,14 @@ local function SetRelationshipProperly(npc, ent, rel)
 		if (npc:Disposition(ent) == D_HT || npc:Disposition(ent) == D_FR) && (rel != D_HT && rel != D_FR) then
 			npc:ClearEnemyMemory(ent)
 		end
-		npc:AddEntityRelationship(ent, rel, 99)
+		npc:AddEntityRelationship(ent, rel, GetTeamBasedRelationshipPriority(npc, ent))
 	//end
+end
+
+function GetTeamBasedRelationshipPriority(ent1, ent2)
+	local team1 = ent1:GetInternalVariable("TeamNum")
+	local team2 = ent2:GetInternalVariable("TeamNum")
+	return ( ( (team1 != 0 && team2 != 0) && 99 ) || 0 )
 end
 
 function AddTeamBasedRelations(ent)
