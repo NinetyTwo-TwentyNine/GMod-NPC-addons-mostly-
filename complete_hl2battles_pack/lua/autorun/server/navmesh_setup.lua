@@ -26,6 +26,7 @@ local function AreaDisconnectionCheck(current, nav_direction)
 			if table.HasValue(BNS_Server_NavAreaDisconnections[current:GetID()], neighbor:GetID()) then continue end
 		end
 
+
 		deltaZ = current:ComputeAdjacentConnectionHeightChange(neighbor)
 		if math.abs(deltaZ) > 12.5 then
 			CreateAreaDisconnection(current, neighbor)
@@ -239,14 +240,34 @@ function Astar( start, goal, sizequota, avoidthose )
 	start:UpdateOnOpenList()
 
 
+	local goalCheckTable = {}
+	for _,v in pairs( table.Add({goal}, goal:GetAdjacentAreas()) ) do table.insert(goalCheckTable, v:GetID()) end
+
 	local indexCheckTable = {}
 	for _,v in pairs( table.Add({start}, start:GetAdjacentAreas()) ) do table.insert(indexCheckTable, v:GetID()) end
 	for _,v in pairs( table.Add({goal}, goal:GetAdjacentAreas()) ) do table.insert(indexCheckTable, v:GetID()) end
 
 	while ( !start:IsOpenListEmpty() ) do
 		local current = start:PopOpenList() // Remove the area with lowest cost in the open list and return it
-		if ( current == goal ) then // That's it!
+		if ( table.HasValue(goalCheckTable, current:GetID()) ) then // That's it!
 			local total_path = { current }
+			if (current != goal) then
+				local canAddGoal = true
+				if BNS_Server_NavAreaDisconnections[current:GetID()] then
+					if table.HasValue(BNS_Server_NavAreaDisconnections[current:GetID()], goal:GetID()) then
+						canAddGoal = false
+					end
+				end
+				if BNS_Server_NavAreaDisconnections[goal:GetID()] then
+					if table.HasValue(BNS_Server_NavAreaDisconnections[goal:GetID()], current:GetID()) then
+						canAddGoal = false
+					end
+				end
+
+				if canAddGoal == true then
+					table.insert(total_path, 1, goal)
+				end
+			end
 
 			current = current:GetID()
 			while ( cameFrom[ current ] ) do

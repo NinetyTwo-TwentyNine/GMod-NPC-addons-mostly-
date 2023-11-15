@@ -36,7 +36,7 @@ hook.Add("OnEntityCreated", "Combine APC Driver AI", function(ent)
 				return ( ent:IsMoving() )
 			end
 			func_table[BNS_DFT_CHECK_NPC_BMOVEMENT] = function()
-				return ( (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMins().y):Distance(ent:GetCurWaypointPos()) < (ent.Vehicle:GetPos() + ent.Vehicle:GetForward()*ent.Vehicle:OBBMaxs().y):Distance(ent:GetCurWaypointPos()) )
+				return ( ent.Vehicle:GetThrottle() < 0 )
 			end
 			func_table[BNS_DFT_GET_VEHICLE_FLENGTH] = function()
 				return ( ent.Vehicle:OBBMaxs().y )

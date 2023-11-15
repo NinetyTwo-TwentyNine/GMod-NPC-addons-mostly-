@@ -210,26 +210,31 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 						ent.CheckTable = {}
 						table.insert( ent.CheckTable, table.GetLastValue(ent.VehiclePath) )
 						table.Add( ent.CheckTable, ent.CheckTable[1]:GetAdjacentAreas() )
+
+						ent.SecondaryCheckTable = {}
 						for k,v in pairs( ent.CheckTable[1]:GetAdjacentAreas() ) do
-							table.Add( ent.CheckTable, v:GetAdjacentAreas() )
+							table.Add( ent.SecondaryCheckTable, v:GetAdjacentAreas() )
 						end
 
-						if table.HasValue( ent.CheckTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
-							ent.PathBuildup = Astar( ent.VehiclePath[table.Count(ent.VehiclePath)], navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
-							if istable(ent.PathBuildup) then
-								table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
-								for k,v in pairs(ent.PathBuildup) do
-									table.insert(ent.VehiclePath, v)
+						if !table.HasValue( ent.CheckTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
+							if table.HasValue( ent.SecondaryCheckTable, navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()) ) then
+								ent.PathBuildup = Astar( table.GetLastValue(ent.VehiclePath), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
+								if istable(ent.PathBuildup) then
+									table.remove( ent.VehiclePath, table.Count(ent.VehiclePath) )
+									for k,v in pairs(ent.PathBuildup) do
+										table.insert(ent.VehiclePath, v)
+									end
+								elseif ent.PathBuildup == BNS_VP_STATUS_FAILED then
+									ent.VehiclePath = BNS_VP_STATUS_FAILED
 								end
-							elseif ent.PathBuildup == BNS_VP_STATUS_FAILED then
-								ent.VehiclePath = BNS_VP_STATUS_FAILED
+								ent.PathBuildup = nil
+							else
+								ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
+								ent.CurrentArea = 1
 							end
-							ent.PathBuildup = nil
-						else
-							ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
-							ent.CurrentArea = 1
 						end
 						ent.CheckTable = nil
+						ent.SecondaryCheckTable = nil
 					end
 				end
 			end
@@ -276,7 +281,15 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 					ent.VehiclePath = nil
 				end
 			end
-		end
+
+
+			if !ent.IsStuck and ent.VehiclePath != BNS_VP_STATUS_NEVER then
+				if ent:VisibleVec( ent:GetEnemyLastKnownPos() ) and ent:EyePos():Distance(ent:GetEnemyLastKnownPos()) <= ent:GetMaxLookDistance() then
+					ent:UpdateEnemyMemory( ent:GetEnemy(), ent:GetEnemy():GetPos() )
+					ent:MarkEnemyAsEluded()
+				end
+			end
+		end	
 //==============================================================================================================================================================================
 		if ent.IsInWater || ent.NoGroundConnection then
 			if !ent.IsAboutToDie then
