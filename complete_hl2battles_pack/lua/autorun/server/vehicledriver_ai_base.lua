@@ -2,7 +2,7 @@ BNS_DFT_CHECK_VEHICLE_INWATER = 1
 BNS_DFT_CHECK_VEHICLE_NOGROUND = 2
 BNS_DFT_CHECK_VEHICLE_STOPPED = 3
 BNS_DFT_CHECK_NPC_HASTARGET = 4
-BNS_DFT_CHECK_NPC_TARGETSIGHT = 5
+BNS_DFT_CHECK_NPC_TARGET_LASTKNOWN_SIGHT = 5
 BNS_DFT_CHECK_NPC_MOVEMENT = 6
 BNS_DFT_CHECK_NPC_BMOVEMENT = 7
 BNS_DFT_GET_VEHICLE_FLENGTH = 8
@@ -29,7 +29,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 		ent.IsInWater = driving_func_table[BNS_DFT_CHECK_VEHICLE_INWATER]()
 		ent.NoGroundConnection = driving_func_table[BNS_DFT_CHECK_VEHICLE_NOGROUND]()
 		ent.HasTarget = driving_func_table[BNS_DFT_CHECK_NPC_HASTARGET]()
-		ent.TargetInSight = driving_func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT]()
+		ent.TargetLastKnownPosInSight = driving_func_table[BNS_DFT_CHECK_NPC_TARGET_LASTKNOWN_SIGHT]()
 //==============================================================================================================================================================================
 		if ent.Driving then
 			if !driving_func_table[BNS_DFT_CHECK_NPC_MOVEMENT]() then
@@ -180,7 +180,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 							ent.PathOutOfRange = false
 							ent.BreakTimer = nil
 						end
-						if ent.HasTarget && !ent.TargetInSight && !ent.IsStuck then
+						if ent.HasTarget && !ent.TargetLastKnownPosInSight && !ent.IsStuck then
 							if ent.Vehicle:GetPos():Distance(ent.VehiclePath[ent.CurrentArea + 1]:GetCenter()) < ent.Vehicle:GetPos():Distance(ent.VehiclePath[ent.CurrentArea]:GetCenter()) then
 								ent.CurrentArea = ent.CurrentArea + 1
 								ent.Driving = false
@@ -192,7 +192,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 			end
 		end
 //==============================================================================================================================================================================
-		if ent.HasTarget and !ent.Driving and !ent.TargetInSight then
+		if ent.HasTarget and !ent.Driving and !ent.TargetLastKnownPosInSight then
 			if !ent.VehiclePath then
 				ent.VehiclePath = Astar( navmesh.GetNearestNavArea(ent.Vehicle:GetPos()), navmesh.GetNearestNavArea(ent:GetEnemyLastKnownPos()), driving_func_table[BNS_DFT_GET_VEHICLE_SIZEQUOTA](), ent.AvoidAreas )
 				ent.CurrentArea = 1
@@ -281,15 +281,7 @@ function BNS_AddVehicleDrivingAI(ent, driving_func_table)
 					ent.VehiclePath = nil
 				end
 			end
-
-
-			if !ent.IsStuck and ent.VehiclePath != BNS_VP_STATUS_NEVER then
-				if ent:VisibleVec( ent:GetEnemyLastKnownPos() ) and ent:EyePos():Distance(ent:GetEnemyLastKnownPos()) <= ent:GetMaxLookDistance() then
-					ent:UpdateEnemyMemory( ent:GetEnemy(), ent:GetEnemy():GetPos() )
-					ent:MarkEnemyAsEluded()
-				end
-			end
-		end	
+		end
 //==============================================================================================================================================================================
 		if ent.IsInWater || ent.NoGroundConnection then
 			if !ent.IsAboutToDie then

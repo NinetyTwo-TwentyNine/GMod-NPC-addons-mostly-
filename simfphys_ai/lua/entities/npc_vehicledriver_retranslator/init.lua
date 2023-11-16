@@ -448,15 +448,16 @@ function ENT:StartAttacking()
 end
 
 function ENT:CheckIfMovementRequired()
-	if self.AdditionalMovementRequired then return end
-
 	if (math.Round(CurTime() - self.VehicleDriver:GetEnemyLastTimeSeen(), 1) <= 0.1) && (self.VehicleDriver:GetKeyValues()["target"] == "") then
 		self.AdditionalMovementCounter = self.AdditionalMovementCounter or 0
 		self.AdditionalMovementCounter = self.AdditionalMovementCounter + FrameTime() * ((self.TurretHasStopped and 1) or 0.5)
-		if self.AdditionalMovementCounter > 2.0 then
+		if self.AdditionalMovementCounter > 2.0 && !self.AdditionalMovementRequired then
 			self.AdditionalMovementCounter = nil
 			self.AdditionalMovementRequired = true
 		end
+	elseif self.AdditionalMovementRequired then
+		self.AdditionalMovementCounter = 1.5
+		self.AdditionalMovementRequired = false
 	end
 end
 

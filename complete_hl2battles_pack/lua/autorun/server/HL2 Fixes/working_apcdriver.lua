@@ -29,8 +29,8 @@ hook.Add("OnEntityCreated", "Combine APC Driver AI", function(ent)
 			func_table[BNS_DFT_CHECK_NPC_HASTARGET] = function()
 				return ( IsValid(ent:GetEnemy()) )
 			end
-			func_table[BNS_DFT_CHECK_NPC_TARGETSIGHT] = function()
-				return ( ent.HasTarget && ent:Visible(ent:GetEnemy()) )
+			func_table[BNS_DFT_CHECK_NPC_TARGET_LASTKNOWN_SIGHT] = function()
+				return ( ent.HasTarget && ( ent:Visible(ent:GetEnemy()) || ent:VisibleVec(ent:GetEnemyLastKnownPos()) ) )
 			end
 			func_table[BNS_DFT_CHECK_NPC_MOVEMENT] = function()
 				return ( ent:IsMoving() )
