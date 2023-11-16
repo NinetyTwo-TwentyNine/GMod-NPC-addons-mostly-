@@ -211,7 +211,8 @@ function ENT:DriveTheVehicle()
 		self.VehicleDriver:SetKeyDown(IN_RUN, math.atan2( deltaZ, relative_pos:Length2D() ) > (math.pi / 18))
 	end
 
-	relative_pos,_ = WorldToLocal(target_pos, Angle(0,0,0), self.Vehicle:GetPos() + self.Seat:GetForward() * self.Vehicle:GetPos():Distance(target_pos), self.Seat:GetAngles())
+
+	relative_pos,_ = WorldToLocal(target_pos, Angle(0,0,0), self.Vehicle:GetPos() + self.Seat:GetForward() * 125, self.Seat:GetAngles())
 
 	if !self.GoingBackwards then
 		if relative_pos.x > 75 then
