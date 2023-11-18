@@ -465,7 +465,7 @@ if SERVER then
 		local DamagePos = dmginfo:GetDamagePosition()
 		local BaseEnt = self:GetBaseEnt()
 		
-		if not dmginfo:IsDamageType(DMG_BULLET) and not dmginfo:IsDamageType(DMG_DIRECT) then return end  -- no tirepopping on splash damage
+		if !dmginfo:IsDamageType(DMG_BULLET) and !dmginfo:IsDamageType(DMG_DIRECT) and !dmginfo:IsDamageType(DMG_AIRBOAT) then return end  -- no tirepopping on splash damage
 		
 		if IsValid(BaseEnt) then
 			BaseEnt:TakeDamageInfo(dmginfo)

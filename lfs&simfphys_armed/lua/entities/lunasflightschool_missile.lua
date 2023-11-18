@@ -124,7 +124,7 @@ if SERVER then
 				end
 			} )
 			if trace.Hit || self.MarkForRemove then
-				self:Detonate(trace.HitPos)
+				self:Detonate()
 			end
 		end
 		
@@ -175,7 +175,7 @@ if SERVER then
 				bullet.Src 			= Pos
 				bullet.Dir 			= Dir
 				bullet.Spread 		= Vector(0,0,0)
-				bullet.Distance		= 100
+				bullet.Distance		= 160
 				bullet.Tracer		= 0
 				bullet.TracerName	= "simfphys_tracer"
 				bullet.Force		= 30000
