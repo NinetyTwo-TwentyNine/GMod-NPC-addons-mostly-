@@ -1,5 +1,6 @@
 function EFFECT:Init( data )
 	local vehicle = data:GetEntity()
+	if !IsValid(vehicle) then return false end
 
 	local ID = vehicle:LookupAttachment( "muzzle_cannon" )
 	if ID == 0 then return end
