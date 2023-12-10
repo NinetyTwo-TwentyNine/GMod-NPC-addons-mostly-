@@ -2416,7 +2416,7 @@ local V = {
 	SpawnAngleOffset = 0,
 
 	Members = {
-		Mass = 8500,
+		Mass = 12000,
 		AirFriction = 0,
 		Inertia = Vector(20000,90000,100000),
 		

@@ -103,6 +103,15 @@ function simfphys.weapon:Initialize( vehicle )
 	
 	simfphys.RegisterCamera( vehicle.pSeat[2], Vector(0,0,25), Vector(0,0,25), false )
 	simfphys.RegisterCamera( vehicle.pSeat[3], Vector(0,0,25), Vector(0,0,25), false )
+
+	---звук поворота башни
+	vehicle.TurretHorizontal = CreateSound(vehicle,"turret1/cannon_turn_loop_1.wav")
+	vehicle.TurretHorizontal:SetSoundLevel(100)
+	vehicle.TurretHorizontal:Play()
+	vehicle:CallOnRemove("stopmgsounds",function(vehicle)
+		vehicle.TurretHorizontal:Stop()		
+	end)
+	---
 	
 	timer.Simple( 1, function()
 		if not IsValid( vehicle ) then return end
@@ -196,6 +205,11 @@ function simfphys.weapon:AimCannon( ply, vehicle, pod, Attachment )
 	
 	local Angles = vehicle:WorldToLocalAngles( Aimang )
 	
+	---звуки
+	local v = math.abs((math.Round(Angles.y,1) - (vehicle.sm_pp_yaw and math.Round(vehicle.sm_pp_yaw,1) or 0)))
+	vehicle.VAL_TurretHorizontal = (v <= 0.5 or (v >= 359.7 and v <= 360)) and 0 or 1	
+	local ft = FrameTime()
+	---
 	vehicle.sm_pp_yaw = vehicle.sm_pp_yaw and math.ApproachAngle( vehicle.sm_pp_yaw, Angles.y, AimRate * FrameTime() ) or 180
 	vehicle.sm_pp_pitch = vehicle.sm_pp_pitch and math.ApproachAngle( vehicle.sm_pp_pitch, Angles.p, AimRate * FrameTime() ) or 0
 	
@@ -210,6 +224,13 @@ end
 
 function simfphys.weapon:ControlTurret( vehicle, deltapos )
 	if not istable( vehicle.PassengerSeats ) or not istable( vehicle.pSeat ) then return end
+
+	---звуки башни
+	vehicle.VAL_TurretHorizontal = vehicle.VAL_TurretHorizontal or 0
+	vehicle.TurretHorizontal:ChangePitch(vehicle.VAL_TurretHorizontal*100,0.5)
+	vehicle.TurretHorizontal:ChangeVolume(vehicle.VAL_TurretHorizontal,0.5)
+	vehicle.VAL_TurretHorizontal = 0
+	---
 	
 	local pod = vehicle:GetDriverSeat()
 	

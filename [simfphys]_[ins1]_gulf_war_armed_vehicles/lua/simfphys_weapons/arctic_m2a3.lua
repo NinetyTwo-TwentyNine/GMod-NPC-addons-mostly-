@@ -109,14 +109,6 @@ function simfphys.weapon:Initialize( vehicle )
 
 	vehicle:SetPoseParameter("cannon_aim_pitch", 75 )
 	
-	---звук поворота башни
-	vehicle.TurretHorizontal = CreateSound(vehicle,"turret1/cannon_turn_loop_1.wav")
-	vehicle.TurretHorizontal:SetSoundLevel(100)
-	vehicle.TurretHorizontal:Play()
-	vehicle:CallOnRemove("stopmgsounds",function(vehicle)
-		vehicle.TurretHorizontal:Stop()		
-	end)
-	---
 
 	timer.Simple( 1, function()
 		if not IsValid( vehicle ) then return end
@@ -189,10 +181,6 @@ function simfphys.weapon:AimCannon( ply, vehicle, pod, Attachment )
 
 	local Angles = vehicle:WorldToLocalAngles( Aimang )
 	
-	---звуки
-	local v = math.abs((math.Round(Angles.y,1) - (vehicle.sm_pp_yaw and math.Round(vehicle.sm_pp_yaw,1) or 0)))
-	vehicle.VAL_TurretHorizontal = (v <= 0.5 or (v >= 359.7 and v <= 360)) and 0 or 1	
-	local ft = FrameTime()
 	vehicle.sm_pp_yaw = vehicle.sm_pp_yaw and math.ApproachAngle( vehicle.sm_pp_yaw, Angles.y, AimRate * FrameTime() ) or 0
 	vehicle.sm_pp_pitch = vehicle.sm_pp_pitch and math.ApproachAngle( vehicle.sm_pp_pitch, -Angles.p, AimRate * FrameTime() ) or 0
 
@@ -207,13 +195,6 @@ end
 function simfphys.weapon:ControlTurret( vehicle, deltapos )
 	if not istable( vehicle.PassengerSeats ) or not istable( vehicle.pSeat ) then return end
 	
-	---звуки башни
-	vehicle.VAL_TurretHorizontal = vehicle.VAL_TurretHorizontal or 0
-	vehicle.TurretHorizontal:ChangePitch(vehicle.VAL_TurretHorizontal*100,0.5)
-	vehicle.TurretHorizontal:ChangeVolume(vehicle.VAL_TurretHorizontal,0.5)
-	
-	vehicle.VAL_TurretHorizontal = 0
-	---
 	local pod = vehicle:GetDriverSeat()
 
 	if not IsValid( pod ) then return end
@@ -396,46 +377,6 @@ function simfphys.weapon:Think( vehicle )
 	for k, i in pairs(remove) do
 		table.remove(vehicle.MissileTracking, i)
 	end
-local trackss
-	local gear = vehicle:GetGear()
-    local mass = vehicle:GetPhysicsObject():GetMass()
-    local TrackTurnRate = 40
-    local TrackMultRate = 250
-    local AntiFrictionRate = 0.1
-    trackss= CreateSound( vehicle, "simulated_vehicles/sherman/tracks.wav")
-	if vehicle:EngineActive() and gear == 2 and vehicle.PressedKeys["A"] == true and vehicle.susOnGround == true then
-        if vehicle:GetPhysicsObject():GetAngleVelocity().z <= TrackTurnRate then
-            vehicle:GetPhysicsObject():ApplyTorqueCenter( Vector(0,0, mass * TrackMultRate ))
-            vehicle:GetPhysicsObject():ApplyForceCenter( Vector( 0,0, mass * AntiFrictionRate ))
-			trackss:Play()
-			trackss:ChangePitch( math.Clamp(50+TrackTurnRate / 80,0,150) ) 
-			trackss:ChangeVolume( math.min( math.max(222 - 20,0) / 600,1) ) 
-			vehicle:CallOnRemove( "stopmesounds", function( vehicle )
-				if trackss then
-					trackss:Stop()
-				end
-			end)
-        end
-    elseif vehicle:EngineActive() and gear == 2 and vehicle.PressedKeys["A"] == false and vehicle.susOnGround == false then
-		trackss:Stop()
-    end
-    if vehicle:EngineActive() and gear == 2 and vehicle.PressedKeys["D"] == true and vehicle.susOnGround == true then
-        if math.abs(vehicle:GetPhysicsObject():GetAngleVelocity().z) <= TrackTurnRate then
-            vehicle:GetPhysicsObject():ApplyTorqueCenter( Vector(0,0, -mass * TrackMultRate  ))
-            vehicle:GetPhysicsObject():ApplyForceCenter( Vector( 0,0, mass * AntiFrictionRate ))
-			trackss:Play()
-			trackss:ChangePitch( math.Clamp(50+TrackTurnRate / 80,0,150) ) 
-			trackss:ChangeVolume( math.min( math.max(222 - 20,0) / 600,1) ) 
-			vehicle:CallOnRemove( "stopmesounds", function( vehicle )
-				if trackss then
-					trackss:Stop()
-				end
-			end)
-        end
-    elseif vehicle:EngineActive() and gear == 2 and vehicle.PressedKeys["D"] == false and vehicle.susOnGround == false then
-		trackss:Stop()
-	end	
-	
 end
 
 function simfphys.weapon:UpdateSuspension( vehicle )
