@@ -134,11 +134,11 @@ function ENT:SecondaryAttack()
 	local Pos = self:LocalToWorld( Vector(17.36,50.89 * (self.FireLeft and 1 or -1),-59.39) )
 	ent:SetPos( Pos )
 	ent:SetAngles( (tr.HitPos - Pos):Angle() )
+	ent:SetOwner( self )
 	ent:Spawn()
 	ent:Activate()
 	ent:SetAttacker( Attacker )
 	ent:SetInflictor( self )
-	ent:SetOwner( self )
 	ent:SetStartVelocity( self:GetVelocity():Length() )
 	
 	if tr.Hit then

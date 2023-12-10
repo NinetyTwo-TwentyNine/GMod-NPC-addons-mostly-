@@ -111,6 +111,7 @@ function ENT:SecondaryAttack()
 	end
 	
 	for k,v in pairs(TraceFilter) do
+		if table.HasValue(ent.Filter, v) then continue end
 		table.insert(ent.Filter, v)
 	end
 	

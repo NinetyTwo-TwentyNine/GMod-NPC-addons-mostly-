@@ -71,11 +71,11 @@ function ENT:SecondaryAttack()
 			local Ang = self:WorldToLocal( mPos ).y > 0 and -1 or 1
 			ent:SetPos( mPos )
 			ent:SetAngles( self:LocalToWorldAngles( Angle(0,Ang,0) ) )
+			ent:SetOwner( self )
 			ent:Spawn()
 			ent:Activate()
 			ent:SetAttacker( Attacker )
 			ent:SetInflictor( self )
-			ent:SetOwner( self )
 			ent:SetStartVelocity( self:GetVelocity():Length() )
 			
 			if IsValid( self.wheel_R ) then
