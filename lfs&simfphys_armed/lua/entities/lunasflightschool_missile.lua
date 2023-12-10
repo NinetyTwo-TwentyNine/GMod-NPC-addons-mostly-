@@ -44,7 +44,7 @@ if SERVER then
 	end
 	
 	function ENT:FollowTarget( followent )
-		local speed = self:GetStartVelocity() + (self:GetDirtyMissile() and 5000 or 3500)
+		local speed = self:GetStartVelocity() + (self:GetDirtyMissile() and 5000 or 3000)
 		local turnrate = (self:GetCleanMissile() or self:GetDirtyMissile()) and 60 or 50
 		
 		local TargetPos = followent:LocalToWorld( followent:OBBCenter() )

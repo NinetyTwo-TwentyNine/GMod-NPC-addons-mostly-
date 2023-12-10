@@ -72,6 +72,9 @@ function ENT:SecondaryAttack()
 	if IsValid( self.wheel_L ) then
 		table.insert( TraceFilter, self.wheel_L )
 	end
+	if IsValid( self.wheel_C ) then
+		table.insert( TraceFilter, self.wheel_C )
+	end
 
 	self.MirrorSecondary = not self.MirrorSecondary
 	local Mirror = self.MirrorSecondary and -1 or 1
@@ -150,7 +153,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 		local Target = self:AIGetTarget()
 			
 		if IsValid( Target ) then
-			if self:AITargetInfront( Target, 65 ) then
+			if self:AITargetInfront( Target, 50 ) then
 				Fire1 = true
 
 				local TraceFilter = {self,self.wheel_L,self.wheel_R,self.wheel_C}
@@ -171,9 +174,9 @@ function ENT:HandleWeapons(Fire1, Fire2)
 					end
 
 					if (self:AIGetRelationship(TraceEntity) == D_HT || self:AIGetRelationship(TraceEntity) == D_FR) && !(TraceEntity:IsPlayer() && GetConVarNumber("ai_ignoreplayers") == 1) then
-						if self:AITargetInfront( TraceEntity, 25 ) then
+						//if self:AITargetInfront( TraceEntity, 25 ) then
 							Fire2 = true
-						end
+						//end
 					elseif self:AIGetRelationship(TraceEntity) == D_LI && !(TraceEntity:IsPlayer() && GetConVarNumber("ai_ignoreplayers") == 1) then
 						Fire1 = false
 					end
@@ -242,5 +245,5 @@ function ENT:OnLandingGearToggled( bOn )
 end
 
 function ENT:GetMissileOffset()
-	return Vector(0,0,-5)
+	return Vector(0,0,75)
 end

@@ -1747,7 +1747,7 @@ function ENT:AICanSee( otherEnt )
 end
 
 function ENT:RunAI()
-	local RangerLength = 15000
+	local RangerLength = 7500
 	local mySpeed = self:GetVelocity():Length()
 	local MinDist = 600 + mySpeed * 2
 	local StartPos = self:GetPos()

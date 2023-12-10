@@ -39,7 +39,7 @@ ENT.ElevatorPos = Vector(-226.05,0,50)
 ENT.RudderPos = Vector(-229.69,0,100)
 
  
-ENT.MaxVelocity = 3700
+ENT.MaxVelocity = 6000
 
 ENT.MaxThrust = 2800
 

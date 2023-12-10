@@ -59,7 +59,7 @@ function ENT:HandleWeapons(Fire1, Fire2)
 		local Target = self:AIGetTarget()
 			
 		if IsValid( Target ) then
-			if self:AITargetInfront( Target, 50 ) then
+			if self:AITargetInfront( Target, 30 ) then
 				Fire1 = true
 
 				local TraceFilter = {self,self.wheel_L,self.wheel_R,self.wheel_C}

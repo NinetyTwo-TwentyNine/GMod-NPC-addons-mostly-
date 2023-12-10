@@ -330,7 +330,7 @@ function ENT:HandleWeapons(Fire1, Fire2, Fire3)
 end
 
 function ENT:GetMissileOffset()
-	return Vector(10,0,6)
+	return Vector(10,0,-90)
 end
 
 function ENT:OnRotorDestroyed()
