@@ -160,6 +160,7 @@ function ENT:SecondaryAttack()
 	ent:SetStartVelocity( self:GetVelocity():Length() )
 	//ent:SetDirtyMissile (true)
 	
+	constraint.NoCollide( ent, self, 0, 0 ) 
 	
 	if tr.Hit then
 		local Target = tr.Entity
@@ -170,8 +171,6 @@ function ENT:SecondaryAttack()
 			end
 		end
 	end
-	
-	constraint.NoCollide( ent, self, 0, 0 ) 
 
 	self:TakeSecondaryAmmo()
 end

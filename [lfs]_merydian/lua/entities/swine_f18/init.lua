@@ -86,9 +86,6 @@ function ENT:SecondaryAttack()
 	
 
 	local ent = ents.Create( "lunasflightschool_missile" )
-	for k,v in pairs(TraceFilter) do
-		constraint.NoCollide( ent, v, 0, 0 )
-	end
 	local Pos = self:LocalToWorld( Vector(-58,155 * Mirror,50) )
 	ent:SetPos( Pos + (tr.HitPos - Pos):Angle():Forward()*160 )
 	ent:SetAngles( (tr.HitPos - Pos):Angle() )
@@ -99,6 +96,12 @@ function ENT:SecondaryAttack()
 	ent:SetOwner( self )
 	ent:SetStartVelocity( self:GetVelocity():Length() )
 	ent:SetDirtyMissile (true)
+
+	for k,v in pairs(TraceFilter) do
+		constraint.NoCollide( ent, v, 0, 0 )
+		if table.HasValue(ent.Filter, v) then continue end
+		table.insert(ent.Filter, v)
+	end
 	
 	if tr.Hit then
 		local Target = tr.Entity
@@ -108,11 +111,6 @@ function ENT:SecondaryAttack()
 				ent:SetStartVelocity( 0 )
 			end
 		end
-	end
-
-	for k,v in pairs(TraceFilter) do
-		if table.HasValue(ent.Filter, v) then continue end
-		table.insert(ent.Filter, v)
 	end
 	
 	self:TakeSecondaryAmmo( 1 )
