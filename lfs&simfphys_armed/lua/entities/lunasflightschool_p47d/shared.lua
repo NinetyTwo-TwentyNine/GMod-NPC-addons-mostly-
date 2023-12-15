@@ -11,7 +11,7 @@ ENT.Category = "[LFS]"
 ENT.Spawnable		= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/p-47 (fly).mdl"
+ENT.MDL = "models/blu/p47.mdl"
 
 ENT.AITEAM = 2
 
@@ -55,7 +55,8 @@ ENT.MaxHealth = 800
 ENT.MaxPrimaryAmmo = 1200
 ENT.MaxSecondaryAmmo = 10
 
-ENT.MISSILEMDL = "models/damik/p-47d thunderbolt/hvar rocket.mdl"
+//ENT.MISSILEMDL = "models/damik/p-47d thunderbolt/hvar rocket.mdl"
+ENT.MISSILEMDL = "models/blu/p47_missile.mdl"
 ENT.MISSILES = {
 	[1] = { Vector(92.16,-194.69,62.98), Vector(92.16,194.69,62.98) },
 	[2] = { Vector(92.63,-178.76,61.32), Vector(92.63,178.76,61.32) },
