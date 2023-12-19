@@ -1005,7 +1005,7 @@ if CLIENT then
 		ent:LFSRepairInfo( X, Y, ent:GetRepairMode(), RepairProgress, RepairProgress > 0 and RepairProgress < 1 )
 	end
 
-	local LockText = Material( "lfs_locked.png" )
+	local LockText = Material( "lvs/locked.png" )
 	local smHider = 0
 	local function PaintSeatSwitcher( ent, X, Y )
 		local me = LocalPlayer()
@@ -1248,7 +1248,7 @@ if CLIENT then
 	end )
 
 	local Frame
-	local bgMat = Material( "lfs_controlpanel_bg.png" )
+	local bgMat = Material( "lvs/controlpanel_bg.png" )
 	local adminMat = Material( "icon16/shield.png" )
 	local soundPreviewMat = Material( "materials/icon16/sound.png" )
 
@@ -1749,7 +1749,7 @@ if CLIENT then
 
 	list.Set( "DesktopWindows", "LFSMenu", {
 		title = "[LFS] Settings",
-		icon = "icon64/iconlfs.png",
+		icon = "icon64/iconlvs.png",
 		init = function( icon, window )
 			OpenMenu()
 		end
@@ -1757,7 +1757,7 @@ if CLIENT then
 
 	concommand.Add( "lfs_openmenu", function( ply, cmd, args ) OpenMenu() end )
 
-	timer.Simple(10, function()
+	/*timer.Simple(10, function()
 		if not istable( scripted_ents ) or not isfunction( scripted_ents.GetList ) then return end
 		
 		for _, v in pairs( scripted_ents.GetList() ) do
@@ -1773,7 +1773,7 @@ if CLIENT then
 				end
 			end
 		end
-	end)
+	end)*/
 
 	cvars.AddChangeCallback( "lfs_show_identifier", function( convar, oldValue, newValue ) 
 		ShowPlaneIdent = tonumber( newValue ) ~=0

@@ -154,8 +154,8 @@ function ENT:GetKillMarker()
 	return self.LastKillMarker or 0
 end
 
-local matHealth = Material( "lfs_repairmode_health.png" )
-local matAmmo = Material( "lfs_repairmode_ammo.png" )
+local matHealth = Material( "lvs/3d2dmats/repair.png" )
+local matAmmo = Material( "lvs/3d2dmats/refil.png" )
 
 function ENT:LFSRepairInfo(ScrW, ScrH, IsRepair, Progress, ShowRepair)
 	local X = ScrW * 0.5
