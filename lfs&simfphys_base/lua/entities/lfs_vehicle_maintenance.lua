@@ -10,6 +10,8 @@ ENT.Category = "[LFS]"
 ENT.Spawnable = true
 ENT.AdminOnly = false
 
+ENT.IconOverride	= "materials/entities/lvs_vehicle_repair.png"
+
 ENT.FoundVehicles = {}
 
 function ENT:SetupDataTables()

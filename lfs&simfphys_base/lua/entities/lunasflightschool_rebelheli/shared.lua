@@ -11,6 +11,8 @@ ENT.Category = "[LFS]"
 ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 
+ENT.IconOverride	= "materials/entities/lvs_helicopter_rebel.png"
+
 ENT.MDL = "models/blu/helicopter.mdl"
 
 ENT.AITEAM = 2

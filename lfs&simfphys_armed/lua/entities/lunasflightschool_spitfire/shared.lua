@@ -11,6 +11,8 @@ ENT.Category = "[LFS]"
 ENT.Spawnable		= true
 ENT.AdminSpawnable		= false
 
+ENT.IconOverride	= "materials/entities/lvs_plane_spitfire.png"
+
 ENT.MDL = "models/blu/spitfire.mdl"
 
 ENT.AITEAM = 2

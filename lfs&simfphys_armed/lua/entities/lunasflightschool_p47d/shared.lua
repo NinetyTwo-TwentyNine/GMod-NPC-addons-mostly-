@@ -11,6 +11,8 @@ ENT.Category = "[LFS]"
 ENT.Spawnable		= true
 ENT.AdminSpawnable		= false
 
+ENT.IconOverride	= "materials/entities/lvs_plane_p47.png"
+
 ENT.MDL = "models/blu/p47.mdl"
 
 ENT.AITEAM = 2
@@ -19,7 +21,7 @@ ENT.Mass = 3000
 ENT.Inertia = Vector(260000,260000,260000)
 ENT.Drag = -40
 
-ENT.SeatPos = Vector(40,0,91)
+ENT.SeatPos = Vector(30,0,66)
 ENT.SeatAng = Angle(0,-90,0)
 
 ENT.IdleRPM = 200

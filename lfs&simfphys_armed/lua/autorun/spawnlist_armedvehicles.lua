@@ -2610,7 +2610,7 @@ list.Set( "simfphys_vehicles", "sim_fphys_spz_puma_armed", V )
 
 local V = {
 	Name = "DOD:S Tiger Tank",
-	Model = "models/blu/tanks/tiger.mdl",
+	Model = "models/blu/tanks/tiger_lvs.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
 	SpawnOffset = Vector(0,0,60),
@@ -2632,10 +2632,10 @@ local V = {
 		end,
 		
 		GibModels = {
-			"models/blu/tanks/tiger_gib_1.mdl",
-			"models/blu/tanks/tiger_gib_2.mdl",
-			"models/blu/tanks/tiger_gib_3.mdl",
-			"models/blu/tanks/tiger_gib_4.mdl",
+			"models/blu/tanks/tiger_lvs_gib_1.mdl",
+			"models/blu/tanks/tiger_lvs_gib_2.mdl",
+			"models/blu/tanks/tiger_lvs_gib_3.mdl",
+			"models/blu/tanks/tiger_lvs_gib_4.mdl",
 		},
 
 		MaxHealth = 6000,
@@ -2790,7 +2790,7 @@ list.Set( "simfphys_vehicles", "sim_fphys_tank", V )
 
 local V = {
 	Name = "DOD:S Sherman Tank",
-	Model = "models/blu/tanks/sherman.mdl",
+	Model = "models/blu/tanks/sherman_lvs.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
 	SpawnOffset = Vector(0,0,60),

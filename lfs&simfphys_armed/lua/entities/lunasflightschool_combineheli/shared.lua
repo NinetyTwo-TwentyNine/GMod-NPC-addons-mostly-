@@ -11,6 +11,8 @@ ENT.Category = "[LFS]"
 ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 
+ENT.IconOverride	= "materials/entities/lvs_helicopter_combine.png"
+
 ENT.MDL = "models/Combine_Helicopter.mdl"
 ENT.GibModels = {
 	"models/gibs/helicopter_brokenpiece_01.mdl",

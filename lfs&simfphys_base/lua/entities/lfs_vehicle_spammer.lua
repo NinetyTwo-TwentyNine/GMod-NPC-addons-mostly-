@@ -13,6 +13,8 @@ ENT.Spawnable		= true
 ENT.AdminOnly		= true
 ENT.Editable = true
 
+ENT.IconOverride	= "materials/entities/lvs_vehicle_spammer.png"
+
 function ENT:SetupDataTables()
 	local AllSents = scripted_ents.GetList() 
 	local SpawnOptions = {}
