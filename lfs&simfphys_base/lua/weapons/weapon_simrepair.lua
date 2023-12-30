@@ -3,6 +3,7 @@ AddCSLuaFile()
 SWEP.Category			= "simfphys"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= false
+SWEP.IconOverride		= "materials/entities/weapon_lvsrepair.png"
 SWEP.ViewModel			= "models/weapons/c_physcannon.mdl"
 SWEP.WorldModel		= "models/weapons/w_physics.mdl"
 SWEP.UseHands = true
@@ -173,11 +174,19 @@ function SWEP:DrawHUD()
 		return
 	end
 	
-	local IsVehicle = ent:GetClass():lower() == "gmod_sent_vehicle_fphysics_base"
+	local IsSimfphys = ent:GetClass():lower() == "gmod_sent_vehicle_fphysics_base"
+	local IsLFS = ent.Base == "lunasflightschool_basescript" || ent.Base == "lunasflightschool_basescript_heli" || ent.Base == "lunasflightschool_basescript_gunship"
+	local IsVehicle = IsSimfphys || IsLFS
 	
 	if (IsVehicle) then
-		local MaxHealth = ent:GetMaxHealth()
-		local Health = ent:GetCurHealth()
+		local MaxHealth, Health
+		if IsSimfphys then
+			MaxHealth = ent:GetMaxHealth()
+			Health = ent:GetCurHealth()
+		else
+			MaxHealth = ent:GetMaxHP()
+			Health = ent:GetHP()
+		end
 		
 		draw.RoundedBox( 0, xpos, ypos, ((sizex * 0.118) / MaxHealth) * Health, sizey * 0.02, Color( (Health < MaxHealth * 0.6) and 255 or 0, (Health >= MaxHealth * 0.3) and 255 or 0, 0, 100 ) )
 		

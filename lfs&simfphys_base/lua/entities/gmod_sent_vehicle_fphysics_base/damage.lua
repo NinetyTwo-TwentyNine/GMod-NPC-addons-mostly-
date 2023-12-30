@@ -186,6 +186,16 @@ function ENT:ExplodeVehicle()
 		end
 	end
 
+	local ent = ents.Create( "lunasflightschool_destruction" )
+	if IsValid( ent ) then
+		ent:SetPos( self:LocalToWorld( self:OBBCenter() ) )
+		ent:SetAngles( self:GetAngles() )
+		ent.GibModels = { }
+		ent.Vel = self:GetVelocity()
+		ent:Spawn()
+		ent:Activate()
+	end
+
 	local Driver = self:GetDriver()
 	if IsValid( Driver ) then
 		if self.RemoteDriver ~= Driver then

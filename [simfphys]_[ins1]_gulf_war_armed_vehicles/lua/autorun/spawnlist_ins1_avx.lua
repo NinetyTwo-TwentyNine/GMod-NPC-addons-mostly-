@@ -73,6 +73,16 @@ local function DestroyVehicle( ent )
 			end
 		end
 	end
+
+	local explosion = ents.Create( "lunasflightschool_destruction" )
+	if IsValid( explosion ) then
+		explosion:SetPos( ent:LocalToWorld( ent:OBBCenter() ) )
+		explosion:SetAngles( ent:GetAngles() )
+		explosion.GibModels = { }
+		explosion.Vel = ent:GetVelocity()
+		explosion:Spawn()
+		explosion:Activate()
+	end
 	
 	local Driver = ent:GetDriver()
 	if IsValid( Driver ) then
