@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript" )
 ENT.PrintName = "Spitfire"
 ENT.Author = "Luna"
 ENT.Information = "British World War 2 Fighterplane"
-ENT.Category = "[LFS]"
+ENT.Category = "[Base] Armed"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable		= false
 
 ENT.IconOverride	= "materials/entities/lvs_plane_spitfire.png"
@@ -53,6 +53,10 @@ ENT.MaxHealth = 800
 
 ENT.MaxPrimaryAmmo = 2226
 ENT.MaxSecondaryAmmo = -1
+
+local key = "lunasflightschool_spitfire"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table
 
 sound.Add( {
 	name = "LFS_SPITFIRE_RPM1",

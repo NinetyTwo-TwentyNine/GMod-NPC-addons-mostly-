@@ -41,6 +41,8 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Int",6, "SpawnWithSkin", { KeyName = "spawnwithskin", Edit = { type = "Int", order = 8,min = 0, max = 16, category = "Vehicle-Options"} } )
 	self:NetworkVar( "Int",7, "SpawnWithHealth", { KeyName = "spawnwithhealth", Edit = { type = "Int", order = 9,min = 0, max = 50000, category = "Vehicle-Options"} } )
 	self:NetworkVar( "Int",8, "SpawnWithShield", { KeyName = "spawnwithshield", Edit = { type = "Int", order = 10,min = 0, max = 50000, category = "Vehicle-Options"} } )
+	self:NetworkVar( "String",11, "TargetName", { KeyName = "targetname", Edit = { type = "String", order = 11, value = "", category = "Vehicle-Options"} } )
+	self:NetworkVar( "String",12, "SquadName", { KeyName = "squadname", Edit = { type = "String", order = 12, value = "", category = "Vehicle-Options"} } )
 
 	self:NetworkVar( "Int",9, "UseHealth", { KeyName = "maxhealth", Edit = { type = "Int", order = 21,min = 0, max = 50000, category = "Spawner-Options"} } )
 	self:NetworkVar( "Int",10, "SelfDestructAfterAmount", { KeyName = "selfdestructafteramount", Edit = { type = "Int", order = 22,min = 0, max = 100, category = "Spawner-Options"} } )
@@ -198,41 +200,62 @@ if SERVER then
 						spawnedvehicle:SetPos( pos )
 						spawnedvehicle:SetAngles( ang )
 
+						spawnedvehicle:Spawn()
+						spawnedvehicle:Activate()
 						if self:GetTeamOverride() >= 0 then
 							spawnedvehicle.AITEAM = self:GetTeamOverride()
 						end
-						spawnedvehicle:Spawn()
-						spawnedvehicle:Activate()
-						spawnedvehicle:SetAI( true )
-						spawnedvehicle:SetSkin( self:GetSpawnWithSkin() )
 
-						if self:GetSpawnWithHealth() > 0 then
-							spawnedvehicle.MaxHealth = self:GetSpawnWithHealth()
-							spawnedvehicle:SetHP( self:GetSpawnWithHealth() )
-						end
+						timer.Simple(FrameTime(), function()
+							if !IsValid(spawnedvehicle) then return end
 
-						if self:GetSpawnWithShield() > 0 then
-							spawnedvehicle.MaxShield = self:GetSpawnWithShield()
-							spawnedvehicle:SetShield( self:GetSpawnWithShield() )
-						end
+							spawnedvehicle:SetAI( true )
+							spawnedvehicle:SetSkin( self:GetSpawnWithSkin() )
 
-						if not spawnedvehicle.DontPushMePlease then
-							local PhysObj = spawnedvehicle:GetPhysicsObject()
+							if self:GetSpawnWithHealth() > 0 then
+								spawnedvehicle.MaxHealth = self:GetSpawnWithHealth()
+								spawnedvehicle:SetHP( self:GetSpawnWithHealth() )
+							end
+
+							if self:GetSpawnWithShield() > 0 then
+								spawnedvehicle.MaxShield = self:GetSpawnWithShield()
+								spawnedvehicle:SetShield( self:GetSpawnWithShield() )
+							end
+
+
+							local targetname = string.Trim(self:GetTargetName())
+							if targetname != "" then
+								spawnedvehicle:AIGetSelf():SetKeyValue("targetname", targetname)
+							end
+
+							local squadname = string.Trim(self:GetSquadName())
+							if squadname != "" then
+								timer.Simple(0.1, function()
+									if !IsValid(spawnedvehicle) then return end
+									if !spawnedvehicle:GetAI() then return end
+
+									spawnedvehicle:AIGetSelf():SetKeyValue("squadname", squadname)
+								end)
+							end
+
+							if not spawnedvehicle.DontPushMePlease then
+								local PhysObj = spawnedvehicle:GetPhysicsObject()
 							
-							if IsValid( PhysObj ) then
-								PhysObj:SetVelocityInstantaneous( self:GetRight() * 1000 )
+								if IsValid( PhysObj ) then
+									PhysObj:SetVelocityInstantaneous( self:GetRight() * 1000 )
+								end
 							end
-						end
 
-						table.insert( self.spawnedvehicles, spawnedvehicle )
+							table.insert( self.spawnedvehicles, spawnedvehicle )
 
-						if self:GetSelfDestructAfterAmount() > 0 then
-							self.RemoverCount = isnumber( self.RemoverCount ) and self.RemoverCount + 1 or 1
+							if self:GetSelfDestructAfterAmount() > 0 then
+								self.RemoverCount = isnumber( self.RemoverCount ) and self.RemoverCount + 1 or 1
 
-							if self.RemoverCount >= self:GetSelfDestructAfterAmount() then
-								self:Remove()
+								if self.RemoverCount >= self:GetSelfDestructAfterAmount() then
+									self:Remove()
+								end
 							end
-						end
+						end)
 					end
 				end
 			end

@@ -197,8 +197,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 		
 		GibModels = {
@@ -670,8 +670,8 @@ local V = {
 				ent:ManipulateBoneScale(ent:LookupBone("turret_yaw"), Vector(0,0,0))
 			end,
 
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.APCApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.APCApplyDamage(ent, damage, type, attacker)
 		end,
 
 		OnDestroyed = function(ent)
@@ -933,8 +933,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.APCApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.APCApplyDamage(ent, damage, type, attacker)
 		end,
 
 		OnDestroyed = function(ent)
@@ -1169,6 +1169,7 @@ local V = {
 	Model = Model("models/engineer/us/lav25/lav25.mdl"),
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
+	IconOverride = "gred_simfphys_lav25",
 	SpawnOffset = Vector(0,0,10),
 	SpawnAngleOffset = 0,
 
@@ -1200,8 +1201,8 @@ local V = {
 			end
 		end,
 
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.APCApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.APCApplyDamage(ent, damage, type, attacker)
 		end,
 		
 		OnDestroyed = function(ent)
@@ -1404,6 +1405,7 @@ local V = {
 	Model = Model("models/engineer/us/lav25/lavhq.mdl"),
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
+	IconOverride = "gred_simfphys_lavhq",
 	SpawnOffset = Vector(0,0,10),
 	SpawnAngleOffset = 0,
 
@@ -1431,8 +1433,8 @@ local V = {
 			end
 		end,
 
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.APCApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.APCApplyDamage(ent, damage, type, attacker)
 		end,
 
 		OnDestroyed = function(ent)
@@ -2167,8 +2169,8 @@ local V = {
 			ent:SetNWBool( "simfphys_NoHud", true ) 
 		end,
 		
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 
 		OnCSTick = function(ent)
@@ -2412,6 +2414,7 @@ local V = {
 	Model = "models/apc/ger/puma/puma.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
+	IconOverride = "gred_simfphys_spz_puma",
 	SpawnOffset = Vector(0,0,10),
 	SpawnAngleOffset = 0,
 
@@ -2427,8 +2430,8 @@ local V = {
 			ent:SetNWBool( "simfphys_NoHud", true ) 
 		end,
 		
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,	
 
 		OnCSTick = function(ent)
@@ -2613,6 +2616,7 @@ local V = {
 	Model = "models/blu/tanks/tiger_lvs.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
+	IconOverride = "lvs_wheeldrive_dodtiger",
 	SpawnOffset = Vector(0,0,60),
 	SpawnAngleOffset = 90,
 
@@ -2627,8 +2631,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 			
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 		
 		GibModels = {
@@ -2793,6 +2797,7 @@ local V = {
 	Model = "models/blu/tanks/sherman_lvs.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Armed Vehicles",
+	IconOverride = "lvs_wheeldrive_dodsherman",
 	SpawnOffset = Vector(0,0,60),
 	SpawnAngleOffset = 90,
 
@@ -2807,8 +2812,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 			
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 
 		GibModels = {
@@ -3063,8 +3068,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 		
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 		
 		GibModels = {
@@ -3172,7 +3177,7 @@ local V = {
 		BulletProofTires = true,
 		
 		IdleRPM = 600,
-		LimitRPM = 2250,
+		LimitRPM = 3000,
 		PeakTorque = 750,
 		PowerbandStart = 600,
 		PowerbandEnd = 2600,
@@ -3239,8 +3244,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 		
 		GibModels = {
@@ -3347,7 +3352,7 @@ local V = {
 		BulletProofTires = true,
 		
 		IdleRPM = 600,
-		LimitRPM = 3500,
+		LimitRPM = 2500,
 		PeakTorque = 780,
 		PowerbandStart = 600,
 		PowerbandEnd = 2600,
@@ -3413,8 +3418,8 @@ local V = {
 				ent:SetNWBool( "simfphys_NoHud", true ) 
 			end,
 		
-		ApplyDamage = function( ent, damage, type ) 
-			simfphys.TankApplyDamage(ent, damage, type)
+		ApplyDamage = function( ent, damage, type, attacker ) 
+			simfphys.TankApplyDamage(ent, damage, type, attacker)
 		end,
 
 		OnDestroyed = function(ent)
@@ -3563,7 +3568,7 @@ local V = {
 		BulletProofTires = true,
 		
 		IdleRPM = 600,
-		LimitRPM = 3000,
+		LimitRPM = 2750,
 		PeakTorque = 700,
 		PowerbandStart = 600,
 		PowerbandEnd = 3500,

@@ -5,9 +5,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript_heli" )
 ENT.PrintName = "AH-1Z Viper"
 ENT.Author = "DarkLord20172002"
 ENT.Information = ""
-ENT.Category = "[LFS] Merydian"
+ENT.Category = "[Merydian] Helicopters"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable	= false
 
 ENT.MDL = "models/ah-1 cobra/ah1z_b.mdl"
@@ -44,6 +44,10 @@ function ENT:AddDataTables()
 	
 	self:SetAmmoTertiary( self.MaxTertiaryAmmo )
 end
+
+local key = "mrydianlfs_ah1z"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table
 
 sound.Add( {
 	name = "MINIGUN_LOOP",

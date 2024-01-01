@@ -74,15 +74,10 @@ local function DestroyVehicle( ent )
 		end
 	end
 
-	local explosion = ents.Create( "lunasflightschool_destruction" )
-	if IsValid( explosion ) then
-		explosion:SetPos( ent:LocalToWorld( ent:OBBCenter() ) )
-		explosion:SetAngles( ent:GetAngles() )
-		explosion.GibModels = { }
-		explosion.Vel = ent:GetVelocity()
-		explosion:Spawn()
-		explosion:Activate()
-	end
+	local effectdata = EffectData()
+		effectdata:SetOrigin( ent:LocalToWorld( ent:OBBCenter() ) )
+	util.Effect( "lfs_explosion", effectdata )
+
 	
 	local Driver = ent:GetDriver()
 	if IsValid( Driver ) then
@@ -107,8 +102,6 @@ local function DestroyVehicle( ent )
 	ent:Remove()
 end
 
-local VEHICLE_TYPE_APC = 1
-local VEHICLE_TYPE_TANK = 2
 
 local function ArmouredVehicleTakeDamage( ent, dmginfo, vehicleType )
 	ent:TakePhysicsDamage( dmginfo )
@@ -122,17 +115,17 @@ local function ArmouredVehicleTakeDamage( ent, dmginfo, vehicleType )
 	ent.LastAttacker = dmginfo:GetAttacker() 
 	ent.LastInflictor = dmginfo:GetInflictor()
 
-	bcDamage( ent , ent:WorldToLocal( DamagePos ) )
+	bcDamage( ent, ent:WorldToLocal( DamagePos ) )
 
-	simfphys.ArmouredVehicleApplyDamage( ent, Damage, Type, vehicleType )
+	simfphys.ArmouredVehicleApplyDamage( ent, Damage, Type, ent.LastAttacker, vehicleType )
 end
 
 local function TankTakeDamage( ent, dmginfo )
-	ArmouredVehicleTakeDamage( ent, dmginfo, VEHICLE_TYPE_TANK )
+	ArmouredVehicleTakeDamage( ent, dmginfo, simfphys.VEHICLE_TYPE_TANK )
 end
 
 local function APCTakeDamage( ent, dmginfo )
-	ArmouredVehicleTakeDamage( ent, dmginfo, VEHICLE_TYPE_APC )
+	ArmouredVehicleTakeDamage( ent, dmginfo, simfphys.VEHICLE_TYPE_APC )
 end
 
 
@@ -291,6 +284,7 @@ local V = {
 	Model = "models/cod4/m2_bradley.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = "Arctic's Gulf War Vehicles",
+	IconOverride = "m2_bredley",
 	SpawnOffset = Vector(0,0,60),
 	SpawnAngleOffset = 180,
 
@@ -544,7 +538,7 @@ local V = {
 		BulletProofTires = true,
 
 		IdleRPM = 600,
-		LimitRPM = 2250,
+		LimitRPM = 3000,
 		PeakTorque = 750,
 		PowerbandStart = 600,
 		PowerbandEnd = 2600,
@@ -700,7 +694,7 @@ local V = {
 		BulletProofTires = true,
 
 		IdleRPM = 400,
-		LimitRPM = 4000,
+		LimitRPM = 2500,
 		PeakTorque = 610,
 		PowerbandStart = 600,
 		PowerbandEnd = 2600,

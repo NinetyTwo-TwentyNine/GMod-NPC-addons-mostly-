@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript" )
 ENT.PrintName = "Cessna 172"
 ENT.Author = "Luna"
 ENT.Information = "Small and Unarmed Civilian Airplane"
-ENT.Category = "[LFS]"
+ENT.Category = "[Base] Unarmed"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable		= false
 
 ENT.IconOverride	= "materials/entities/lvs_plane_cessna.png"
@@ -56,6 +56,10 @@ ENT.MaxStability = 0.7
 
 ENT.MaxPrimaryAmmo = -1
 ENT.MaxSecondaryAmmo = -1
+
+local key = "lunasflightschool_cessna"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table
 
 sound.Add( {
 	name = "LFS_CESSNA_RPM1",

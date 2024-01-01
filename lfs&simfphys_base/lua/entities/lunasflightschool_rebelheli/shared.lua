@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript_heli" )
 ENT.PrintName = "Rebel Helicopter"
 ENT.Author = "Luna"
 ENT.Information = "Transport Helicopter as seen in Half Life 2 Episode 2"
-ENT.Category = "[LFS]"
+ENT.Category = "[Base] Unarmed"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable	= false
 
 ENT.IconOverride	= "materials/entities/lvs_helicopter_rebel.png"
@@ -39,6 +39,10 @@ ENT.MaxHealth = 3500
 
 ENT.MaxPrimaryAmmo = -1
 ENT.MaxSecondaryAmmo = -1
+
+local key = "lunasflightschool_rebelheli"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table
 
 sound.Add( {
 	name = "rebel_heli",

@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript" )
 ENT.PrintName = "F-22"
 ENT.Author = "SWINE"
 ENT.Information = ""
-ENT.Category = "[LFS] Merydian"
+ENT.Category = "[Merydian] Jet Fighters"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/hawx/fa22.mdl"
@@ -55,6 +55,10 @@ ENT.MaxHealth = 3600
 
 ENT.MaxPrimaryAmmo = 1000
 ENT.MaxSecondaryAmmo = 4
+
+local key = "swine_f22"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table
 
 sound.Add( {
 	name = "JET_ENGINERPM1",

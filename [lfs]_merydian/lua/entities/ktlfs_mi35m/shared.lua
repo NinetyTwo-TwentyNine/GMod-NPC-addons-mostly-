@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript_heli" )
 ENT.PrintName = "Mi-35M"
 ENT.Author = ""
 ENT.Information = ""
-ENT.Category = "[LFS] Merydian"
+ENT.Category = "[Merydian] Helicopters"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable	= false
 
 ENT.MDL = "models/mi-35.mdl"
@@ -50,6 +50,10 @@ ENT.MISSILEENT = "lunasflightschool_missile"
 ENT.MISSILES = {}
 ENT.MISSILES[1] = Vector(45,-48,56)
 ENT.MISSILES[2] = Vector(45,48,56)
+
+local key = "ktlfs_mi35m"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table
 
 sound.Add( {
 	name = "GSHG_FIRE_LOOP",

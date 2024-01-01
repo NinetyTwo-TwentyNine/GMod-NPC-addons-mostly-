@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript_heli" )
 ENT.PrintName = "Combine Helicopter"
 ENT.Author = "Luna"
 ENT.Information = "Combine Attack Helicopter from Half Life 2 + Episodes"
-ENT.Category = "[LFS]"
+ENT.Category = "[Base] Armed"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable	= false
 
 ENT.IconOverride	= "materials/entities/lvs_helicopter_combine.png"
@@ -49,3 +49,7 @@ ENT.MaxPrimaryAmmo = 100
 ENT.MaxSecondaryAmmo = 8
 
 ENT.IsArmored = true
+
+local key = "lunasflightschool_combineheli"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table

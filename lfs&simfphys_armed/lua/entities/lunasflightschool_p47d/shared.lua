@@ -6,9 +6,9 @@ DEFINE_BASECLASS( "lunasflightschool_basescript" )
 ENT.PrintName = "P-47D"
 ENT.Author = "Luna"
 ENT.Information = "American World War 2 Fighterplane"
-ENT.Category = "[LFS]"
+ENT.Category = "[Base] Armed"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminSpawnable		= false
 
 ENT.IconOverride	= "materials/entities/lvs_plane_p47.png"
@@ -66,3 +66,7 @@ ENT.MISSILES = {
 	[4] = { Vector(93.96,-132.84,55.58), Vector(93.96,132.84,55.58) },
 	[5] = { Vector(94,-118.52,53.9), Vector(94,118.52,53.9) },
 }
+
+local key = "lunasflightschool_p47d"
+local table = {Category = ENT.Category, Name = ENT.PrintName, IconOverride = ENT.IconOverride, AdminOnly = ENT.AdminOnly}
+list.GetForEdit("lfs_vehicles")[key] = table

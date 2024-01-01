@@ -989,7 +989,7 @@ end)
 hook.Add("OnEntityCreated", "Enhanced Sbox NPC Handling", function(ent)
 
     if esboxnpcs_all_npcs:GetBool() then
-		timer.Simple(0.01, function() if IsValid(ent) then ESBOXNPCS_HandleNPC(ent, nil) end end)
+		timer.Simple(FrameTime(), function() if IsValid(ent) then ESBOXNPCS_HandleNPC(ent, nil) end end)
 	end
 	
 end)

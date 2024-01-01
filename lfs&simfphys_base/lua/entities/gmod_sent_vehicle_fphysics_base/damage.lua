@@ -1,10 +1,27 @@
-function ENT:ApplyDamage( damage, type )
+function ENT:ApplyDamage( damage, type, attacker )
 	if bit.band(type, DMG_BLAST) != 0 || bit.band(type, DMG_BLAST_SURFACE) != 0 then 
 		damage = damage * 10
 	elseif bit.band(type, DMG_AIRBOAT) != 0 then 
 		damage = damage * 3
 	elseif bit.band(type, DMG_BULLET) then 
 		damage = damage * 2
+	end
+
+	if IsValid(attacker) then
+		local Driver = self:GetDriver()
+		if IsValid(Driver) && Driver:IsNPC() then
+			Driver:MarkTookDamageFromEnemy( attacker )
+			Driver:UpdateEnemyMemory( attacker, attacker:GetPos() )
+		end
+
+		if self.PassengerSeats then
+			for i = 1, table.Count( self.PassengerSeats ) do
+				local Passenger = self.pSeat[i]:GetDriver()
+				if IsValid(Passenger) && Passenger:IsNPC() then
+					Passenger:UpdateEnemyMemory( attacker, attacker:GetPos() )
+				end
+			end
+		end
 	end
 	
 	local MaxHealth = self:GetMaxHealth()
@@ -186,15 +203,10 @@ function ENT:ExplodeVehicle()
 		end
 	end
 
-	local ent = ents.Create( "lunasflightschool_destruction" )
-	if IsValid( ent ) then
-		ent:SetPos( self:LocalToWorld( self:OBBCenter() ) )
-		ent:SetAngles( self:GetAngles() )
-		ent.GibModels = { }
-		ent.Vel = self:GetVelocity()
-		ent:Spawn()
-		ent:Activate()
-	end
+	local effectdata = EffectData()
+		effectdata:SetOrigin( self:LocalToWorld( self:OBBCenter() ) )
+	util.Effect( "lfs_explosion", effectdata )
+
 
 	local Driver = self:GetDriver()
 	if IsValid( Driver ) then
@@ -241,9 +253,9 @@ function ENT:OnTakeDamage( dmginfo )
 			net.WriteBool( false ) 
 		net.Broadcast()
 		
-		self:ApplyDamage( Damage, Type )
+		self:ApplyDamage( Damage, Type, self.LastAttacker )
 	end
-	
+
 	if self.IsArmored then return end
 	
 	if IsValid(Driver) then

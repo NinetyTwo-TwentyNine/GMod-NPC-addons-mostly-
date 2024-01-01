@@ -398,7 +398,7 @@ if SERVER then
 		nTeam = nTeam or simfphys.LFS.PlayerDefaultTeam:GetInt()
 
 		local TeamText = {
-			[0] = "FRIENDLY TO EVERYONE",
+			[0] = "NO TEAM (DEFAULT)",
 		}
 
 		if self:lfsGetAITeam() ~= nTeam then

@@ -603,16 +603,6 @@ local function buildserversettingsmenu( self )
 end
 
 
-
-local ExtraMaterials = {}
-ExtraMaterials["sim_fphys_tank"] = "lvs_wheeldrive_dodtiger"
-ExtraMaterials["sim_fphys_tank2"] = "lvs_wheeldrive_dodsherman"
-ExtraMaterials["sim_fphys_spz_puma_armed"] = "gred_simfphys_spz_puma"
-ExtraMaterials["sim_fphys_lav25_armed"] = "gred_simfphys_lav25"
-ExtraMaterials["sim_fphys_lav-c2_armed"] = "gred_simfphys_lavhq"
-ExtraMaterials["avx_m2a3"] = "m2_bredley"
-//print("==============EXTRA SIMFPHYS MATERIALS ADDED===============")
-
 hook.Add( "SimfphysPopulateVehicles", "AddEntityContent", function( pnlContent, tree, node )
 
 	local Categorised = {}
@@ -654,7 +644,7 @@ hook.Add( "SimfphysPopulateVehicles", "AddEntityContent", function( pnlContent, 
 				spawnmenu.CreateContentIcon( "simfphys_vehicles", self.PropPanel, {
 					nicename	= ent.PrintName or ent.ClassName,
 					spawnname	= ent.ClassName,
-					material	= "entities/"..(ExtraMaterials[ent.ClassName] || ent.ClassName)..".png",
+					material	= "entities/"..(ent.IconOverride || ent.ClassName)..".png",
 					admin		= ent.AdminOnly
 				} )
 				
@@ -752,7 +742,7 @@ hook.Add( "SimfphysPopulateVehicles", "AddEntityContent", function( pnlContent, 
 
 end )
 
-spawnmenu.AddCreationTab( "simfphys", function()
+spawnmenu.AddCreationTab( "Simfphys", function()
 
 	local ctrl = vgui.Create( "SpawnmenuContentPanel" )
 	ctrl:CallPopulateHook( "SimfphysPopulateVehicles" )

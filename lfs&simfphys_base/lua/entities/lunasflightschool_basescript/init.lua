@@ -1446,6 +1446,13 @@ function ENT:OnTakeDamage( dmginfo )
 		end
 	end
 
+	local attacker = dmginfo:GetAttacker()
+	if self:GetAI() && IsValid(attacker) then
+		local AI = self:AIGetSelf()
+		AI:MarkTookDamageFromEnemy( attacker )
+		AI:UpdateEnemyMemory( attacker, attacker:GetPos() )
+	end
+
 	local CurHealth = self:GetHP()
 	local NewHealth = math.Clamp( CurHealth - Damage , -self:GetMaxHP(), self:GetMaxHP() )
 

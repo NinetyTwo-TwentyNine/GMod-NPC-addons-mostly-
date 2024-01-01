@@ -366,15 +366,32 @@ local function DMGContainsTypeFromTable(dmgType, dmgTable)
 	end
 end
 	
-local VEHICLE_TYPE_APC = 1
-local VEHICLE_TYPE_TANK = 2
+simfphys.VEHICLE_TYPE_APC = 1
+simfphys.VEHICLE_TYPE_TANK = 2
 
-function simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, vehicleType)
+function simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, attacker, vehicleType)
 	if not IsValid( ent ) or not isnumber( Damage ) or not isnumber( Type ) or not isnumber(vehicleType) then return end
 	
-	if vehicleType == VEHICLE_TYPE_TANK then
+	if vehicleType == simfphys.VEHICLE_TYPE_TANK then
 		if (DMGContainsTypeFromTable(Type, ExceptionDMGTypes) and Damage > 100) then Damage = Damage - 100
 		elseif !DMGContainsTypeFromTable(Type, ValidDMGTypes) then return end
+	end
+
+	if IsValid(attacker) then
+		local Driver = ent:GetDriver()
+		if IsValid(Driver) && Driver:IsNPC() then
+			Driver:MarkTookDamageFromEnemy( attacker )
+			Driver:UpdateEnemyMemory( attacker, attacker:GetPos() )
+		end
+
+		if ent.PassengerSeats then
+			for i = 1, table.Count( ent.PassengerSeats ) do
+				local Passenger = ent.pSeat[i]:GetDriver()
+				if IsValid(Passenger) && Passenger:IsNPC() then
+					Passenger:UpdateEnemyMemory( attacker, attacker:GetPos() )
+				end
+			end
+		end
 	end
 
 	if DMGContainsTypeFromTable(Type, {DMG_BLAST, DMG_BLAST_SURFACE}) then
@@ -423,12 +440,12 @@ function simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, vehicleType)
 	ent:SetCurHealth( NewHealth )
 end
 
-function simfphys.APCApplyDamage(ent, Damage, Type)
-	simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, VEHICLE_TYPE_APC)
+function simfphys.APCApplyDamage(ent, Damage, Type, attacker)
+	simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, attacker, simfphys.VEHICLE_TYPE_APC)
 end
 
-function simfphys.TankApplyDamage(ent, Damage, Type)
-	simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, VEHICLE_TYPE_TANK)
+function simfphys.TankApplyDamage(ent, Damage, Type, attacker)
+	simfphys.ArmouredVehicleApplyDamage(ent, Damage, Type, attacker, simfphys.VEHICLE_TYPE_TANK)
 end
 
 
