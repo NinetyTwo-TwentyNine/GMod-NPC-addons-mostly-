@@ -56,6 +56,12 @@ hook.Add( "LFSPopulateVehicles", "AddEntityContent", function( pnlContent, tree,
 		end
 
 	end
+
+	-- Select the first node
+	local FirstNode = tree:Root():GetChildNode( 0 )
+	if IsValid( FirstNode ) then
+		FirstNode:InternalDoClick()
+	end
 end )
 
 

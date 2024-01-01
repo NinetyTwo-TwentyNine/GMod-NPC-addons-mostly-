@@ -16,18 +16,14 @@ ENT.Editable = true
 ENT.IconOverride	= "materials/entities/lvs_vehicle_spammer.png"
 
 function ENT:SetupDataTables()
-	local AllSents = scripted_ents.GetList() 
 	local SpawnOptions = {}
-
-	for _, v in pairs( AllSents ) do
-		if v and istable( v.t ) then
-			if v.t.Spawnable then
-				if v.t.Base and string.StartWith( v.t.Base:lower(), "lunasflightschool_basescript" ) then
-					if v.t.Category and v.t.PrintName then
-						local nicename = v.t.Category.." - "..v.t.PrintName
-						if not table.HasValue( SpawnOptions, nicename ) then
-							SpawnOptions[nicename] = v.t.ClassName
-						end
+	if list.Get("lfs_vehicles") then
+		for k,v in pairs(list.Get("lfs_vehicles")) do
+			if v and istable( v ) then
+				if v.Category and v.Name then
+					local nicename = v.Category.." - "..v.Name
+					if not table.HasValue( SpawnOptions, nicename ) then
+						SpawnOptions[nicename] = k
 					end
 				end
 			end
@@ -41,8 +37,8 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Int",6, "SpawnWithSkin", { KeyName = "spawnwithskin", Edit = { type = "Int", order = 8,min = 0, max = 16, category = "Vehicle-Options"} } )
 	self:NetworkVar( "Int",7, "SpawnWithHealth", { KeyName = "spawnwithhealth", Edit = { type = "Int", order = 9,min = 0, max = 50000, category = "Vehicle-Options"} } )
 	self:NetworkVar( "Int",8, "SpawnWithShield", { KeyName = "spawnwithshield", Edit = { type = "Int", order = 10,min = 0, max = 50000, category = "Vehicle-Options"} } )
-	self:NetworkVar( "String",11, "TargetName", { KeyName = "targetname", Edit = { type = "String", order = 11, value = "", category = "Vehicle-Options"} } )
-	self:NetworkVar( "String",12, "SquadName", { KeyName = "squadname", Edit = { type = "String", order = 12, value = "", category = "Vehicle-Options"} } )
+	self:NetworkVar( "String",1, "TargetName", { KeyName = "targetname", Edit = { type = "String", category = "Vehicle-Options"} } )
+	self:NetworkVar( "String",2, "SquadName", { KeyName = "squadname", Edit = { type = "String", category = "Vehicle-Options"} } )
 
 	self:NetworkVar( "Int",9, "UseHealth", { KeyName = "maxhealth", Edit = { type = "Int", order = 21,min = 0, max = 50000, category = "Spawner-Options"} } )
 	self:NetworkVar( "Int",10, "SelfDestructAfterAmount", { KeyName = "selfdestructafteramount", Edit = { type = "Int", order = 22,min = 0, max = 100, category = "Spawner-Options"} } )
@@ -194,6 +190,7 @@ if SERVER then
 				local Type = self:GetType()
 				
 				if Type ~= "" then
+					self.Spawning = true
 					local spawnedvehicle = ents.Create( Type )
 					
 					if IsValid( spawnedvehicle ) then
@@ -207,6 +204,7 @@ if SERVER then
 						end
 
 						timer.Simple(FrameTime(), function()
+							if !IsValid(self) then return end
 							if !IsValid(spawnedvehicle) then return end
 
 							spawnedvehicle:SetAI( true )
@@ -230,11 +228,11 @@ if SERVER then
 
 							local squadname = string.Trim(self:GetSquadName())
 							if squadname != "" then
-								timer.Simple(0.1, function()
+								timer.Simple(0.2, function()
 									if !IsValid(spawnedvehicle) then return end
 									if !spawnedvehicle:GetAI() then return end
 
-									spawnedvehicle:AIGetSelf():SetKeyValue("squadname", squadname)
+									spawnedvehicle:AIGetSelf():Fire("setsquad", squadname)
 								end)
 							end
 
@@ -247,6 +245,7 @@ if SERVER then
 							end
 
 							table.insert( self.spawnedvehicles, spawnedvehicle )
+							self.Spawning = false
 
 							if self:GetSelfDestructAfterAmount() > 0 then
 								self.RemoverCount = isnumber( self.RemoverCount ) and self.RemoverCount + 1 or 1
@@ -259,7 +258,7 @@ if SERVER then
 					end
 				end
 			end
-		else
+		elseif !self.Spawning then
 			local AmountSpawned = 0
 			for k,v in pairs( self.spawnedvehicles ) do
 				if IsValid( v ) then
