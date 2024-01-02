@@ -116,7 +116,7 @@ function ENT:SecondaryAttack()
 	if tr.Hit then
 		local Target = tr.Entity
 		if IsValid( Target ) then
-			if Target.Base == "lunasflightschool_basescript" || Target.Base == "lunasflightschool_basescript_heli" || Target.Base == "lunasflightschool_basescript_gunship" then
+			if Target.Base && Target.Base:lower():StartWith("lunasflightschool_basescript") then
 				ent:SetLockOn( Target )
 				ent:SetStartVelocity( 0 )
 			end

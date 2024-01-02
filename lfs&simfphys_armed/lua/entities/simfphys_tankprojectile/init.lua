@@ -49,10 +49,10 @@ end
 local DMG_PROPEXPLOSION = 134217792
 local DMG_LUABULLET = 8194
 
-local CanDeflectOn = {
-	["gmod_sent_vehicle_fphysics_wheel"] = true,
-	["gmod_sent_vehicle_fphysics_base"] = true,
-}
+local function CanDeflectOn( ent )
+	if !IsValid(ent) then return false end
+	return (ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" || ent:GetClass() == "gmod_sent_vehicle_fphysics_base" || (ent.Base && ent.Base:lower():StartWith("lunasflightschool_basescript")))
+end
 
 function ENT:Think()	
 	local curtime = CurTime()
@@ -80,7 +80,7 @@ function ENT:Think()
 		
 		self.DeflectAng = self.DeflectAng or 25
 
-		local candeflect = (trace.Entity.IsArmored && !self.ArmourPiercing) and (CanDeflectOn[ trace.Entity:GetClass() ] || trace.Entity.LFS || trace.Entity.IdentifiesAsLFS)
+		local candeflect = CanDeflectOn( trace.Entity ) and (trace.Entity.IsArmored && !self.ArmourPiercing)
 		
 		if hitangle < self.DeflectAng and not self.Bounced and candeflect then
 			

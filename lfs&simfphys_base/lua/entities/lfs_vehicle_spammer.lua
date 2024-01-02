@@ -190,10 +190,11 @@ if SERVER then
 				local Type = self:GetType()
 				
 				if Type ~= "" then
-					self.Spawning = true
 					local spawnedvehicle = ents.Create( Type )
 					
 					if IsValid( spawnedvehicle ) then
+						self.Spawning = true
+
 						spawnedvehicle:SetPos( pos )
 						spawnedvehicle:SetAngles( ang )
 

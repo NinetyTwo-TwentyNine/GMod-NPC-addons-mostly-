@@ -1,18 +1,7 @@
-local function CheckIfLFS(ent)
-	if !IsValid(ent) then return end
-	if !ent.Base then return false end
-	if ent.Base == "lunasflightschool_basescript" || ent.Base == "lunasflightschool_basescript_heli" || ent.Base == "lunasflightschool_basescript_gunship" then
-		return true
-	else
-		return false
-	end
-end
-
-
 hook.Add("PlayerEnteredVehicle", "LFS AI handling", function(ply, seat)
 	local vehicle = seat:GetOwner()
 	if !IsValid(vehicle) then return end
-	if !CheckIfLFS(vehicle) then return end
+	if !(vehicle.Base && vehicle.Base:lower():StartWith("lunasflightschool_basescript")) then return end
 	if !IsValid(vehicle:GetDriverSeat()) then return end
 
 	if vehicle:GetDriverSeat() == seat then
@@ -30,7 +19,7 @@ end)
 hook.Add("PlayerLeaveVehicle", "LFS AI handling", function(ply, seat)
 	local vehicle = seat:GetOwner()
 	if !IsValid(vehicle) then return end
-	if !CheckIfLFS(vehicle) then return end
+	if !(vehicle.Base && vehicle.Base:lower():StartWith("lunasflightschool_basescript")) then return end
 	if !IsValid(vehicle:GetDriverSeat()) then return end
 
 	if vehicle:GetDriverSeat() == seat then
@@ -59,7 +48,7 @@ function LFS_AddVehicleBasedRelations(ent)
 		end
 
 		if !IsValid(vehicle) then return end
-		if !CheckIfLFS(vehicle) then return end
+		if !(vehicle.Base && vehicle.Base:lower():StartWith("lunasflightschool_basescript")) then return end
 
 		for _,npc in pairs(ents.GetAll()) do
 			if !npc:IsNPC() then continue end
@@ -73,7 +62,7 @@ function LFS_AddVehicleBasedRelations(ent)
 
 	if ent:IsNPC() then
 		for _,vehicle in pairs(ents.GetAll()) do
-			if !CheckIfLFS(vehicle) then continue end
+			if !(vehicle.Base && vehicle.Base:lower():StartWith("lunasflightschool_basescript")) then continue end
 			if !IsValid(vehicle:GetDriverSeat()) then continue end
 
 			local driver = vehicle:GetDriverSeat():GetDriver()

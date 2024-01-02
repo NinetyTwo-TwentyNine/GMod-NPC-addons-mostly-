@@ -458,7 +458,7 @@ function simfphys.IdentifyVehicleTarget(npc, target)
 		if IsValid(target:GetDriver()) then
 			target = target:GetDriver()
 		end
-	elseif target.Base == "lunasflightschool_basescript" || target.Base == "lunasflightschool_basescript_heli" || target.Base == "lunasflightschool_basescript_gunship" then
+	elseif target.Base && target.Base:lower():StartWith("lunasflightschool_basescript") then
 		if IsValid(target:GetDriver()) then
 			target = target:GetDriver()
 		elseif IsValid(target:AIGetSelf()) then
@@ -466,7 +466,7 @@ function simfphys.IdentifyVehicleTarget(npc, target)
 		end
 	end
 
-	if target:GetClass() == "gmod_sent_vehicle_fphysics_base" || target.Base == "lunasflightschool_basescript" || target.Base == "lunasflightschool_basescript_heli" || target.Base == "lunasflightschool_basescript_gunship" then
+	if target:GetClass() == "gmod_sent_vehicle_fphysics_base" || (target.Base && target.Base:lower():StartWith("lunasflightschool_basescript")) then
 		for _,seat in pairs( target:GetPassengerSeats() ) do
 			local seat_driver = seat:GetDriver()
 			if !IsValid(seat_driver) then continue end

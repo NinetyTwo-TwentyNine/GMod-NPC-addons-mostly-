@@ -226,7 +226,7 @@ function ENT:HandleWeapons(Fire1, Fire2, Fire3)
 				if IsValid(tr.Entity) then
 					local TraceEntity = tr.Entity
 
-					local ShouldFireGuidedMissiles = (TraceEntity.Base == "lunasflightschool_basescript" || TraceEntity.Base == "lunasflightschool_basescript_heli" || TraceEntity.Base == "lunasflightschool_basescript_gunship")
+					local ShouldFireGuidedMissiles = (TraceEntity.Base && TraceEntity.Base:lower():StartWith("lunasflightschool_basescript"))
 
 					if TraceEntity != Target then
 						TraceEntity = simfphys.IdentifyVehicleTarget(AI, TraceEntity)
