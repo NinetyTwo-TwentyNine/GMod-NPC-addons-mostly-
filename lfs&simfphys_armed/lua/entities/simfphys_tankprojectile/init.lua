@@ -51,7 +51,7 @@ local DMG_LUABULLET = 8194
 
 local function CanDeflectOn( ent )
 	if !IsValid(ent) then return false end
-	return (ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" || ent:GetClass() == "gmod_sent_vehicle_fphysics_base" || (ent.Base && ent.Base:lower():StartWith("lunasflightschool_basescript")))
+	return (ent:GetClass() == "gmod_sent_vehicle_fphysics_wheel" || ent:GetClass() == "gmod_sent_vehicle_fphysics_base" || ent.LFS || ent.IdentifiesAsLFS)
 end
 
 function ENT:Think()	

@@ -97,8 +97,8 @@ end
 if CLIENT then
 	local RING = Material( "effects/select_ring" )
 
-	local AMMO = Material( "lfs_repairmode_ammo.png" )
-	local HEALTH = Material( "lfs_repairmode_health.png" )
+	local AMMO = Material( "lvs/3d2dmats/refil.png" )
+	local HEALTH = Material( "lvs/3d2dmats/repair.png" )
 
 	function ENT:Draw()
 		self:DrawModel()
