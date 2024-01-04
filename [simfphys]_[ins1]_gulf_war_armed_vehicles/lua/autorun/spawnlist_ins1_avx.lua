@@ -697,7 +697,7 @@ local V = {
 		LimitRPM = 2500,
 		PeakTorque = 610,
 		PowerbandStart = 600,
-		PowerbandEnd = 2600,
+		PowerbandEnd = 2000,
 		Turbocharged = false,
 		Supercharged = false,
 		DoNotStall = true,
@@ -733,7 +733,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.4,
-		Gears = {-0.06,0,0.06,0.08,0.1,0.12,0.13}
+		Gears = {-0.04,0,0.06,0.08,0.1,0.12,0.13}
 	}
 }
 list.Set( "simfphys_vehicles", "avx_t72", V )

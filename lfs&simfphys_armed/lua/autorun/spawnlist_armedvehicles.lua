@@ -1394,7 +1394,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.4,
-		Gears = {-0.05,0,0.1,0.14,0.18,0.22,0.26,0.3}
+		Gears = {-0.1,0,0.1,0.14,0.18,0.22,0.26,0.3}
 	}
 }
 list.Set("simfphys_vehicles", "sim_fphys_lav25_armed", V)
@@ -1605,7 +1605,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.4,
-		Gears = {-0.05,0,0.1,0.14,0.18,0.22,0.26,0.3}
+		Gears = {-0.1,0,0.1,0.14,0.18,0.22,0.26,0.3}
 	}
 }
 list.Set("simfphys_vehicles", "sim_fphys_lav-c2_armed", V)
@@ -2403,7 +2403,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.5,
-		Gears = {-0.2,0,0.04,0.08,0.1,0.15,0.2,0.25,0.35,0.4,0.45}
+		Gears = {-0.06,0,0.06,0.08,0.1,0.15,0.2,0.25,0.35,0.4,0.45}
 	}
 }
 list.Set( "simfphys_vehicles", "sim_fphys_fv510_armed", V )
@@ -2605,7 +2605,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.5,
-		Gears = {-0.14,0,0.1,0.15,0.2,0.245}
+		Gears = {-0.1,0,0.1,0.15,0.2,0.245}
 	}
 }
 list.Set( "simfphys_vehicles", "sim_fphys_spz_puma_armed", V )
@@ -2621,7 +2621,7 @@ local V = {
 	SpawnAngleOffset = 90,
 
 	Members = {
-		Mass = 10000,
+		Mass = 25000,
 		AirFriction = 5,
 		Inertia = Vector(10000,80000,100000),
 		
@@ -2650,8 +2650,8 @@ local V = {
 		
 		FirstPersonViewPos = Vector(0,-50,15),
 		
-		FrontWheelRadius = 45,
-		RearWheelRadius = 45,
+		FrontWheelRadius = 50,
+		RearWheelRadius = 50,
 		
 		EnginePos = Vector(-79.66,0,72.21),
 		
@@ -2724,12 +2724,12 @@ local V = {
 			}
 		},
 		
-		FrontHeight = 23,
+		FrontHeight = 35,
 		FrontConstant = 50000,
 		FrontDamping = 6000,
 		FrontRelativeDamping = 6000,
 		
-		RearHeight = 23,
+		RearHeight = 35,
 		RearConstant = 50000,
 		RearDamping = 6000,
 		RearRelativeDamping = 6000,
@@ -2786,7 +2786,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.21,
-		Gears = {-0.1,0,0.05,0.07,0.09,0.11,0.13}
+		Gears = {-0.05,0,0.05,0.07,0.09,0.11,0.13}
 	}
 }
 list.Set( "simfphys_vehicles", "sim_fphys_tank", V )
@@ -2802,7 +2802,7 @@ local V = {
 	SpawnAngleOffset = 90,
 
 	Members = {
-		Mass = 8000,
+		Mass = 15000,
 		AirFriction = 7,
 		Inertia = Vector(10000,80000,100000),
 		
@@ -2890,12 +2890,12 @@ local V = {
 			}
 		},
 		
-		FrontHeight = 22,
+		FrontHeight = 30,
 		FrontConstant = 50000,
 		FrontDamping = 5000,
 		FrontRelativeDamping = 5000,
 		
-		RearHeight = 22,
+		RearHeight = 30,
 		RearConstant = 50000,
 		RearDamping = 5000,
 		RearRelativeDamping = 5000,
@@ -2952,7 +2952,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.3,
-		Gears = {-0.1,0,0.05,0.08,0.11,0.12}
+		Gears = {-0.05,0,0.05,0.08,0.11,0.12}
 	}
 }
 list.Set( "simfphys_vehicles", "sim_fphys_tank2", V )
@@ -3355,7 +3355,7 @@ local V = {
 		LimitRPM = 2500,
 		PeakTorque = 780,
 		PowerbandStart = 600,
-		PowerbandEnd = 2600,
+		PowerbandEnd = 2000,
 		Turbocharged = false,
 		Supercharged = false,
 		DoNotStall = true,
@@ -3391,7 +3391,7 @@ local V = {
 		ForceTransmission = 1,
 		
 		DifferentialGear = 0.4,
-		Gears = {-0.06,0,0.06,0.08,0.1,0.12,0.13}
+		Gears = {-0.04,0,0.06,0.08,0.1,0.12,0.13}
 	}
 }
 list.Set( "simfphys_vehicles", "sim_fphys_tank4", V )
@@ -3568,7 +3568,7 @@ local V = {
 		BulletProofTires = true,
 		
 		IdleRPM = 600,
-		LimitRPM = 2750,
+		LimitRPM = 5000,
 		PeakTorque = 700,
 		PowerbandStart = 600,
 		PowerbandEnd = 3500,
