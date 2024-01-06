@@ -285,7 +285,7 @@ function ENT:SpawnNPC()
 	if(keyvalues) then
 		for key,val in pairs(keyvalues) do npc:SetKeyValue(key,val) end
 	end
-	if(squad) then npc:Fire("setsquad",squad,0) end
+	if(squad) then npc:SetKeyValue("squadname", squad) end
 
 	if class == "npc_apcdriver" && npc:GetInternalVariable("vehicle") == "" then
 		local combine_apc = ents.Create( "prop_vehicle_apc" )
@@ -312,11 +312,23 @@ function ENT:SpawnNPC()
 		local simfphys_vehicle = self.CurrentSimfphysVehicle
 		simfphys_vehicle.DriverSeat:SetName("simfphys["..simfphys_vehicle:EntIndex().."]driver_seat")
 		if simfphys_vehicle.PassengerSeats then
+			local duplicate_keys_table = {}
+			for k,_ in pairs(data.KeyValues or {}) do duplicate_keys_table[k:lower()] = true end
+			for k,_ in pairs(keyvalues or {}) do duplicate_keys_table[k:lower()] = true end
+			duplicate_keys_table["squadname"] = true
+			duplicate_keys_table["spawnflags"] = true
+			duplicate_keys_table["vehicle"] = nil
+			duplicate_keys_table["body"] = nil
+
 			for i = 1,npc:GetInternalVariable("body") do
 				if simfphys_vehicle.pSeat[i] then
 					simfphys_vehicle.pSeat[i]:SetName("simfphys["..simfphys_vehicle:EntIndex().."]passenger_seat#"..i)
 					local npc_duplicate = ents.Create(class)
-					for key,val in pairs(npc:GetKeyValues()) do npc_duplicate:SetKeyValue(key, tostring(val)) end
+					for key,val in pairs(npc:GetKeyValues()) do
+						if key:lower() == "globalname" then npc_duplicate:SetKeyValue("targetname", npc:GetName()) continue end
+						if !duplicate_keys_table[key:lower()] then continue end
+						npc_duplicate:SetKeyValue(key, tostring(val))
+					end
 					npc_duplicate:SetKeyValue("vehicle",simfphys_vehicle.pSeat[i]:GetName())
 					npc_duplicate.Vehicle = simfphys_vehicle
 

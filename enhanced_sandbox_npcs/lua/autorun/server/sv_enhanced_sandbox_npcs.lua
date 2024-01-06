@@ -595,45 +595,46 @@ function ESBOXNPCS_HandleNPC(ent, ply)
 	
 	if !ent:IsScripted() && !isturret && IsPlayerConVarEnabled(ply, "esboxnpcs_npc_squadcap") then
 		local capabilities = ent:CapabilitiesGet()
-		if bit.band(capabilities, CAP_SQUAD) == 0 then
+		if bit.band(capabilities, CAP_SQUAD) == 0 then  -- Squadnames are ignored on spawn when the NPC is incapable, but they don't clear the keyvalue, so the "if squadname is empty" thing is not reliable.
 			local dontshow = false
 			ent:CapabilitiesAdd(CAP_SQUAD)
 			
-			-- Well, we know it was incapable of squads before, so giving it a squad now probably wouldn't hurt anything.	
-			-- Squadnames are ignored on spawn when the NPC is incapable, but they don't clear the keyvalue, so the "if squadname is empty" thing is not reliable.
-			if (classify == CLASS_PLAYER_ALLY ||
-				classify == CLASS_PLAYER_ALLY_VITAL) then
-				ent:Fire("SetSquad", "resistance")
-			elseif (classify == CLASS_COMBINE ||
-					classify == CLASS_COMBINEGUNSHIP) then
-				ent:Fire("SetSquad", "overwatch")
-			--[[elseif IsMounted("hl1") then
-				print("HL1, ", classify)
-				-- Don't try HL1 classes if HL1 is not mounted
-				if (classify == 27) then -- CLASS_HUMAN_PASSIVE
-					print("sintist")
+			if (ent:GetKeyValues()["squadname"] == "") then
+				-- Well, we know it was incapable of squads before, so giving it a squad now probably wouldn't hurt anything.
+
+				if (classify == CLASS_PLAYER_ALLY ||
+					classify == CLASS_PLAYER_ALLY_VITAL) then
 					ent:Fire("SetSquad", "resistance")
-				elseif (classify == 28) then -- CLASS_HUMAN_MILITARY
-					-- Might as well put assassins in a different squad.
-					-- It makes sense and the user might have a mod that makes them and the HECU enemies.
-					print("what")
-					if class == "monster_human_assassin" then
-						print("a")
-						ent:Fire("SetSquad", "blackops")
-					else
-						print("b")
-						ent:Fire("SetSquad", "hecu")
-					end
-				elseif (classify == 29) then -- CLASS_ALIEN_MILITARY
-					print("aliens")
-					ent:Fire("SetSquad", "alien_military")
-				end]]
-			else
-				dontshow = true
-			end
+				elseif (classify == CLASS_COMBINE ||
+						classify == CLASS_COMBINEGUNSHIP) then
+					ent:Fire("SetSquad", "overwatch")
+				--[[elseif IsMounted("hl1") then
+					print("HL1, ", classify)
+					-- Don't try HL1 classes if HL1 is not mounted
+					if (classify == 27) then -- CLASS_HUMAN_PASSIVE
+						print("sintist")
+						ent:Fire("SetSquad", "resistance")
+					elseif (classify == 28) then -- CLASS_HUMAN_MILITARY
+						-- Might as well put assassins in a different squad.
+						-- It makes sense and the user might have a mod that makes them and the HECU enemies.
+						if class == "monster_human_assassin" then
+							print("a")
+							ent:Fire("SetSquad", "blackops")
+						else
+							print("b")
+							ent:Fire("SetSquad", "hecu")
+						end
+					elseif (classify == 29) then -- CLASS_ALIEN_MILITARY
+						print("aliens")
+						ent:Fire("SetSquad", "alien_military")
+					end]]
+				else
+					dontshow = true
+				end
 			
-			if dontshow != true then
-				print("Adding squad capabilities to " .. class .. "...")
+				if dontshow != true then
+					print("Adding squad capabilities to " .. class .. "...")
+				end
 			end
 		end
 	end

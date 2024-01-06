@@ -241,7 +241,12 @@ function Astar( start, goal, sizequota, avoidthose )
 
 
 	local goalCheckTable = {}
-	for _,v in pairs( table.Add({goal}, goal:GetAdjacentAreas()) ) do table.insert(goalCheckTable, v:GetID()) end
+	for _,v in pairs( table.Add({goal}, goal:GetAdjacentAreas()) ) do
+		local deltaZ = v:ComputeAdjacentConnectionHeightChange(goal)
+		if math.abs(deltaZ) > 12.5 then continue end
+
+		table.insert(goalCheckTable, v:GetID())
+	end
 
 	local indexCheckTable = {}
 	for _,v in pairs( table.Add({start}, start:GetAdjacentAreas()) ) do table.insert(indexCheckTable, v:GetID()) end
