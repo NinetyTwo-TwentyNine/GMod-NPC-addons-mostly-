@@ -1383,7 +1383,7 @@ list.Set( "simfphys_vehicles", "sim_fphys_pwliaz", V )
 
 
 local V = {
-	Name = "HL2 avia",
+	Name = "HL2 Avia",
 	Model = "models/blu/avia/avia.mdl",
 	Class = "gmod_sent_vehicle_fphysics_base",
 	Category = Category,

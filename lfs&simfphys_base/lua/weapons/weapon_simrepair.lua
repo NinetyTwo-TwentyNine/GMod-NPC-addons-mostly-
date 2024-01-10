@@ -175,7 +175,7 @@ function SWEP:DrawHUD()
 	end
 	
 	local IsSimfphys = ent:GetClass():lower() == "gmod_sent_vehicle_fphysics_base"
-	local IsLFS = ent.Base == "lunasflightschool_basescript" || ent.Base == "lunasflightschool_basescript_heli" || ent.Base == "lunasflightschool_basescript_gunship"
+	local IsLFS = ent.Base && ent.Base:lower():StartWith("lunasflightschool_basescript")
 	local IsVehicle = IsSimfphys || IsLFS
 	
 	if (IsVehicle) then
@@ -185,7 +185,7 @@ function SWEP:DrawHUD()
 			Health = ent:GetCurHealth()
 		else
 			MaxHealth = ent:GetMaxHP()
-			Health = ent:GetHP()
+			Health = math.Round(ent:GetHP())
 		end
 		
 		draw.RoundedBox( 0, xpos, ypos, ((sizex * 0.118) / MaxHealth) * Health, sizey * 0.02, Color( (Health < MaxHealth * 0.6) and 255 or 0, (Health >= MaxHealth * 0.3) and 255 or 0, 0, 100 ) )

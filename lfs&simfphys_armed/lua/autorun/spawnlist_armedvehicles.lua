@@ -265,6 +265,7 @@ local V = {
 		Turbocharged = false,
 		Supercharged = false,
 		
+		FuelType = FUELTYPE_ELECTRIC,
 		FuelFillPos = Vector(32.82,-78.31,81.89),
 		
 		PowerBias = 0,

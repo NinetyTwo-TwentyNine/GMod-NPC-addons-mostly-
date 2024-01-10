@@ -1,11 +1,13 @@
 AddCSLuaFile()
 
 ENT.Type	= "anim"
-ENT.PrintName	= "gas pump (diesel)"
-ENT.Category	= "simfphys"
+ENT.PrintName	= "Gas Pump (Diesel)"
+ENT.Category	= "[Simfphys]"
 
 ENT.Spawnable = true
 ENT.AdminOnly = false
+
+ENT.IconOverride	= "materials/entities/lvs_item_refuel.png"
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "User" )
@@ -163,10 +165,15 @@ function ENT:Use( ply )
 			ply:SelectWeapon( "weapon_simfillerpistol" )
 			ply.gas_InUse = true
 			
-			local weapon = ply:GetActiveWeapon()
-			if IsValid( weapon ) and weapon:GetClass() == "weapon_simfillerpistol" then
-				weapon:SetFuelType( FUELTYPE_DIESEL )
-			end
+			timer.Simple(0.1, function()
+				if !IsValid(self) then return end
+				if !IsValid(ply) then return end
+
+				local weapon = ply:GetActiveWeapon()
+				if IsValid( weapon ) and weapon:GetClass() == "weapon_simfillerpistol" then
+					weapon:SetFuelType( FUELTYPE_DIESEL )
+				end
+			end)
 		end
 	else
 		if ply == self:GetUser() then

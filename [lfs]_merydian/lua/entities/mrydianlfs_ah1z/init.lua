@@ -228,10 +228,11 @@ function ENT:HandleWeapons(Fire1, Fire2, Fire3)
 				if IsValid(tr.Entity) then
 					local TraceEntity = tr.Entity
 
-					local ShouldFireGuidedMissiles = (TraceEntity.Base && TraceEntity.Base:lower():StartWith("lunasflightschool_basescript"))
+					local VehicleDriver = simfphys.IdentifyVehicleTarget(AI, TraceEntity)
+					local ShouldFireGuidedMissiles = (TraceEntity != VehicleDriver)
 
 					if TraceEntity != Target then
-						TraceEntity = simfphys.IdentifyVehicleTarget(AI, TraceEntity)
+						TraceEntity = VehicleDriver
 					end
 
 					if (self:AIGetRelationship(TraceEntity) == D_HT || self:AIGetRelationship(TraceEntity) == D_FR) && !(TraceEntity:IsPlayer() && GetConVarNumber("ai_ignoreplayers") == 1) then
