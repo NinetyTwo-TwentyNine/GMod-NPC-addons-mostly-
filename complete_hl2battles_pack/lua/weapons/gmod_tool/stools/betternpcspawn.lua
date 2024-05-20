@@ -14,7 +14,7 @@ TOOL.Information = {
 
 local NPCNames = {}
 if SERVER then
-  cvars.AddChangeCallback("nav_area_size_check_complete", function()
+  cvars.AddChangeCallback("bns_npc_check_complete", function()
     if GetConVarNumber("bns_npc_check_complete") == 1 then
       for k,v in pairs(list.Get("NPC")) do
         if !table.IsEmpty(list.Get("BNS_NPCKeyValues")[v.Class]) then
@@ -65,20 +65,21 @@ if SERVER then
 
   local SendServerNPCList = function(len, ply)
     net.Start("BNS_ReceiveServerNPCList")
-      net.WriteTable(list.Get("BNS_AllNPCTemplates"))
+      net.WriteString(util.TableToJSON(list.Get("BNS_AllNPCTemplates")))
     net.Send(ply)
   end
   net.Receive("BNS_SendServerNPCList", SendServerNPCList)
 
   local SetServerPlayerNPCList = function(len, ply)
-    DefaultNPCList = net.ReadTable()
+    DefaultNPCList = util.JSONToTable(net.ReadString())
     if ply:IsSuperAdmin() then
       for k,v in pairs(list.Get("BNS_AllNPCTemplates")) do
         list.Set("BNS_AllNPCTemplates", k, DefaultNPCList[k])
         list.Set("NPC", k, DefaultNPCList[k])
       end
     end
-    local NewNPCList = net.ReadTable()
+
+    local NewNPCList = util.JSONToTable(net.ReadString())
     if ply:IsSuperAdmin() then
       for k,v in pairs(NewNPCList) do
         list.Set("BNS_AllNPCTemplates", k, NewNPCList[k])
@@ -488,12 +489,12 @@ function TOOL.BuildCPanel(cpanel)
 
       function OnGotServerNPCList()
         if !LocalPlayer():IsSuperAdmin() then
-          DefaultNPCList = net.ReadTable()
+	  DefaultNPCList = util.JSONToTable(net.ReadString())
         end
         for k,v in pairs(DefaultNPCList) do list.Set("NPC", k, v) end
 
         net.Start("BNS_SetServerPlayerNPCList")
-        net.WriteTable(DefaultNPCList)
+        net.WriteString(util.TableToJSON(DefaultNPCList))
 
         local content = file.Read("betternpcspawner/"..val..".txt", "DATA")
         if (content) then
@@ -501,7 +502,7 @@ function TOOL.BuildCPanel(cpanel)
           TemplateTable = table.Copy(data.SavedTemplates)
           ChangedNPCTemplates = table.GetKeys(data.ChangedTemplates)
 
-          net.WriteTable(data.ChangedTemplates)
+          net.WriteString(util.TableToJSON(data.ChangedTemplates))
           for k,v in pairs(data.ChangedTemplates) do
             if list.Get("NPC")[k] then
               list.GetForEdit("NPC")[k] = data.ChangedTemplates[k]
@@ -511,7 +512,7 @@ function TOOL.BuildCPanel(cpanel)
             end
           end
         else
-          net.WriteTable({})
+          net.WriteString(util.TableToJSON({}))
         end
         net.SendToServer()
       end
