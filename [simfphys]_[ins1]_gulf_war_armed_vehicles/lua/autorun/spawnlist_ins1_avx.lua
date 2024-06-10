@@ -26,11 +26,6 @@ local function DestroyVehicle( ent )
 	bprop:SetModel( ent:GetModel() )			
 	bprop:SetPos( ent:GetPos() )
 	bprop:SetAngles( ent:GetAngles() )
-	for i = 0, ent:GetNumPoseParameters() - 1 do
-		local sPose = ent:GetPoseParameterName(i)
-		bprop:SetPoseParameter(sPose, ent:GetPoseParameter(sPose))
-	end
-
 	bprop:Spawn()
 	bprop:Activate()
 	bprop:GetPhysicsObject():SetVelocity( ent:GetVelocity() + Vector(math.random(-5,5),math.random(-5,5),math.random(150,250)) ) 
@@ -39,6 +34,11 @@ local function DestroyVehicle( ent )
 	bprop.MakeSound = true
 	bprop:SetColor( Col )
 	bprop:SetSkin( skin )
+
+	for i = 0, ent:GetNumPoseParameters() - 1 do
+		local sPose = ent:GetPoseParameterName(i)
+		bprop:SetPoseParameter(sPose, ent:GetPoseParameter(sPose))
+	end
 	
 	ent.Gib = bprop
 	
