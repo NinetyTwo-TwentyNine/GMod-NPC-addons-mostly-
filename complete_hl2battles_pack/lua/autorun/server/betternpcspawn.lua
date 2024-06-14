@@ -74,15 +74,6 @@ hook.Add("PlayerSpawnedNPC", "BNSAdditionalNPCSetupHook", function(ply, npc)
       end
     end
     list.Set("NPC", NPCMenuType, list.Get("BNS_AllNPCTemplates")[NPCMenuType])
-
-    if bit.band(npc:GetKeyValues()["spawnflags"], 16) != 0 then
-      if npc:GetClass() == "npc_metropolice" then
-	npc:CapabilitiesAdd(CAP_AIM_GUN)
-        npc:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_PERFECT)
-        npc:SetMaxHealth(0)
-      end
-      npc:SetKeyValue( "spawnflags", bit.band(npc:GetKeyValues()["spawnflags"], bit.bnot(16)) )
-    end
   end
 end)
 

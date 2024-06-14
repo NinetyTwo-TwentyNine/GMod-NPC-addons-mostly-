@@ -72,7 +72,7 @@ if SERVER then
 
   local SetServerPlayerNPCList = function(len, ply)
     DefaultNPCList = util.JSONToTable(net.ReadString())
-    if ply:IsSuperAdmin() then
+    if ply:IsListenServerHost() then
       for k,v in pairs(list.Get("BNS_AllNPCTemplates")) do
         list.Set("BNS_AllNPCTemplates", k, DefaultNPCList[k])
         list.Set("NPC", k, DefaultNPCList[k])
@@ -80,7 +80,7 @@ if SERVER then
     end
 
     local NewNPCList = util.JSONToTable(net.ReadString())
-    if ply:IsSuperAdmin() then
+    if ply:IsListenServerHost() then
       for k,v in pairs(NewNPCList) do
         list.Set("BNS_AllNPCTemplates", k, NewNPCList[k])
         list.Set("NPC", k, NewNPCList[k])
@@ -488,7 +488,7 @@ function TOOL.BuildCPanel(cpanel)
       net.SendToServer()
 
       function OnGotServerNPCList()
-        if !LocalPlayer():IsSuperAdmin() then
+        if !LocalPlayer():IsListenServerHost() then
 	  DefaultNPCList = util.JSONToTable(net.ReadString())
         end
         for k,v in pairs(DefaultNPCList) do list.Set("NPC", k, v) end
@@ -732,7 +732,7 @@ function TOOL:Reload( )
             end
           end
 
-          if !self:GetOwner():IsSuperAdmin() then
+          if !self:GetOwner():IsListenServerHost() then
             if !list.Get("BNS_PlayerNPCTemplates")[self:GetOwner():AccountID()] then
               list.GetForEdit("BNS_PlayerNPCTemplates")[self:GetOwner():AccountID()] = {}
             end

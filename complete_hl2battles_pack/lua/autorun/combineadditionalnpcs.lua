@@ -49,8 +49,9 @@ list.Set( "NPC", "npc_smetropolicer", NPC )
 
 local NPC = {   Name = "Metro Police Leader",
                 Class = "npc_metropolice",
+		Skin = 2,
                 Health = 54,
-		SpawnFlags = 16 + 33554432,
+		SpawnFlags = 33554432,
 		KeyValues = { SquadName = "overwatch" },
                 Weapons = { "weapon_smg1", "weapon_annabelle", "swep_npcrocketlauncher" }, 
                 Category = "Combine"
