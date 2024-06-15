@@ -25,7 +25,7 @@ function SWEP:NPCShoot_Primary(ShootPos,ShootDir)
 
 		self:EmitSound("weapons/rpg/rocketfire1.wav")
 		local enemy = self.Owner:GetEnemy()
-		local rocket = ents.Create("apc_missile")
+		local rocket = ents.Create("rpg_missile")
 		rocket:SetPos(ShootPos+ShootDir)
 		rocket:SetAngles(ShootDir:Angle())
 		rocket:SetOwner(self.Owner)
@@ -35,6 +35,7 @@ function SWEP:NPCShoot_Primary(ShootPos,ShootDir)
 			if !IsValid(self) then return end
 			self.FiredRocket = false
 		end)
+		rocket:SetSaveValue( "m_flDamage", GetConVarNumber("sk_npc_dmg_rpg_round") )
 		rocket:Activate()
 
 		timer.Simple(0.33, function()
@@ -54,7 +55,10 @@ function SWEP:NPCShoot_Primary(ShootPos,ShootDir)
 		self.NextFireTime = CurTime() + 3
 		self:SetNextPrimaryFire( self.NextFireTime )
 		self.Owner:StopMoving()
-		self.Owner:RestartGesture(self.Owner:GetSequenceInfo(self.Owner:LookupSequence("shoot_rpg")).activity)
+
+		if self.Owner:GetSequenceInfo(self.Owner:LookupSequence("shoot_rpg")) != nil then
+			self.Owner:RestartGesture(self.Owner:GetSequenceInfo(self.Owner:LookupSequence("shoot_rpg")).activity)
+		end
 	end
 end
 

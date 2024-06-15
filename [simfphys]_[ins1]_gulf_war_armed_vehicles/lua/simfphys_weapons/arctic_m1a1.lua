@@ -52,7 +52,7 @@ local function m240_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.Spread = Vector(0.01, 0.01, 0)
 		projectile.HullSize = 1
 		projectile.attackingent = vehicle
-		projectile.Damage = 12
+		projectile.Damage = 15
 		projectile.Force = 12
 
 	vehicle:GetPhysicsObject():ApplyForceOffset( -shootDirection * 1000, shootOrigin )

@@ -62,10 +62,11 @@ end
 
 function SWEP:ShotThatThing()
 	local Dist=(self.Owner:GetEnemy():GetPos()-self.Owner:GetPos()):Length()
-	local shoot_angle = self.Owner:GetEnemy():GetPos() - self.Owner:GetPos()
-	shoot_angle = shoot_angle + Vector(math.Rand(-3.125,3.125), math.Rand(-3.125,3.125), math.Rand(0,6.25)) * (5-self.Owner:GetCurrentWeaponProficiency()) * (shoot_angle:Distance(Vector(0,0,0))/(Dist/7))
+	local shoot_pos = self.Owner:GetShootPos() + self.Owner:GetRight() * 5 + self.Owner:GetUp() * -5
+	local shoot_angle = self.Owner:GetEnemy():BodyTarget(shoot_pos) - shoot_pos
+	shoot_angle = shoot_angle + Vector(math.Rand(-3.125,3.125), math.Rand(-3.125,3.125), math.Rand(3.125,6.25)) * (5-self.Owner:GetCurrentWeaponProficiency()) * (shoot_angle:Distance(Vector(0,0,0))/(Dist/7))
 	shoot_angle:Normalize()
-	local shoot_pos = self.Owner:GetShootPos() + self.Owner:GetRight() * 5 + self.Owner:GetUp() * -5 + shoot_angle * 100
+	shoot_pos = shoot_pos + shoot_angle * 100
 
 	local rocket = ents.Create( "grenade_ar2" )
 		rocket:SetPos( shoot_pos )

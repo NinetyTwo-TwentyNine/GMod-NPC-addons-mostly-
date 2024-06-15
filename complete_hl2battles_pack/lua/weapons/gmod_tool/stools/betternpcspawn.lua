@@ -313,6 +313,7 @@ function TOOL.BuildCPanel(cpanel)
         weaponinserter:SetText("")
         weaponinserter:SetPlaceholderText("Add a weapon")
         weaponinserter:SetEnabled(true)
+        weaponinserter:SetEnterAllowed(true)
 
         weaponremover:Clear()
         weaponremover:SetEnabled(false)

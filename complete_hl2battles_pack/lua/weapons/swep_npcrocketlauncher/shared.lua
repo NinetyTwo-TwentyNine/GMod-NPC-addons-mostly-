@@ -35,6 +35,16 @@ function SWEP:Initialize()
 	self.NextFireTime=CurTime()
 end
 
+function SWEP:Equip(owner)
+	timer.Simple(FrameTime(), function()
+	if IsValid(self) && IsValid(owner) then
+		if owner:GetClass() == "npc_combine_s" || owner:GetClass() == "npc_citizen" then
+			owner:SetCurrentWeaponProficiency( WEAPON_PROFICIENCY_PERFECT )
+		end
+	end
+	end)
+end
+
 /*---------------------------------------------------------
 	PrimaryAttack
 ---------------------------------------------------------*/

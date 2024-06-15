@@ -38,7 +38,7 @@ local function hmg_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.HullSize = 6
 		projectile.attackingent = vehicle
 		projectile.Spread = Vector(0.01,0.01,0.01)
-		projectile.Damage = 15
+		projectile.Damage = 20
 		//projectile.ArmourPiercing = true
 		projectile.Force = 12
 	

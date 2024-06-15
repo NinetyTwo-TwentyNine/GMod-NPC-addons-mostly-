@@ -1,4 +1,4 @@
-simfphys.weapon.MGClipsize = 100
+simfphys.weapon.MGClipsize = 120
 
 local lavc2_susdata = {}
 local Maxs = Vector(10,10,0)
@@ -41,7 +41,7 @@ local function mg_fire(ply,vehicle,shootOrigin,shootDirection)
 		projectile.HullSize = 6
 		projectile.attackingent = vehicle
 		projectile.Spread = Vector(0.01,0.01,0.01)
-		projectile.Damage = 12
+		projectile.Damage = 18
 		projectile.Force = 12
 	
 	simfphys.FireHitScan( projectile )

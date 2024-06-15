@@ -21,7 +21,7 @@ hook.Add("OnEntityCreated", "Elite Metropolice Setup", function(ent)
 
 			if ConVarExists("esboxnpcs_soldier_elite_proficiency") && ConVarExists("esboxnpcs_soldier_ar2_proficiency") then
 				if ply:GetInfoNum("esboxnpcs_soldier_elite_proficiency", 0) > 0 then
-					ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_PERFECT)
+					ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_VERY_GOOD)
 				elseif ply:GetInfoNum("esboxnpcs_soldier_ar2_proficiency", 0) > 0 && IsValid(ent:GetActiveWeapon()) && ent:GetActiveWeapon():GetClass() == "weapon_ar2" then
 					ent:SetCurrentWeaponProficiency(WEAPON_PROFICIENCY_GOOD)
 				end
@@ -37,6 +37,7 @@ hook.Add("OnEntityCreated", "Manhack Owner Setup", function(ent)
 		if IsValid(ent) && IsValid(ent:GetParent()) then
 			if ent:GetParent():GetClass() == "npc_metropolice" then
 				ent.ManhackOwner = ent:GetParent()
+				ent:SetKeyValue("TeamNum", ent.ManhackOwner:GetKeyValues()["TeamNum"])
 			end
 		end
 		end)

@@ -1,5 +1,5 @@
 
-local function MachineGunFire(ply,vehicle,shootOrigin,Attachment,damage)
+local function MachineGunFire(ply,vehicle,shootOrigin,Attachment)
 
 	vehicle:EmitSound("sherman_fire_mg", 120)
 
@@ -12,7 +12,7 @@ local function MachineGunFire(ply,vehicle,shootOrigin,Attachment,damage)
 		projectile.HullSize = 5
 		projectile.attackingent = vehicle
 		projectile.Spread = Vector(0.008,0.008,0.008)
-		projectile.Damage = damage
+		projectile.Damage = 20
 		projectile.ArmourPiercing = true
 		projectile.Force = 12
 	
@@ -143,7 +143,7 @@ function simfphys.weapon:PrimaryAttack( vehicle, ply, shootOrigin, Attachment, I
 		effectdata:SetScale( 4 )
 	util.Effect( "CS_MuzzleFlash", effectdata, true, true )
 	
-	MachineGunFire(ply,vehicle,shootOrigin,Attachment,20)
+	MachineGunFire(ply,vehicle,shootOrigin,Attachment)
 	
 	self:SetNextPrimaryFire( vehicle, CurTime() + 0.1 + (vehicle.smTmpMG ^ 5) * 0.05 )
 end

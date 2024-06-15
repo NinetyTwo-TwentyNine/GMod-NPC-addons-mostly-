@@ -20,7 +20,7 @@ local NPC = {   Name = "Combine Leader",
                 Model = "models/combine_leader.mdl",
                 Health = 90,
 		KeyValues = { SquadName = "overwatch", tacticalvariant = 2, Numgrenades = 0 },
-                Weapons = { "swep_a35", "swep_detached_emplacement_gun" },
+                Weapons = { "swep_detached_emplacement_gun", "swep_npcrocketlauncher" },
                 Category = "Combine"
 }
 list.Set( "NPC", "npc_scombinel", NPC )
@@ -53,7 +53,7 @@ local NPC = {   Name = "Metro Police Leader",
                 Health = 54,
 		SpawnFlags = 33554432,
 		KeyValues = { SquadName = "overwatch" },
-                Weapons = { "weapon_smg1", "weapon_annabelle", "swep_npcrocketlauncher" }, 
+                Weapons = { "weapon_smg1", "weapon_annabelle", "swep_a35" }, 
                 Category = "Combine"
 }
 list.Set( "NPC", "npc_smetropolicel", NPC )

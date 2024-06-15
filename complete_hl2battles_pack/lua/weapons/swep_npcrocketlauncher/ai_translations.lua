@@ -12,7 +12,9 @@ function SWEP:SetupWeaponHoldTypeForAI(t)
 	self.ActivityTranslateAI [ ACT_IDLE_ANGRY ] 				= ACT_IDLE_ANGRY_RPG
 	self.ActivityTranslateAI [ ACT_RANGE_ATTACK1 ] 				= ACT_RANGE_ATTACK_RPG
 	self.ActivityTranslateAI [ ACT_RELOAD ] 					= ACT_GESTURE_RELOAD
+	self.ActivityTranslateAI [ ACT_WALK ] 						= ACT_WALK_RPG
 	self.ActivityTranslateAI [ ACT_WALK_AIM ] 					= ACT_WALK_RPG
+	self.ActivityTranslateAI [ ACT_RUN ] 						= ACT_RUN_RPG
 	self.ActivityTranslateAI [ ACT_RUN_AIM ] 					= ACT_RUN_RPG
 	self.ActivityTranslateAI [ ACT_GESTURE_RANGE_ATTACK1 ] 		= ACT_GESTURE_RANGE_ATTACK1
 	self.ActivityTranslateAI [ ACT_RELOAD_LOW ] 				= ACT_RELOAD_LOW
