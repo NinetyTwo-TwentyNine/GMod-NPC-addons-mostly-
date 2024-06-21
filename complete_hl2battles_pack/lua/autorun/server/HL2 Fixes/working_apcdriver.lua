@@ -33,7 +33,7 @@ hook.Add("OnEntityCreated", "Combine APC Driver AI", function(ent)
 				if !func_table[BNS_DFT_CHECK_NPC_HASTARGET]() then return false end
 				local enemy = ent:GetEnemy()
 				local enemy_assumed_pos = ent:GetEnemyLastKnownPos() + enemy:BodyTarget(ent:EyePos()) - enemy:GetPos()
-				return ( ent:Visible(enemy) || ent:VisibleVec(enemy_assumed_pos) )
+				return ( ent:Visible(enemy) || (ent:VisibleVec(enemy_assumed_pos) && ent:EyePos():Distance(enemy_assumed_pos) <= ent:GetMaxLookDistance()) )
 			end
 			func_table[BNS_DFT_CHECK_NPC_MOVEMENT] = function()
 				return ( ent:IsMoving() )
