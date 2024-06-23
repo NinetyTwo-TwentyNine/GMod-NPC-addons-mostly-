@@ -8,7 +8,7 @@ ENT.Author = "Luna"
 ENT.Information = "Transport Helicopter as seen in Half Life 2 Episode 2"
 ENT.Category = "[Base] Unarmed"
 
-ENT.Spawnable		= false
+ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 
 ENT.IconOverride	= "materials/entities/lvs_helicopter_rebel.png"

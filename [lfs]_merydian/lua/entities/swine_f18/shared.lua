@@ -8,7 +8,7 @@ ENT.Author = "SWINE"
 ENT.Information = ""
 ENT.Category = "[Merydian] Jet Fighters"
 
-ENT.Spawnable		= false
+ENT.Spawnable		= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/sentry/fa18f.mdl"

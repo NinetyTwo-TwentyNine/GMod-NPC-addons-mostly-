@@ -7,7 +7,7 @@ ENT.Author = "DarkLord20172002"
 ENT.Information = ""
 ENT.Category = "[Merydian] Helicopters"
 
-ENT.Spawnable		= false
+ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 
 ENT.MDL = "models/ah-64d_apache_longbow.mdl"

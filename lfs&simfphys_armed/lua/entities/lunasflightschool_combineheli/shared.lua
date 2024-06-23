@@ -8,7 +8,7 @@ ENT.Author = "Luna"
 ENT.Information = "Combine Attack Helicopter from Half Life 2 + Episodes"
 ENT.Category = "[Base] Armed"
 
-ENT.Spawnable		= false
+ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 
 ENT.IconOverride	= "materials/entities/lvs_helicopter_combine.png"

@@ -8,8 +8,8 @@ ENT.Author = "Luna"
 ENT.Information = "Small and Unarmed Civilian Airplane"
 ENT.Category = "[Base] Unarmed"
 
-ENT.Spawnable		= false
-ENT.AdminSpawnable		= false
+ENT.Spawnable		= true
+ENT.AdminSpawnable	= false
 
 ENT.IconOverride	= "materials/entities/lvs_plane_cessna.png"
 

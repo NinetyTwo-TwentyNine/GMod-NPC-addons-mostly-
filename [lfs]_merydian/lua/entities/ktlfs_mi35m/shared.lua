@@ -8,7 +8,7 @@ ENT.Author = ""
 ENT.Information = ""
 ENT.Category = "[Merydian] Helicopters"
 
-ENT.Spawnable		= false
+ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 
 ENT.MDL = "models/mi-35.mdl"

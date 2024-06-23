@@ -8,8 +8,8 @@ ENT.Author = "Luna"
 ENT.Information = "British World War 2 Fighterplane"
 ENT.Category = "[Base] Armed"
 
-ENT.Spawnable		= false
-ENT.AdminSpawnable		= false
+ENT.Spawnable		= true
+ENT.AdminSpawnable	= false
 
 ENT.IconOverride	= "materials/entities/lvs_plane_spitfire.png"
 
