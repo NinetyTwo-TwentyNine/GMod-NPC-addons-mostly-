@@ -123,8 +123,10 @@ function simfphys.weapon:Think( vehicle )
 				end
 			end)
 		else
-			vehicle.wpn_chr:Stop()
-			vehicle.wpn_chr = nil
+			if vehicle.wpn_chr then
+				vehicle.wpn_chr:Stop()
+				vehicle.wpn_chr = nil
+			end
 			GaussFire(ply,vehicle,shootOrigin,Attachment,250 + vehicle.gausscharge * 3)
 			vehicle.gausscharge = 0
 			

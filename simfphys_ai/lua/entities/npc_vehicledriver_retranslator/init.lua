@@ -96,6 +96,8 @@ function ENT:EstablishVehicleConnection()
 			local muzzleStringId = self.Seat:GetNWString("Attachment", null)
 			self.MuzzleAttachment = self.Vehicle:LookupAttachment( muzzleStringId )
 		end
+
+		self:SetupGunnerFunctions()
 	else
 		self.GunnerSeat = false
 	end
@@ -157,6 +159,27 @@ function ENT:SetVehicleParameters()
 	print("BLength = "..self.Vehicle.BLength)
 
 	return true
+end
+
+function ENT:SetupGunnerFunctions()
+	local vehicleWeaponClass = ""
+	for k,v in pairs(simfphys.ManagedVehicles) do
+		if (v.entity == self.Vehicle) then
+			vehicleWeaponClass = v.func:ValidClasses()[1]
+			break
+		end
+	end
+
+	local weaponFuncs = (SIMFPHYS_AI_WeaponFuncs[vehicleWeaponClass] or {})[self.SeatPos] or {}
+	for i = 1,2 do
+		if !weaponFuncs[i] || !isfunction(weaponFuncs[i]) then
+			weaponFuncs[i] = function(attacker, los_ent)
+				return true
+			end
+		end
+	end
+
+	self.VehicleWeapons = weaponFuncs
 end
 
 function ENT:Think()
@@ -334,7 +357,7 @@ function ENT:ControlTheGun()
 	end
 
 	if self.Attacking then
-		self:StartAttacking()
+		self:StartAttacking(gun_los)
 	elseif self.SeatPos == 0 then
 		self:CheckIfMovementRequired()
 	end
@@ -439,9 +462,9 @@ function ENT:GetGunDir()
 	end
 end
 
-function ENT:StartAttacking()
-	self.VehicleDriver:SetKeyDown(IN_ATTACK, true)
-	self.VehicleDriver:SetKeyDown(IN_ATTACK2, true)
+function ENT:StartAttacking(gun_los)
+	self.VehicleDriver:SetKeyDown(IN_ATTACK, self.VehicleWeapons[1](self.VehicleDriver, gun_los.Entity))
+	self.VehicleDriver:SetKeyDown(IN_ATTACK2, self.VehicleWeapons[2](self.VehicleDriver, gun_los.Entity))
 
 	if self.SeatPos != 0 then return end
 	self.AdditionalMovementCounter = 0
