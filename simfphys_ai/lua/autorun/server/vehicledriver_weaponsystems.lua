@@ -15,11 +15,7 @@ local genericBurstFiring = function(scaler, minimum, phaseOffset)
 end
 local genericAntiArmourFiring = function(attacker, los_ent)
 	if !IsValid(los_ent) then return false end
-
-	local relationship = attacker:Disposition(simfphys.IdentifyVehicleTarget(attacker, los_ent))
-	if relationship != D_HT && relationship != D_FR then return false end
-
-	return los_ent:IsVehicle() || (los_ent.Base && los_ent.Base:lower():StartWith("lunasflightschool_basescript"))
+	return (simfphys.IdentifyVehicleTarget(attacker, los_ent) != los_ent)
 end
 
 
